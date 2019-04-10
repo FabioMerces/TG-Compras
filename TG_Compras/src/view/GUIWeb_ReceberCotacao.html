@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title>PseuCamp: Planilha de Cotações</title>
+        <link rel="Stylesheet" type="text/css" href="css/estilo.css" />
+    </head>
+    <body>
+    <div id="pag">
+        <a href="index.html"><div id="logo"><br /><br /><br />Logo</div></a>
+
+        <div id="banner" style="text-align:center;" >
+            <div id="titulo">
+                <br />
+                <h1>TG Compras</h1>
+            </div>
+        </div>
+
+        <div id="bloco_esq">
+        </div>
+
+        <div id="conteudo">
+            <!--
+                Adcionar Modal Javascript p/ alterar os dados da cotação
+                conforme fornecedor selecionar uma cotação da tabela
+                campos: Preço(unitário) e Data entrega
+                
+                Depois de efetuar a criação do modal
+                partir p/ uso de iframe p/ simplificar e otimizar tabelas
+            -->
+            <h2>Cotações em Aberto</h2>
+            <table>
+                <tr>
+                  <th>Material</th>
+                  <th>Quantidade</th>
+                  <th>Data Pedido</th>
+                  <th>Preço Unit.</th>
+                  <th>Preço Total</th>
+                  <th>Data Entrega</th>
+                </tr>
+                <tr>
+                  <td>Caneta Azul Bic</td>
+                  <td>17</td>
+                  <td>21/03/19</td>
+                  <td>1,30</td>
+                  <td>22,10</td>
+                  <td>27/03/19</td>
+                </tr>
+                <tr>
+                  <td>Bolacha ClubSocial</td>
+                  <td>100</td>
+                  <td>23/03/19</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Maçã</td>
+                  <td>999</td>
+                  <td>26/03/19</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+            </table>
+            <div class="tooltip" style="text-align: left">Ajuda?
+                <span class="tooltiptext">Selecione da lista a Cotação a qual deseja e atribua o 'Preço' e a 'Data de Entrega', após isso salve suas alterações.</span>
+            </div>
+            
+            
+            <div id="btnAlt">
+                <button class="btn" type="submit">Efetivar Alterações</button>
+            </div>
+        </div>
+
+        <div id="bloco_dir">
+        </div>
+
+        <div id="rodape">
+            <hr />
+            <p>Template de Sistema - <b>TG Compras</b></p>
+            <hr />
+        </div>
+    </div>
+    </body>
+</html>

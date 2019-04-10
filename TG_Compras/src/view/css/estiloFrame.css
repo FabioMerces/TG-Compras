@@ -1,0 +1,15 @@
+/*Formatação de Buttons/InputSubmits*/
+.btn {
+    background-color: #ddd;
+    border: none;
+    color: black;
+    padding: 12px 24px;
+    text-align: center;
+    font-size: 14px;
+    margin: 4px 2px;
+    transition: 0.3s;
+}
+.btn:hover {
+    background-color: #3e8e41;
+    color: white;
+}

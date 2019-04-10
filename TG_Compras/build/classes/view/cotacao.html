@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="Stylesheet" type="text/css" href="css/estiloFrame.css" />
+    </head>
+    <body>
+        <form name="frmSolicitaCotacao" method="post" action="">
+            <br><br>
+            <h2 style="text-align: center">Solicitar Cotação</h2>
+            <hr />
+            <table width="300" align="center">
+                <caption><b>Dados Material</b></caption>
+                <tr>
+                    <td>Código Material:</td>
+                    <td><input type="text" name="codMat" size="15" readonly=""/></td>
+                </tr>
+                <tr>
+                    <td>Nome Material:</td>
+                    <td><input type="text" name="nomeMat" size="15" readonly=""/></td>
+                </tr>
+                <tr>
+                    <td>Quantidade Material:</td>
+                    <td><input type="text" name="qtdMat" size="15" readonly=""/></td>
+                </tr>              
+            </table>
+            <hr/>
+            <table width="300" align="center">
+                <caption><b>Dados Fornecedor</b></caption>
+                <tr>
+                    <td>CNPJ Fornecedor:</td>
+                    <td><input type="text" name="cnpj" size="15" readonly=""/></td>
+                </tr>
+                <tr>
+                    <td>Nome Fornecedor:</td>
+                    <td><input type="text" name="nomeForn" size="15" readonly=""/></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input class="btn" type="submit" value="Enviar Cotação" /></td>
+                </tr>
+            </table>
+            <input type="hidden" name="acao" value="envioCot" />
+            <hr />
+        </form>
+    </body>
+</html>

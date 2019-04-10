@@ -1,0 +1,171 @@
+body {
+    margin:0;	
+    padding:0; 
+    background-image:url("../imagens/gray_hexagon.jpg"); 
+    height: 100%;
+    /*Centralizar e escalar imagem de fundo*/
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align:center; 
+}
+#pag {
+    width:1224px; 
+    margin-top:10px; 
+    margin:0 auto;  
+}
+#logo {
+    width: 200px; 
+    height: 135px; 
+    float:left; 
+    /*background:  url("../imagens/.jpg"); */
+    background-color: #FF0000;
+}
+#banner {
+    width: 1024px; 
+    height: 135px; 
+    float:left; 
+    /*background-image:url("../imagens/.png") */
+}
+#titulo {
+    width: 824px; 
+    height: 135px; 
+    float:left;  
+}
+#bloco_esq {/*barra menu*/
+    width: 110px; 
+    height: 585px; 
+    float:left; 
+    /*background-image:url("../imagens/.jpg") */
+    /*background-color: #00FFFF;*/
+}
+#conteudo {
+    width: 1004px; 
+    height: 585px; 
+    float:left; 
+    /*background-image:url("../imagens/.jpg") */
+    background-color: #F0F0FD;
+}
+#bloco_dir {
+    width: 110px;
+    height: 585px;
+    float: left;
+    /*background-image:url("../imagens/.jpg") */
+    /*background-color: #00FFFF;*/
+}
+#rodape {
+    width: 1224px; 
+    height: 50px; 
+    float:left; 
+    /*background-image:url("../imagens/.jpg") */
+}
+
+/* 
+    Formatação do Menu realizada através do Tutorial do site do Maujor.
+    link: http://maujor.com/tutorial/menurollimg.php#content
+*/
+#menu ul {
+    list-style-type: none; /*remove o marcador*/
+    margin: 5px; /*remove o recuo IE e Opera*/
+    padding: 5px; /*remove o recuo Mozilla e NN*/
+    font-size:12px; font-family:verdana,arial, helvetica, sans-serif;
+}
+#menu ul li {height:20px;}
+
+#menu a {
+    display: block;
+    padding: 1px 0 1px 25px;
+    border: 1px solid #000000;
+    width: 180px;
+    background-color: #339966;
+    color: #0000ff;
+    text-decoration: none;
+    /*background-image:url("../imagens/.jpg") */
+    width:153px;
+}
+#menu a:hover {
+    border: 1px solid #000000;
+    background-color:#FFFF99;
+    /*background-image:url("../imagens/.jpg") */
+    color:#000000;
+}
+#menu a:active {
+    border: 1px solid #000000;
+    background-color:#FFFF99;
+    /*background-image:url("../imagens/.jpg") */
+    color:#000000;
+}
+
+/*Formatação do estilo de Tabelas*/
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+th, td {
+    text-align: left;
+    padding: 12px;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+tr td:hover{
+    background: #ddd;
+}
+
+/*Formatação Tooltip*/
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 240px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -120px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/*Formatação de Buttons/InputSubmits*/
+.btn {
+    background-color: #ddd;
+    border: none;
+    color: black;
+    padding: 12px 24px;
+    text-align: center;
+    font-size: 14px;
+    margin: 4px 2px;
+    transition: 0.3s;
+}
+.btn:hover {
+    background-color: #3e8e41;
+    color: white;
+}
