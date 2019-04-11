@@ -255,6 +255,7 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
                 btnAlterar.setEnabled(true);
                 btnExcluir.setEnabled(true);
                 txtUsuario.setEnabled(false);
+                txtSenha.setEnabled(true);
 
             }
 
@@ -265,10 +266,14 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("BD1711015", "BD1711015");
+        conexao = new Conexao("GABRIEL", "GABRIEL");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
-        conexao.setConnectionString("jdbc:oracle:thin:@apolo:1521:xe");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoUsuario = new DaoUsuario(conexao.conectar());
+        
+        JOptionPane.showMessageDialog(null, "Atencao! \n para cadastrar ou excluir um usuario" +
+                 " sera necessario seu cadastro ou exclusao previamente no sistema de RH da empresa");
+         
     }//GEN-LAST:event_formWindowOpened
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
@@ -291,7 +296,7 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
                                 flagVerificaTudo = false;
                             }
         
-        if(txtUsuario.getText() == null || txtSenha.getText() == null){
+        if(txtUsuario.getText().isEmpty()|| txtSenha.getText().isEmpty()){
             flagVerificaTudo = false;
         }
         
@@ -338,7 +343,7 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
                                 flagVerificaTudo = false;
                             }
         
-        if(txtUsuario.getText() == null || txtSenha.getText() == null){
+        if(txtUsuario.getText().isEmpty()|| txtSenha.getText().isEmpty()){
             flagVerificaTudo = false;
         }
         

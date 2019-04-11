@@ -98,9 +98,9 @@ public class DaoFornecedor {
     public void alterar(Fornecedor f) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("UPDATE tbl_Fornecedor set NomeFornecedor = ?, Logradouro = ?"
-                    + " Numero = ?, Complemento = ?, CEP = ?, Bairro = ?, Cidade = ?, UF = ?, Pais = ?"
-                    + " TelPrincipal = ?, TelSecundario = ?, Email = ?, NotaVelocidade = ?, NotaPreco = ?"
+            ps = conn.prepareStatement("UPDATE tbl_Fornecedor set NomeFornecedor = ?, Logradouro = ?,"
+                    + " Numero = ?, Complemento = ?, CEP = ?, Bairro = ?, Cidade = ?, UF = ?, Pais = ?,"
+                    + " TelPrincipal = ?, TelSecundario = ?, Email = ?, NotaVelocidade = ?, NotaPreco = ?,"
                     + " NotaPosVenda = ?, NotaQualidade = ?"
                     + " WHERE CNPJ = ?");
             ps.setString(1, f.getNomeFornecedor());

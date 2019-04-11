@@ -7,6 +7,7 @@ package view;
 
 import control.Conexao;
 import control.DaoFornecedor;
+import javax.swing.JOptionPane;
 import model.Fornecedor;
 
 /**
@@ -150,6 +151,11 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         jLabel10.setText("UF");
 
         txtUF.setEnabled(false);
+        txtUF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUFActionPerformed(evt);
+            }
+        });
 
         jLabel11.setText("País");
 
@@ -157,10 +163,18 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
 
         jLabel22.setText("Telefone Principal");
 
-        txtTelPrincipal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat(""))));
+        try {
+            txtTelPrincipal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         txtTelPrincipal.setEnabled(false);
 
-        txtTelSecundario.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat(""))));
+        try {
+            txtTelSecundario.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         txtTelSecundario.setEnabled(false);
 
         jLabel23.setText("Telefone Secundário");
@@ -183,10 +197,9 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAlterar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExcluir)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnExcluir))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,7 +222,7 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
                                     .addComponent(jLabel23)
                                     .addComponent(txtTelSecundario, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel4)
                                         .addGap(0, 0, Short.MAX_VALUE))
@@ -222,31 +235,26 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
                             .addComponent(txtCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(1, 1, 1)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel24)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(txtUF, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtPais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(txtEmail)))
-                                .addComponent(txtComplemento)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel6)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabel10)
-                                            .addGap(27, 27, 27)
-                                            .addComponent(jLabel11)))
-                                    .addGap(0, 0, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(txtRazaoSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(55, 55, 55))))
+                                    .addComponent(jLabel24)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtUF, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtPais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel6)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addGap(27, 27, 27)
+                                .addComponent(jLabel11))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtComplemento, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtRazaoSocial, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE))))))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAlterar, btnBuscar, btnCadastrar, btnExcluir});
@@ -267,22 +275,25 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(23, 23, 23)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtLogradouro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(23, 23, 23)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtLogradouro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel7)
                                     .addComponent(jLabel8)
@@ -296,7 +307,7 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
                                 .addComponent(jLabel22)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtTelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel23)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtTelSecundario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -338,6 +349,7 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         fornecedor = null;
         
         String CNPJ = txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", "");
+        System.out.println(CNPJ);
         fornecedor = daoFornecedor.consultar(CNPJ);
         
         if(fornecedor == null){
@@ -359,6 +371,7 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         txtTelPrincipal.setEnabled(true);
         txtTelSecundario.setEnabled(true);
         txtUF.setEnabled(true);
+        
         }else{
         btnBuscar.setEnabled(false);
         btnCadastrar.setEnabled(false);
@@ -377,22 +390,48 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         txtPais.setEnabled(true);
         txtTelPrincipal.setEnabled(true);
         txtTelSecundario.setEnabled(true);
-        txtUF.setEnabled(true);                  
+        txtUF.setEnabled(true);          
+
+        txtCNPJ.setText(fornecedor.getCNPJ());
+        txtRazaoSocial.setText(fornecedor.getNomeFornecedor());
+        txtBairro.setText(fornecedor.getBairro());
+        txtCEP.setText(fornecedor.getCEP());
+        txtCidade.setText(fornecedor.getCidade());
+        txtComplemento.setText(fornecedor.getComplemento());
+        txtEmail.setText(fornecedor.getEmailFornecedor());
+        txtLogradouro.setText(fornecedor.getLogradouro());
+        txtNumero.setText(Integer.toString(fornecedor.getNumero()));
+        txtPais.setText(fornecedor.getPais());
+        txtTelPrincipal.setText(fornecedor.getTelPrincipal());
+        txtTelSecundario.setText(fornecedor.getTelSecundario());
+        txtUF.setText(fornecedor.getUF());
+        
         }
         
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("BD1711015", "BD1711015");
+        conexao = new Conexao("GABRIEL", "GABRIEL");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
-        conexao.setConnectionString("jdbc:oracle:thin:@apolo:1521:xe");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoFornecedor = new DaoFornecedor(conexao.conectar());
     }//GEN-LAST:event_formWindowOpened
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         
+        boolean flagVerificaTudo = true;
+        
+        if(txtCEP.getText().isEmpty() || txtRazaoSocial.getText().isEmpty() || txtEmail.getText().isEmpty() || txtNumero.getText().equals(0)){
+            flagVerificaTudo = false;
+        }
+         
+         if(flagVerificaTudo == false){
+         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n" + 
+                 "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");
+         }
+        
         fornecedor.setBairro(txtBairro.getText());
-        fornecedor.setCEP(txtCEP.getText());
+        fornecedor.setCEP(txtCEP.getText().replace(".", "").replace("-", ""));
         fornecedor.setCNPJ(txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", ""));
         fornecedor.setCidade(txtCidade.getText());
         fornecedor.setComplemento(txtComplemento.getText());
@@ -401,12 +440,16 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         fornecedor.setNomeFornecedor(txtRazaoSocial.getText());
         fornecedor.setNumero(Integer.parseInt(txtNumero.getText()));
         fornecedor.setPais(txtPais.getText());
-        fornecedor.setTelPrincipal(txtTelPrincipal.getText());
-        fornecedor.setTelSecundario(txtTelSecundario.getText());
+        fornecedor.setTelPrincipal(txtTelPrincipal.getText().replace("(", "").replace(")", "").replace("-", ""));
+        fornecedor.setTelSecundario(txtTelSecundario.getText().replace("(", "").replace(")", "").replace("-", ""));
         fornecedor.setUF(txtUF.getText());
         
         //FAZER VERIFICACAO SE TA TUDO OK!
-        
+        if(txtCEP.getText().isEmpty() || txtRazaoSocial.getText().isEmpty() || txtEmail.getText().isEmpty() || txtNumero.getText().equals(0)){
+            flagVerificaTudo = false;
+        }
+        System.out.println(txtRazaoSocial.getText());
+        if(flagVerificaTudo == true){
         daoFornecedor.alterar(fornecedor);
         
         btnBuscar.setEnabled(true);
@@ -441,13 +484,28 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         txtTelPrincipal.setText("");
         txtTelSecundario.setText("");
         txtUF.setText("");
+        }else{
+         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n" + 
+                 "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");           
+        }
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         fornecedor = new Fornecedor();
+        
+         boolean flagVerificaTudo = true;
  
+         if(txtCEP.getText().isEmpty() || txtRazaoSocial.getText().isEmpty() || txtEmail.getText().isEmpty() || txtNumero.getText().equals(0)){
+            flagVerificaTudo = false;
+        }
+         
+         if(flagVerificaTudo == false){
+         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n" + 
+                 "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");
+         }
+         
         fornecedor.setBairro(txtBairro.getText());
-        fornecedor.setCEP(txtCEP.getText());
+        fornecedor.setCEP(txtCEP.getText().replace(".", "").replace("-", ""));
         fornecedor.setCNPJ(txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", ""));
         fornecedor.setCidade(txtCidade.getText());
         fornecedor.setComplemento(txtComplemento.getText());
@@ -456,12 +514,15 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         fornecedor.setNomeFornecedor(txtRazaoSocial.getText());
         fornecedor.setNumero(Integer.parseInt(txtNumero.getText()));
         fornecedor.setPais(txtPais.getText());
-        fornecedor.setTelPrincipal(txtTelPrincipal.getText());
-        fornecedor.setTelSecundario(txtTelSecundario.getText());
+        fornecedor.setTelPrincipal(txtTelPrincipal.getText().replace("(", "").replace(")", "").replace("-", ""));
+        fornecedor.setTelSecundario(txtTelSecundario.getText().replace("(", "").replace(")", "").replace("-", ""));
         fornecedor.setUF(txtUF.getText());
         
-        //FAZER VERIFICACAO SE TA TUDO OK!
         
+        
+        
+        //FAZER VERIFICACAO SE TA TUDO OK!
+        if(flagVerificaTudo == true){
         daoFornecedor.inserir(fornecedor);
         
         btnBuscar.setEnabled(true);
@@ -496,7 +557,11 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         txtTelPrincipal.setText("");
         txtTelSecundario.setText("");
         txtUF.setText("");
-        
+        }else{
+         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n" + 
+                 "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");
+           
+        }
         
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
@@ -536,6 +601,10 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         txtTelSecundario.setText("");
         txtUF.setText("");
     }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void txtUFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUFActionPerformed
 
     /**
      * @param args the command line arguments

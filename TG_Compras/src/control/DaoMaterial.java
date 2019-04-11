@@ -70,7 +70,7 @@ public class DaoMaterial {
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("UPDATE tbl_Material set NomeMaterial = ?,"
-                    + " UnidMedida = ?, DescriptMaterial = ?,"
+                    + " UnidMedida = ?, DescriptMaterial = ?"
                     + " WHERE CodMaterial = ?");
             ps.setString(1, m.getNomeMaterial());
             ps.setString(2, m.getUnidadeMedida());

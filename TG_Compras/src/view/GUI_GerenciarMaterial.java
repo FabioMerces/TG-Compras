@@ -89,7 +89,7 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
 
         jLabel3.setText("Unidade de Medida");
 
-        cmbUnidadeMedida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbUnidadeMedida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ML", "LT", "KL", "MG", "UN", " " }));
         cmbUnidadeMedida.setEnabled(false);
 
         jLabel4.setText("Descrição Material");
@@ -177,9 +177,9 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("BD1711015", "BD1711015");
+        conexao = new Conexao("GABRIEL", "GABRIEL");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
-        conexao.setConnectionString("jdbc:oracle:thin:@apolo:1521:xe");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
         //TESTE
         //Outro Teste
@@ -215,6 +215,11 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
         txtDescricao.setEnabled(true);
         txtNomeMaterial.setEnabled(true);
         cmbUnidadeMedida.setEnabled(true);
+        
+        txtDescricao.setText(material.getDescricaoMaterial());
+        txtNomeMaterial.setText(material.getNomeMaterial());
+        cmbUnidadeMedida.setSelectedItem(material.getUnidadeMedida());
+        
           
         }
         
