@@ -33,11 +33,11 @@ public class DaoCotacao {
                 c = new Cotacao();
                 c.setNumCotacao(rs.getInt("NumCotacao"));
                 c.setNumSolicitacaoCompra(rs.getInt("NumSolicitacao"));
-                c.setDataPedidoCompra(rs.getString("DataCotacao"));
+                c.setDataCotacao(rs.getInt("DataCotacao"));
                 c.setPrecoMaterial(rs.getFloat("PrecoUnitario"));
-				c.setSituacaoCotacao(rs.getString("SituacaoCotacao"));
-				c.setCNPJ(rs.setString("CNPJ"));
-                c.setCodMaterial(rs.setInt("CodMaterial"));
+		c.setSituacaoCotacao(rs.getString("SituacaoCotacao"));
+		c.setCNPJ(rs.getString("CNPJ"));
+                c.setCodMaterial(rs.getInt("CodMaterial"));
 				
                 ps = conn.prepareStatement("SELECT QtdeMaterial FROM tbl_Material_Solicitados"
                         + " WHERE NumCotacao = ? and CodMaterial = ?");
@@ -63,10 +63,10 @@ public class DaoCotacao {
                     + " VALUES(?,?,?,?,?,?)");
             ps.setInt(1, c.getNumCotacao());
             ps.setInt(2, c.getNumSolicitacaoCompra());
-            ps.setString(3, c.getDataCotacao());
+            ps.setInt(3, c.getDataCotacao());
             ps.setString(4, c.getCNPJ());
             ps.setInt(5, c.getCodMaterial());
-            ps.setString(6, c.getSituacaoCotacao);
+            ps.setString(6, c.getSituacaoCotacao());
           
             ps.execute();
         } catch (SQLException ex) {
@@ -82,7 +82,7 @@ public class DaoCotacao {
                     + " WHERE NumCotacao = ?");
             ps.setString(1, c.getCNPJ());
             ps.setInt(2, c.getCodMaterial());
-            ps.setString(3, c.getDataCotacao());
+            ps.setInt(3, c.getDataCotacao());
             ps.setFloat(4, c.getPrecoMaterial());
 			ps.setString(5, c.getSituacaoCotacao());
 			ps.setInt(6, c.getNumCotacao());
@@ -99,7 +99,7 @@ public class DaoCotacao {
 		
 		try {
 			ps = conn.prepareStatement("DELETE from tbl_Cotacao WHERE NumCotacao = ?");
-			ps.setInt(NumCotacao);
+			ps.setInt(1,NumCotacao);
 		
 			ps.execute();
 		} catch (SQLException ex) {
