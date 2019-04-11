@@ -11,8 +11,9 @@ package model;
  */
 public class Cotacao {
     private int NumCotacao, NumSolicitacaoCompra;
-    private int QtdeMaterial, DataPedidoCompra;
+    private int CodMaterial, QtdeMaterial, DataCotacao;
     private float PrecoMaterial;
+	private String SituacaoCotacao, CNPJ;
 
     public int getNumCotacao() {
         return NumCotacao;
@@ -21,6 +22,30 @@ public class Cotacao {
     public void setNumCotacao(int NumCotacao) {
         this.NumCotacao = NumCotacao;
     }
+
+	public int getCodMaterial() {
+		return CodMaterial;
+	}
+	
+	public void setCodMaterial(int CodMaterial) {
+		this.CodMaterial = CodMaterial;
+	}
+
+	public String getCNPJ() {
+		return CNPJ;
+	}
+	
+	public void setCNPJ(String CNPJ) {
+		this.CNPJ = CNPJ;
+	}
+
+	public String getSituacaoCotacao() {
+		return SituacaoCotacao;
+	}
+	
+	public void setSituacaoCotacao(String situacao) {
+		this.SituacaoCotacao = situacao;
+	}
 
     public int getNumSolicitacaoCompra() {
         return NumSolicitacaoCompra;
@@ -38,12 +63,12 @@ public class Cotacao {
         this.QtdeMaterial = QtdeMaterial;
     }
 
-    public int getDataPedidoCompra() {
-        return DataPedidoCompra;
+    public int getDataCotacao() {
+        return DataCotacao;
     }
 
-    public void setDataPedidoCompra(int DataPedidoCompra) {
-        this.DataPedidoCompra = DataPedidoCompra;
+    public void setDataCotacao(int Data) {
+        this.DataCotacao = Data;
     }
 
     public float getPrecoMaterial() {
