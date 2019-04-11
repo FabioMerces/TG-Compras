@@ -99,15 +99,19 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
 
         btgrpPermissao.add(rdbFuncRegular);
         rdbFuncRegular.setText("Funcionário de outro departamento");
+        rdbFuncRegular.setEnabled(false);
 
         btgrpPermissao.add(rdbFuncCompras);
         rdbFuncCompras.setText("Funcionário do Setor de Compras");
+        rdbFuncCompras.setEnabled(false);
 
         btgrpPermissao.add(rdbGerente);
         rdbGerente.setText("Gerente do Setor de Compras");
+        rdbGerente.setEnabled(false);
 
         btgrpPermissao.add(rdbAdministradorSistema);
         rdbAdministradorSistema.setText("Administrador do Sistema");
+        rdbAdministradorSistema.setEnabled(false);
 
         javax.swing.GroupLayout pnlPermissaoLayout = new javax.swing.GroupLayout(pnlPermissao);
         pnlPermissao.setLayout(pnlPermissaoLayout);
@@ -232,6 +236,10 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
                 btnExcluir.setEnabled(false);
                 txtUsuario.setEnabled(false);
                 txtSenha.setEnabled(true);
+                rdbAdministradorSistema.setEnabled(true);
+                rdbFuncCompras.setEnabled(true);
+                rdbFuncRegular.setEnabled(true);
+                rdbGerente.setEnabled(true);
 
             } else {
                 
@@ -256,6 +264,10 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
                 btnExcluir.setEnabled(true);
                 txtUsuario.setEnabled(false);
                 txtSenha.setEnabled(true);
+                rdbAdministradorSistema.setEnabled(true);
+                rdbFuncCompras.setEnabled(true);
+                rdbFuncRegular.setEnabled(true);
+                rdbGerente.setEnabled(true);
 
             }
 
@@ -317,6 +329,10 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
         btnExcluir.setEnabled(false);
         txtUsuario.setEnabled(true);
         txtSenha.setEnabled(false);
+        rdbAdministradorSistema.setEnabled(false);
+        rdbFuncCompras.setEnabled(false);
+        rdbFuncRegular.setEnabled(false);
+        rdbGerente.setEnabled(false);
         
         }else{
         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente Por Favor verifique os dados");
@@ -364,6 +380,10 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
         btnExcluir.setEnabled(false);
         txtUsuario.setEnabled(true);
         txtSenha.setEnabled(false);
+        rdbAdministradorSistema.setEnabled(false);
+        rdbFuncCompras.setEnabled(false);
+        rdbFuncRegular.setEnabled(false);
+        rdbGerente.setEnabled(false);
         
         }else{
         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente verifique os dados");
@@ -391,6 +411,10 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
         btnExcluir.setEnabled(false);
         txtUsuario.setEnabled(true);
         txtSenha.setEnabled(false);
+        rdbAdministradorSistema.setEnabled(false);
+        rdbFuncCompras.setEnabled(false);
+        rdbFuncRegular.setEnabled(false);
+        rdbGerente.setEnabled(false);
         
         
     }//GEN-LAST:event_btnExcluirActionPerformed

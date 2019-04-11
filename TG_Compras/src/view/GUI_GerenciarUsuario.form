@@ -206,6 +206,7 @@
               <ComponentRef name="btgrpPermissao"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Funcion&#xe1;rio de outro departamento"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdbFuncCompras">
@@ -214,6 +215,7 @@
               <ComponentRef name="btgrpPermissao"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Funcion&#xe1;rio do Setor de Compras"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdbGerente">
@@ -222,6 +224,7 @@
               <ComponentRef name="btgrpPermissao"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Gerente do Setor de Compras"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdbAdministradorSistema">
@@ -230,6 +233,7 @@
               <ComponentRef name="btgrpPermissao"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Administrador do Sistema"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
