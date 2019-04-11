@@ -89,7 +89,7 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
 
         jLabel3.setText("Unidade de Medida");
 
-        cmbUnidadeMedida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ML", "LT", "KL", "MG", "UN", " " }));
+        cmbUnidadeMedida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ML", "LT", "KL", "MG", "UN" }));
         cmbUnidadeMedida.setEnabled(false);
 
         jLabel4.setText("Descrição Material");
@@ -234,9 +234,8 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
         material.setUnidadeMedida(cmbUnidadeMedida.getSelectedItem().toString());
         material.setDescricaoMaterial(txtDescricao.getText());
         
-        if(txtDescricao.getText() == null || txtNomeMaterial.getText() == null ){     //VERIFICAR PQ NAO FUNCIONA       
+        if(txtDescricao.getText().isEmpty() || txtNomeMaterial.getText().isEmpty() ){        
             flagVerificaTudo = false;
-            System.out.println("entrou");
         }
         System.out.println(txtCodigoMaterial.getText());
         System.out.println(txtDescricao.getText());
@@ -266,15 +265,18 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        
+        boolean flagVerificaTudo = true;
         //INCLUIR VERIFICACAO DE DADOS
+        if(txtDescricao.getText().isEmpty() || txtNomeMaterial.getText().isEmpty() ){        
+            flagVerificaTudo = false;
+        }
         
         material.setCodMaterial(Integer.parseInt(txtCodigoMaterial.getText()));
         material.setNomeMaterial(txtNomeMaterial.getText());
         material.setUnidadeMedida(cmbUnidadeMedida.getSelectedItem().toString());
         material.setDescricaoMaterial(txtDescricao.getText());
         
-        
+        if(flagVerificaTudo == true){
         daoMaterial.alterar(material);
             
             txtCodigoMaterial.setEnabled(true);
@@ -290,6 +292,9 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
             btnCadastrar.setEnabled(false);
             btnAlterar.setEnabled(false);
             btnExcluir.setEnabled(false);
+        }else{
+        JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente Por Favor verifique os dados");
+        }
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
