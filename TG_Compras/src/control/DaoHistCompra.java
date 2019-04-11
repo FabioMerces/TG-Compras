@@ -1,5 +1,13 @@
 package control;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import model.HistoricoCompra;
+
 /**
  *
  * @author Matheus Jorge
@@ -28,12 +36,12 @@ public class DaoHistCompra {
                 hc.setCodHistorico(rs.getInt("CodHistorico"));
                 hc.setNumPedido(rs.getInt("NumPedido")); 
 				hc.setCodMaterial(rs.getInt("CodMaterial"));
-				hc.setCNPJ(rs.setString("CNPJ"));
-				hc.setData(rs.setString("DataCompra"));
-				hc.setPreco(rs.setFloat("PrecoUnitario"));
+				hc.setCNPJ(rs.getString("CNPJ"));
+				hc.setData(rs.getString("DataCompra"));
+				hc.setPreco(rs.getFloat("PrecoUnitario"));
             }
         } catch (SQLException ex) {
-            System.out.println("Falha ao consultar Histórico[NumPedido " + NumPedido "]: " + ex.toString());
+            System.out.println("Falha ao consultar Histórico[NumPedido " + NumPedido  + "]: " + ex.toString());
         }
         return (hc);
     }
