@@ -1,3 +1,8 @@
+* {
+    margin:0;	
+    padding:0; 
+    font-family: "Helvetica", "Arial", "Times New Roman";
+}
 body {
     margin:0;	
     padding:0; 
@@ -9,54 +14,64 @@ body {
     background-size: cover;
     text-align:center; 
 }
-#pag {
+#pag {/*Container da página (engloba elementos)*/
     width:1224px; 
-    margin-top:10px; 
     margin:0 auto;  
 }
+
+#header{
+    width: 1224px;
+    height: 115px;
+    background: linear-gradient(110deg, #E7E7E7, #3566AA 40%, #3566AA 60%, transparent 100%);
+}
+
 #logo {
     width: 200px; 
-    height: 135px; 
+    height: 115px; 
     float:left; 
     /*background:  url("../imagens/.jpg"); */
-    background-color: #FF0000;
 }
 #banner {
     width: 1024px; 
-    height: 135px; 
+    height: 115px;
     float:left; 
     /*background-image:url("../imagens/.png") */
 }
 #titulo {
     width: 824px; 
-    height: 135px; 
+    height: 115px; 
+    padding: 20px 0 0 0;
     float:left;  
 }
 #bloco_esq {/*barra menu*/
     width: 110px; 
-    height: 585px; 
+    height: 450px; 
     float:left; 
     /*background-image:url("../imagens/.jpg") */
     /*background-color: #00FFFF;*/
 }
 #conteudo {
     width: 1004px; 
-    height: 585px; 
+    height: 450px; 
+    padding: 10px 0 0 0;
     float:left; 
     /*background-image:url("../imagens/.jpg") */
+    background: linear-gradient(115deg, #686868 0%, #A0A0FD 30%, #A0A0FD 60%, #686868 100%);
     background-color: #F0F0FD;
 }
 #bloco_dir {
     width: 110px;
-    height: 585px;
+    height: 450px;
     float: left;
     /*background-image:url("../imagens/.jpg") */
     /*background-color: #00FFFF;*/
 }
 #rodape {
     width: 1224px; 
-    height: 50px; 
+    height: 40px; 
+    padding-top: 10px;
     float:left; 
+    background: linear-gradient(135deg, #EEEEFF 0%, #3566AA 40%, #3566AA 60%, #EEEEFF 100%);
     /*background-image:url("../imagens/.jpg") */
 }
 
@@ -105,12 +120,12 @@ table {
 }
 th, td {
     text-align: left;
-    padding: 12px;
+    padding: 4px;
 }
 tr:nth-child(even) {
-    background-color: #f2f2f2
+    background-color: #d2d2d2
 }
-tr td:hover{
+tr:hover{
     background: #ddd;
 }
 
@@ -124,11 +139,11 @@ tr td:hover{
 .tooltip .tooltiptext {
     visibility: hidden;
     width: 240px;
-    background-color: #555;
+    background-color: #000000;
     color: #fff;
     text-align: left;
     border-radius: 6px;
-    padding: 5px 0;
+    padding: 10px 0;
     position: absolute;
     z-index: 1;
     bottom: 125%;
@@ -146,7 +161,7 @@ tr td:hover{
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: #555 transparent transparent transparent;
+    border-color: #fff transparent transparent transparent;
 }
 
 .tooltip:hover .tooltiptext {
