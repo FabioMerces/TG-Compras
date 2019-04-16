@@ -189,144 +189,136 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         material = null;
-        
-       int codMaterial = Integer.parseInt(txtCodigoMaterial.getText());
-        
-       material = daoMaterial.consultar(codMaterial);
-        
-        if(material == null){
-        btnBuscar.setEnabled(false);
-        btnCadastrar.setEnabled(true);
-        btnAlterar.setEnabled(false);
-        btnExcluir.setEnabled(false);
-        
-        txtCodigoMaterial.setEnabled(false);
-        txtDescricao.setEnabled(true);
-        txtNomeMaterial.setEnabled(true);
-        cmbUnidadeMedida.setEnabled(true);
-        
-        }else{
-        btnBuscar.setEnabled(false);
-        btnCadastrar.setEnabled(false);
-        btnAlterar.setEnabled(true);
-        btnExcluir.setEnabled(true);
-        
-        txtCodigoMaterial.setEnabled(false);
-        txtDescricao.setEnabled(true);
-        txtNomeMaterial.setEnabled(true);
-        cmbUnidadeMedida.setEnabled(true);
-        
-        txtDescricao.setText(material.getDescricaoMaterial());
-        txtNomeMaterial.setText(material.getNomeMaterial());
-        cmbUnidadeMedida.setSelectedItem(material.getUnidadeMedida());
-        
-          
+
+        int codMaterial = Integer.parseInt(txtCodigoMaterial.getText());
+
+        material = daoMaterial.consultar(codMaterial);
+
+        if (material == null) {
+            btnBuscar.setEnabled(false);
+            btnCadastrar.setEnabled(true);
+            btnAlterar.setEnabled(false);
+            btnExcluir.setEnabled(false);
+
+            txtCodigoMaterial.setEnabled(false);
+            txtDescricao.setEnabled(true);
+            txtNomeMaterial.setEnabled(true);
+            cmbUnidadeMedida.setEnabled(true);
+
+        } else {
+            btnBuscar.setEnabled(false);
+            btnCadastrar.setEnabled(false);
+            btnAlterar.setEnabled(true);
+            btnExcluir.setEnabled(true);
+
+            txtCodigoMaterial.setEnabled(false);
+            txtDescricao.setEnabled(true);
+            txtNomeMaterial.setEnabled(true);
+            cmbUnidadeMedida.setEnabled(true);
+
+            txtDescricao.setText(material.getDescricaoMaterial());
+            txtNomeMaterial.setText(material.getNomeMaterial());
+            cmbUnidadeMedida.setSelectedItem(material.getUnidadeMedida());
+
         }
-        
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         material = new Material();
         boolean flagVerificaTudo = true;
-        
+
         material.setCodMaterial(Integer.parseInt(txtCodigoMaterial.getText()));
         material.setNomeMaterial(txtNomeMaterial.getText());
         material.setUnidadeMedida(cmbUnidadeMedida.getSelectedItem().toString());
         material.setDescricaoMaterial(txtDescricao.getText());
-        
-        if(txtDescricao.getText().isEmpty() || txtNomeMaterial.getText().isEmpty() ){        
+
+        if (txtDescricao.getText().isEmpty() || txtNomeMaterial.getText().isEmpty()) {
             flagVerificaTudo = false;
         }
         System.out.println(txtCodigoMaterial.getText());
         System.out.println(txtDescricao.getText());
         System.out.println(txtNomeMaterial.getText());
-        
-        if(flagVerificaTudo == true){
+
+        if (flagVerificaTudo == true) {
             daoMaterial.inserir(material);
-            
+
             txtCodigoMaterial.setEnabled(true);
             txtDescricao.setEnabled(false);
             txtNomeMaterial.setEnabled(false);
             cmbUnidadeMedida.setEnabled(false);
-            
+
             JOptionPane.showMessageDialog(null, "Cadastro do Material: " + txtNomeMaterial.getText() + " concluido com Sucesso");
-        
-            
+
             txtCodigoMaterial.setText("");
             txtDescricao.setText("");
             txtNomeMaterial.setText("");
-            
+
             btnBuscar.setEnabled(true);
             btnCadastrar.setEnabled(false);
             btnAlterar.setEnabled(false);
             btnExcluir.setEnabled(false);
-            
-            
-            
-        }else{
-        JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente Por Favor verifique os dados");
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente Por Favor verifique os dados");
         }
-        
+
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         boolean flagVerificaTudo = true;
         //INCLUIR VERIFICACAO DE DADOS
-        if(txtDescricao.getText().isEmpty() || txtNomeMaterial.getText().isEmpty() ){        
+        if (txtDescricao.getText().isEmpty() || txtNomeMaterial.getText().isEmpty()) {
             flagVerificaTudo = false;
         }
-        
+
         material.setCodMaterial(Integer.parseInt(txtCodigoMaterial.getText()));
         material.setNomeMaterial(txtNomeMaterial.getText());
         material.setUnidadeMedida(cmbUnidadeMedida.getSelectedItem().toString());
         material.setDescricaoMaterial(txtDescricao.getText());
-        
-        if(flagVerificaTudo == true){
-        daoMaterial.alterar(material);
-            
+
+        if (flagVerificaTudo == true) {
+            daoMaterial.alterar(material);
+
             txtCodigoMaterial.setEnabled(true);
             txtDescricao.setEnabled(false);
             txtNomeMaterial.setEnabled(false);
             cmbUnidadeMedida.setEnabled(false);
-            
+
             JOptionPane.showMessageDialog(null, "Dados do Material: " + txtNomeMaterial.getText() + " alterados com Sucesso");
-        
-            
+
             txtCodigoMaterial.setText("");
             txtDescricao.setText("");
             txtNomeMaterial.setText("");
-            
+
             btnBuscar.setEnabled(true);
             btnCadastrar.setEnabled(false);
             btnAlterar.setEnabled(false);
             btnExcluir.setEnabled(false);
-        }else{
-        JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente Por Favor verifique os dados");
+        } else {
+            JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente Por Favor verifique os dados");
         }
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        
+
         daoMaterial.excluir(material);
-            
-            txtCodigoMaterial.setEnabled(true);
-            txtDescricao.setEnabled(false);
-            txtNomeMaterial.setEnabled(false);
-            cmbUnidadeMedida.setEnabled(false);
-            
-            
-        
-            
-            txtCodigoMaterial.setText("");
-            txtDescricao.setText("");
-            txtNomeMaterial.setText("");
-            
-            btnBuscar.setEnabled(true);
-            btnCadastrar.setEnabled(false);
-            btnAlterar.setEnabled(false);
-            btnExcluir.setEnabled(false);
-            
-            JOptionPane.showMessageDialog(null, "Material Excluido com Sucesso");
+
+        txtCodigoMaterial.setEnabled(true);
+        txtDescricao.setEnabled(false);
+        txtNomeMaterial.setEnabled(false);
+        cmbUnidadeMedida.setEnabled(false);
+
+        txtCodigoMaterial.setText("");
+        txtDescricao.setText("");
+        txtNomeMaterial.setText("");
+
+        btnBuscar.setEnabled(true);
+        btnCadastrar.setEnabled(false);
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+
+        JOptionPane.showMessageDialog(null, "Material Excluido com Sucesso");
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
@@ -381,6 +373,6 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
     private javax.swing.JTextField txtNomeMaterial;
     // End of variables declaration//GEN-END:variables
 private Conexao conexao = null;
-private DaoMaterial daoMaterial = null;
-private Material material = null;
+    private DaoMaterial daoMaterial = null;
+    private Material material = null;
 }

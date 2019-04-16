@@ -53,17 +53,14 @@ public class DaoMaterialFornecedor {
     public void inserir(Fornecedor_Material fm) {
         PreparedStatement ps = null;
         ArrayList<Fornecedor> fornecedores = fm.getFornecedores();
-        int i = 0;
 
         try {
-            while (i < fornecedores.size()) {
                 ps = conn.prepareStatement("INSERT INTO tbl_Fornecedor_Material (CNPJ, CodMaterial"
                         + " VALUES(?,?)");
-                ps.setString(1, fornecedores.get(i).getCNPJ());
+                ps.setString(1, fornecedores.get(fornecedores.size()-1).getCNPJ());
                 ps.setInt(2, fm.getCodMaterial());
 
                 ps.execute();
-            }
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
