@@ -177,9 +177,9 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("GABRIEL", "GABRIEL");
+         conexao = new Conexao("GABRIEL", "GABRIEL");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
-        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe"); 
         daoMaterial = new DaoMaterial(conexao.conectar());
         //TESTE
         //Outro Teste

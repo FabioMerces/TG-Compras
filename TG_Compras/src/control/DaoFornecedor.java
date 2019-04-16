@@ -35,7 +35,7 @@ public class DaoFornecedor {
             ps.setString(1, CNPJ);
 
             rs = ps.executeQuery();
-
+            
             if (rs.next() == true) {
                 f = new Fornecedor();
                 f.setCNPJ(rs.getString("CNPJ"));

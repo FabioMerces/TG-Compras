@@ -29,10 +29,10 @@ public class DaoMaterialFornecedor {
 
     public Fornecedor_Material consultar(int codMaterial) {
         Fornecedor_Material fm = null;
+        DaoFornecedor daoF = new DaoFornecedor(this.conn);
         ResultSet rs;
         PreparedStatement ps = null;
         try {
-            DaoFornecedor daoF = new DaoFornecedor(this.conn);
             ps = conn.prepareStatement("SELECT * FROM tbl_Fornecedor_Material "
                     + "WHERE CodMaterial = ?");
             ps.setInt(1, codMaterial);
@@ -55,12 +55,12 @@ public class DaoMaterialFornecedor {
         ArrayList<Fornecedor> fornecedores = fm.getFornecedores();
 
         try {
-                ps = conn.prepareStatement("INSERT INTO tbl_Fornecedor_Material (CNPJ, CodMaterial"
-                        + " VALUES(?,?)");
-                ps.setString(1, fornecedores.get(fornecedores.size()-1).getCNPJ());
-                ps.setInt(2, fm.getCodMaterial());
+            ps = conn.prepareStatement("INSERT INTO tbl_Fornecedor_Material (CNPJ, CodMaterial"
+                    + " VALUES(?,?)");
+            ps.setString(1, fornecedores.get(fornecedores.size() - 1).getCNPJ());
+            ps.setInt(2, fm.getCodMaterial());
 
-                ps.execute();
+            ps.execute();
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
