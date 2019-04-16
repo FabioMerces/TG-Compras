@@ -363,7 +363,6 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         fornecedor = null;
         
         String CNPJ = txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", "");
-        System.out.println(CNPJ);
         fornecedor = daoFornecedor.consultar(CNPJ);
         
         if(fornecedor == null){
@@ -485,6 +484,9 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         txtTelSecundario.setEnabled(false);
         txtUF.setEnabled(false);
         
+        JOptionPane.showMessageDialog(null, "Alteração dos Dados do Fornecedor: " + txtRazaoSocial.getText() + " concluido com Sucesso");
+        
+        
         txtCNPJ.setText("");
         txtBairro.setText("");
         txtCEP.setText("");
@@ -535,7 +537,6 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         
         
         
-        //FAZER VERIFICACAO SE TA TUDO OK!
         if(flagVerificaTudo == true){
         daoFornecedor.inserir(fornecedor);
         
@@ -557,6 +558,9 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         txtTelPrincipal.setEnabled(false);
         txtTelSecundario.setEnabled(false);
         txtUF.setEnabled(false);
+        
+        JOptionPane.showMessageDialog(null, "Cadastro do Fornecedor: " + txtRazaoSocial.getText() + " concluido com Sucesso");
+        
         
         txtCNPJ.setText("");
         txtBairro.setText("");
@@ -614,6 +618,9 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         txtTelPrincipal.setText("");
         txtTelSecundario.setText("");
         txtUF.setText("");
+        
+        JOptionPane.showMessageDialog(null, "Fornecedor Excluido com Sucesso");
+        
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void txtUFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUFActionPerformed

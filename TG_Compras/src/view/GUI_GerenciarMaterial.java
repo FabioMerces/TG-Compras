@@ -89,7 +89,7 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
 
         jLabel3.setText("Unidade de Medida");
 
-        cmbUnidadeMedida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ML", "LT", "KL", "MG", "UN" }));
+        cmbUnidadeMedida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ML", "LT", "KG", "MG", "UN" }));
         cmbUnidadeMedida.setEnabled(false);
 
         jLabel4.setText("Descrição Material");
@@ -249,6 +249,9 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
             txtNomeMaterial.setEnabled(false);
             cmbUnidadeMedida.setEnabled(false);
             
+            JOptionPane.showMessageDialog(null, "Cadastro do Material: " + txtNomeMaterial.getText() + " concluido com Sucesso");
+        
+            
             txtCodigoMaterial.setText("");
             txtDescricao.setText("");
             txtNomeMaterial.setText("");
@@ -257,6 +260,8 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
             btnCadastrar.setEnabled(false);
             btnAlterar.setEnabled(false);
             btnExcluir.setEnabled(false);
+            
+            
             
         }else{
         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente Por Favor verifique os dados");
@@ -284,6 +289,9 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
             txtNomeMaterial.setEnabled(false);
             cmbUnidadeMedida.setEnabled(false);
             
+            JOptionPane.showMessageDialog(null, "Dados do Material: " + txtNomeMaterial.getText() + " alterados com Sucesso");
+        
+            
             txtCodigoMaterial.setText("");
             txtDescricao.setText("");
             txtNomeMaterial.setText("");
@@ -306,6 +314,9 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
             txtNomeMaterial.setEnabled(false);
             cmbUnidadeMedida.setEnabled(false);
             
+            
+        
+            
             txtCodigoMaterial.setText("");
             txtDescricao.setText("");
             txtNomeMaterial.setText("");
@@ -314,6 +325,8 @@ public class GUI_GerenciarMaterial extends javax.swing.JFrame {
             btnCadastrar.setEnabled(false);
             btnAlterar.setEnabled(false);
             btnExcluir.setEnabled(false);
+            
+            JOptionPane.showMessageDialog(null, "Material Excluido com Sucesso");
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**

@@ -160,7 +160,7 @@
           <StringArray count="5">
             <StringItem index="0" value="ML"/>
             <StringItem index="1" value="LT"/>
-            <StringItem index="2" value="KL"/>
+            <StringItem index="2" value="KG"/>
             <StringItem index="3" value="MG"/>
             <StringItem index="4" value="UN"/>
           </StringArray>

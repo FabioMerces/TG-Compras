@@ -320,6 +320,9 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
         rdbFuncRegular.setSelected(false);
         rdbGerente.setSelected(false);
         
+        JOptionPane.showMessageDialog(null, "Cadastro do Usuario: " + txtUsuario.getText() + " concluido com Sucesso");
+        
+        
         txtUsuario.setText("");
         txtSenha.setText("");
         
@@ -371,6 +374,9 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
         rdbFuncRegular.setSelected(false);
         rdbGerente.setSelected(false);
         
+        JOptionPane.showMessageDialog(null, "Alteração dos Dados do Usuario: " + txtUsuario.getText() + " concluido com Sucesso");
+        
+        
         txtUsuario.setText("");
         txtSenha.setText("");
         
@@ -415,6 +421,12 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
         rdbFuncCompras.setEnabled(false);
         rdbFuncRegular.setEnabled(false);
         rdbGerente.setEnabled(false);
+        
+        //NA VERDADE A EXCLUSAO AINDA NAO TA FUNCIONANDO ASSIM COMO O CADSATRO PRECISA VER COMO SERA FEITA
+        //POR CAUSA DA RESTRICAO COM A TABELA PESSOA
+        
+        JOptionPane.showMessageDialog(null, "Exclusao Realizada com Sucesso");
+        
         
         
     }//GEN-LAST:event_btnExcluirActionPerformed
