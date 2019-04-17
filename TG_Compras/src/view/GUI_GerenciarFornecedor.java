@@ -461,7 +461,6 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         if(txtCEP.getText().isEmpty() || txtRazaoSocial.getText().isEmpty() || txtEmail.getText().isEmpty() || txtNumero.getText().equals(0)){
             flagVerificaTudo = false;
         }
-        System.out.println(txtRazaoSocial.getText());
         if(flagVerificaTudo == true){
         daoFornecedor.alterar(fornecedor);
         

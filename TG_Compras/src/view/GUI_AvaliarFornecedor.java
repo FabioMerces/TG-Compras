@@ -5,6 +5,11 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoFornecedor;
+import javax.swing.JOptionPane;
+import model.Fornecedor;
+
 /**
  *
  * @author M
@@ -35,7 +40,7 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         cmbNotaPreco = new javax.swing.JComboBox<>();
-        cmbNotaGarantia = new javax.swing.JComboBox<>();
+        cmbNotaPosVenda = new javax.swing.JComboBox<>();
         cmbNotaVelocidadeEntrega = new javax.swing.JComboBox<>();
         cmbNotaQualidadeProdutos = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
@@ -48,15 +53,21 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtCNPJ = new javax.swing.JFormattedTextField();
         txtRazaoSocial = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        btnPesquisar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Avaliar Fornecedor");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel21.setText("Nota Final Fornecedor");
 
+        txtNtTotalRanking.setEditable(false);
         txtNtTotalRanking.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         txtNtTotalRanking.setEnabled(false);
 
@@ -71,12 +82,16 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
         jLabel20.setText("Nota Qualidade dos Produtos");
 
         cmbNotaPreco.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        cmbNotaPreco.setEnabled(false);
 
-        cmbNotaGarantia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        cmbNotaPosVenda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        cmbNotaPosVenda.setEnabled(false);
 
         cmbNotaVelocidadeEntrega.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        cmbNotaVelocidadeEntrega.setEnabled(false);
 
         cmbNotaQualidadeProdutos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        cmbNotaQualidadeProdutos.setEnabled(false);
 
         jLabel4.setText("Quanto maior a nota melhor é o Preco do Fornecedor");
 
@@ -110,7 +125,7 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
                                     .addGroup(pnlNotasLayout.createSequentialGroup()
                                         .addComponent(jLabel16)
                                         .addGap(18, 18, 18)
-                                        .addComponent(cmbNotaGarantia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(cmbNotaPosVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel5)
                                     .addGroup(pnlNotasLayout.createSequentialGroup()
                                         .addComponent(jLabel20)
@@ -135,7 +150,7 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
                     .addComponent(jLabel13)
                     .addComponent(cmbNotaPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16)
-                    .addComponent(cmbNotaGarantia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbNotaPosVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(pnlNotasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -151,6 +166,11 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
 
         btnSalvar.setText("Salvar");
         btnSalvar.setEnabled(false);
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Avaliar Fornecedor");
@@ -167,7 +187,12 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
 
         txtRazaoSocial.setEnabled(false);
 
-        jButton3.setText("Pesquisar");
+        btnPesquisar.setText("Pesquisar");
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,7 +209,7 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton3)
+                                .addComponent(btnPesquisar)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel3)
                                 .addGap(18, 18, 18)
@@ -194,7 +219,7 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel21)
                         .addGap(18, 18, 18)
-                        .addComponent(txtNtTotalRanking, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNtTotalRanking, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSalvar)))
                 .addContainerGap())
@@ -210,7 +235,7 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(txtCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtRazaoSocial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                    .addComponent(btnPesquisar))
                 .addGap(18, 18, 18)
                 .addComponent(pnlNotas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -223,6 +248,89 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+        
+        fornecedor = null;
+        
+        String CNPJ = txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", "");
+        fornecedor = daoFornecedor.consultar(CNPJ);
+        if(fornecedor != null){
+            
+            txtRazaoSocial.setText(fornecedor.getNomeFornecedor());
+
+            
+            cmbNotaPosVenda.setSelectedIndex((fornecedor.getNotaPosVenda() - 1));
+            cmbNotaPreco.setSelectedIndex((fornecedor.getNotaPreco()- 1));
+            cmbNotaQualidadeProdutos.setSelectedIndex((fornecedor.getNotaQualidade()- 1));
+            cmbNotaVelocidadeEntrega.setSelectedIndex((fornecedor.getNotaVelocidadeEntrega()- 1));
+                    
+            
+            
+            
+            btnSalvar.setEnabled(true);
+            cmbNotaPosVenda.setEnabled(true);
+            cmbNotaPreco.setEnabled(true);
+            cmbNotaQualidadeProdutos.setEnabled(true);
+            cmbNotaVelocidadeEntrega.setEnabled(true);
+            txtCNPJ.setEnabled(false);
+            txtNtTotalRanking.setEnabled(true);
+            
+            
+                if(cmbNotaPosVenda.getSelectedItem() != null && cmbNotaPreco.getSelectedItem() != null &&
+                    cmbNotaQualidadeProdutos.getSelectedItem() != null && cmbNotaVelocidadeEntrega.getSelectedItem() != null ){
+                        
+                        txtNtTotalRanking.setText(Integer.toString(fornecedor.calculaNotaTotal()));                
+                    }
+                
+                
+            
+        }else{
+        JOptionPane.showMessageDialog(null, "Fornecedor nao encontrado");
+        }
+        
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoFornecedor = new DaoFornecedor(conexao.conectar());
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        
+        
+        
+        
+        
+        if(cmbNotaPosVenda.getSelectedItem() == null || cmbNotaPreco.getSelectedItem() == null ||
+                cmbNotaQualidadeProdutos.getSelectedItem() == null || cmbNotaVelocidadeEntrega.getSelectedItem() == null ){
+        
+            JOptionPane.showMessageDialog(null, "Selecione uma nota para cada requisito do fornecedor");
+        }else{
+        
+        fornecedor.setNotaPosVenda(Integer.parseInt(cmbNotaPosVenda.getSelectedItem().toString()));        
+        fornecedor.setNotaPreco(Integer.parseInt(cmbNotaPreco.getSelectedItem().toString()));
+        fornecedor.setNotaQualidade(Integer.parseInt(cmbNotaQualidadeProdutos.getSelectedItem().toString()));
+        fornecedor.setNotaVelocidadeEntrega(Integer.parseInt(cmbNotaVelocidadeEntrega.getSelectedItem().toString()));
+            
+        daoFornecedor.alterar(fornecedor);
+        
+        btnSalvar.setEnabled(false);
+        cmbNotaPosVenda.setEnabled(false);
+        cmbNotaPreco.setEnabled(false);
+        cmbNotaQualidadeProdutos.setEnabled(false);
+        cmbNotaVelocidadeEntrega.setEnabled(false);
+        txtNtTotalRanking.setText("");
+        txtRazaoSocial.setText("");
+        txtCNPJ.setText("");
+        txtCNPJ.setValue(null);
+        txtCNPJ.setEnabled(true);
+        txtNtTotalRanking.setEnabled(false);
+        fornecedor = null;
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -260,12 +368,12 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JComboBox<String> cmbNotaGarantia;
+    private javax.swing.JComboBox<String> cmbNotaPosVenda;
     private javax.swing.JComboBox<String> cmbNotaPreco;
     private javax.swing.JComboBox<String> cmbNotaQualidadeProdutos;
     private javax.swing.JComboBox<String> cmbNotaVelocidadeEntrega;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel16;
@@ -283,4 +391,8 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
     private javax.swing.JTextField txtNtTotalRanking;
     private javax.swing.JTextField txtRazaoSocial;
     // End of variables declaration//GEN-END:variables
+
+private Conexao conexao;
+private DaoFornecedor daoFornecedor;
+private Fornecedor fornecedor;
 }
