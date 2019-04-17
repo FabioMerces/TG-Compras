@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Fornecedor_Material {
     private int CodMaterial;
-    private ArrayList<Fornecedor>fornecedores;
+    private ArrayList<Fornecedor>fornecedores = new ArrayList<>();
 
     public int getCodMaterial() {
         return CodMaterial;

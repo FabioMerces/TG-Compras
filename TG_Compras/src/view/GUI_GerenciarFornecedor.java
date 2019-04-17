@@ -361,66 +361,66 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         fornecedor = null;
-        
+
         String CNPJ = txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", "");
         fornecedor = daoFornecedor.consultar(CNPJ);
-        
-        if(fornecedor == null){
-        btnBuscar.setEnabled(false);
-        btnCadastrar.setEnabled(true);
-        btnAlterar.setEnabled(false);
-        btnExcluir.setEnabled(false);
-        
-        txtCNPJ.setEnabled(false);
-        txtRazaoSocial.setEnabled(true);
-        txtBairro.setEnabled(true);
-        txtCEP.setEnabled(true);
-        txtCidade.setEnabled(true);
-        txtComplemento.setEnabled(true);
-        txtEmail.setEnabled(true);
-        txtLogradouro.setEnabled(true);
-        txtNumero.setEnabled(true);
-        txtPais.setEnabled(true);
-        txtTelPrincipal.setEnabled(true);
-        txtTelSecundario.setEnabled(true);
-        txtUF.setEnabled(true);
-        
-        }else{
-        btnBuscar.setEnabled(false);
-        btnCadastrar.setEnabled(false);
-        btnAlterar.setEnabled(true);
-        btnExcluir.setEnabled(true);
-        
-        txtCNPJ.setEnabled(false);
-        txtRazaoSocial.setEnabled(true);
-        txtBairro.setEnabled(true);
-        txtCEP.setEnabled(true);
-        txtCidade.setEnabled(true);
-        txtComplemento.setEnabled(true);
-        txtEmail.setEnabled(true);
-        txtLogradouro.setEnabled(true);
-        txtNumero.setEnabled(true);
-        txtPais.setEnabled(true);
-        txtTelPrincipal.setEnabled(true);
-        txtTelSecundario.setEnabled(true);
-        txtUF.setEnabled(true);          
 
-        txtCNPJ.setText(fornecedor.getCNPJ());
-        txtRazaoSocial.setText(fornecedor.getNomeFornecedor());
-        txtBairro.setText(fornecedor.getBairro());
-        txtCEP.setText(fornecedor.getCEP());
-        txtCidade.setText(fornecedor.getCidade());
-        txtComplemento.setText(fornecedor.getComplemento());
-        txtEmail.setText(fornecedor.getEmailFornecedor());
-        txtLogradouro.setText(fornecedor.getLogradouro());
-        txtNumero.setText(Integer.toString(fornecedor.getNumero()));
-        txtPais.setText(fornecedor.getPais());
-        txtTelPrincipal.setText(fornecedor.getTelPrincipal());
-        txtTelSecundario.setText(fornecedor.getTelSecundario());
-        txtUF.setText(fornecedor.getUF());
-        
+        if (fornecedor == null) {
+            btnBuscar.setEnabled(false);
+            btnCadastrar.setEnabled(true);
+            btnAlterar.setEnabled(false);
+            btnExcluir.setEnabled(false);
+
+            txtCNPJ.setEnabled(false);
+            txtRazaoSocial.setEnabled(true);
+            txtBairro.setEnabled(true);
+            txtCEP.setEnabled(true);
+            txtCidade.setEnabled(true);
+            txtComplemento.setEnabled(true);
+            txtEmail.setEnabled(true);
+            txtLogradouro.setEnabled(true);
+            txtNumero.setEnabled(true);
+            txtPais.setEnabled(true);
+            txtTelPrincipal.setEnabled(true);
+            txtTelSecundario.setEnabled(true);
+            txtUF.setEnabled(true);
+
+        } else {
+            btnBuscar.setEnabled(false);
+            btnCadastrar.setEnabled(false);
+            btnAlterar.setEnabled(true);
+            btnExcluir.setEnabled(true);
+
+            txtCNPJ.setEnabled(false);
+            txtRazaoSocial.setEnabled(true);
+            txtBairro.setEnabled(true);
+            txtCEP.setEnabled(true);
+            txtCidade.setEnabled(true);
+            txtComplemento.setEnabled(true);
+            txtEmail.setEnabled(true);
+            txtLogradouro.setEnabled(true);
+            txtNumero.setEnabled(true);
+            txtPais.setEnabled(true);
+            txtTelPrincipal.setEnabled(true);
+            txtTelSecundario.setEnabled(true);
+            txtUF.setEnabled(true);
+
+            txtCNPJ.setText(fornecedor.getCNPJ());
+            txtRazaoSocial.setText(fornecedor.getNomeFornecedor());
+            txtBairro.setText(fornecedor.getBairro());
+            txtCEP.setText(fornecedor.getCEP());
+            txtCidade.setText(fornecedor.getCidade());
+            txtComplemento.setText(fornecedor.getComplemento());
+            txtEmail.setText(fornecedor.getEmailFornecedor());
+            txtLogradouro.setText(fornecedor.getLogradouro());
+            txtNumero.setText(Integer.toString(fornecedor.getNumero()));
+            txtPais.setText(fornecedor.getPais());
+            txtTelPrincipal.setText(fornecedor.getTelPrincipal());
+            txtTelSecundario.setText(fornecedor.getTelSecundario());
+            txtUF.setText(fornecedor.getUF());
+
         }
-        
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -431,18 +431,18 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        
+
         boolean flagVerificaTudo = true;
-        
-        if(txtCEP.getText().isEmpty() || txtRazaoSocial.getText().isEmpty() || txtEmail.getText().isEmpty() || txtNumero.getText().equals(0)){
+
+        if (txtCEP.getText().isEmpty() || txtRazaoSocial.getText().isEmpty() || txtEmail.getText().isEmpty() || txtNumero.getText().equals(0)) {
             flagVerificaTudo = false;
         }
-         
-         if(flagVerificaTudo == false){
-         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n" + 
-                 "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");
-         }
-        
+
+        if (flagVerificaTudo == false) {
+            JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n"
+                    + "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");
+        }
+
         fornecedor.setBairro(txtBairro.getText());
         fornecedor.setCEP(txtCEP.getText().replace(".", "").replace("-", ""));
         fornecedor.setCNPJ(txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", ""));
@@ -456,69 +456,68 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         fornecedor.setTelPrincipal(txtTelPrincipal.getText().replace("(", "").replace(")", "").replace("-", ""));
         fornecedor.setTelSecundario(txtTelSecundario.getText().replace("(", "").replace(")", "").replace("-", ""));
         fornecedor.setUF(txtUF.getText());
-        
+
         //FAZER VERIFICACAO SE TA TUDO OK!
-        if(txtCEP.getText().isEmpty() || txtRazaoSocial.getText().isEmpty() || txtEmail.getText().isEmpty() || txtNumero.getText().equals(0)){
+        if (txtCEP.getText().isEmpty() || txtRazaoSocial.getText().isEmpty() || txtEmail.getText().isEmpty() || txtNumero.getText().equals(0)) {
             flagVerificaTudo = false;
         }
-        if(flagVerificaTudo == true){
-        daoFornecedor.alterar(fornecedor);
-        
-        btnBuscar.setEnabled(true);
-        btnCadastrar.setEnabled(false);
-        btnAlterar.setEnabled(false);
-        btnExcluir.setEnabled(false);
-        
-        txtCNPJ.setEnabled(true);
-        txtRazaoSocial.setEnabled(false);
-        txtBairro.setEnabled(false);
-        txtCEP.setEnabled(false);
-        txtCidade.setEnabled(false);
-        txtComplemento.setEnabled(false);
-        txtEmail.setEnabled(false);
-        txtLogradouro.setEnabled(false);
-        txtNumero.setEnabled(false);
-        txtPais.setEnabled(false);
-        txtTelPrincipal.setEnabled(false);
-        txtTelSecundario.setEnabled(false);
-        txtUF.setEnabled(false);
-        
-        JOptionPane.showMessageDialog(null, "Alteração dos Dados do Fornecedor: " + txtRazaoSocial.getText() + " concluido com Sucesso");
-        
-        
-        txtCNPJ.setText("");
-        txtBairro.setText("");
-        txtCEP.setText("");
-        txtCidade.setText("");
-        txtComplemento.setText("");
-        txtEmail.setText("");
-        txtLogradouro.setText("");
-        txtNumero.setText("");
-        txtPais.setText("");
-        txtRazaoSocial.setText("");
-        txtTelPrincipal.setText("");
-        txtTelSecundario.setText("");
-        txtUF.setText("");
-        }else{
-         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n" + 
-                 "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");           
+        if (flagVerificaTudo == true) {
+            daoFornecedor.alterar(fornecedor);
+
+            btnBuscar.setEnabled(true);
+            btnCadastrar.setEnabled(false);
+            btnAlterar.setEnabled(false);
+            btnExcluir.setEnabled(false);
+
+            txtCNPJ.setEnabled(true);
+            txtRazaoSocial.setEnabled(false);
+            txtBairro.setEnabled(false);
+            txtCEP.setEnabled(false);
+            txtCidade.setEnabled(false);
+            txtComplemento.setEnabled(false);
+            txtEmail.setEnabled(false);
+            txtLogradouro.setEnabled(false);
+            txtNumero.setEnabled(false);
+            txtPais.setEnabled(false);
+            txtTelPrincipal.setEnabled(false);
+            txtTelSecundario.setEnabled(false);
+            txtUF.setEnabled(false);
+
+            JOptionPane.showMessageDialog(null, "Alteração dos Dados do Fornecedor: " + txtRazaoSocial.getText() + " concluido com Sucesso");
+
+            txtCNPJ.setText("");
+            txtBairro.setText("");
+            txtCEP.setText("");
+            txtCidade.setText("");
+            txtComplemento.setText("");
+            txtEmail.setText("");
+            txtLogradouro.setText("");
+            txtNumero.setText("");
+            txtPais.setText("");
+            txtRazaoSocial.setText("");
+            txtTelPrincipal.setText("");
+            txtTelSecundario.setText("");
+            txtUF.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n"
+                    + "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");
         }
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         fornecedor = new Fornecedor();
-        
-         boolean flagVerificaTudo = true;
- 
-         if(txtCEP.getText().isEmpty() || txtRazaoSocial.getText().isEmpty() || txtEmail.getText().isEmpty() || txtNumero.getText().equals(0)){
+
+        boolean flagVerificaTudo = true;
+
+        if (txtCEP.getText().isEmpty() || txtRazaoSocial.getText().isEmpty() || txtEmail.getText().isEmpty() || txtNumero.getText().equals(0)) {
             flagVerificaTudo = false;
         }
-         
-         if(flagVerificaTudo == false){
-         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n" + 
-                 "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");
-         }
-         
+
+        if (flagVerificaTudo == false) {
+            JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n"
+                    + "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");
+        }
+
         fornecedor.setBairro(txtBairro.getText());
         fornecedor.setCEP(txtCEP.getText().replace(".", "").replace("-", ""));
         fornecedor.setCNPJ(txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", ""));
@@ -532,64 +531,60 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         fornecedor.setTelPrincipal(txtTelPrincipal.getText().replace("(", "").replace(")", "").replace("-", ""));
         fornecedor.setTelSecundario(txtTelSecundario.getText().replace("(", "").replace(")", "").replace("-", ""));
         fornecedor.setUF(txtUF.getText());
-        
-        
-        
-        
-        if(flagVerificaTudo == true){
-        daoFornecedor.inserir(fornecedor);
-        
-        btnBuscar.setEnabled(true);
-        btnCadastrar.setEnabled(false);
-        btnAlterar.setEnabled(false);
-        btnExcluir.setEnabled(false);
-        
-        txtCNPJ.setEnabled(true);
-        txtRazaoSocial.setEnabled(false);
-        txtBairro.setEnabled(false);
-        txtCEP.setEnabled(false);
-        txtCidade.setEnabled(false);
-        txtComplemento.setEnabled(false);
-        txtEmail.setEnabled(false);
-        txtLogradouro.setEnabled(false);
-        txtNumero.setEnabled(false);
-        txtPais.setEnabled(false);
-        txtTelPrincipal.setEnabled(false);
-        txtTelSecundario.setEnabled(false);
-        txtUF.setEnabled(false);
-        
-        JOptionPane.showMessageDialog(null, "Cadastro do Fornecedor: " + txtRazaoSocial.getText() + " concluido com Sucesso");
-        
-        
-        txtCNPJ.setText("");
-        txtBairro.setText("");
-        txtCEP.setText("");
-        txtCidade.setText("");
-        txtComplemento.setText("");
-        txtEmail.setText("");
-        txtLogradouro.setText("");
-        txtNumero.setText("");
-        txtPais.setText("");
-        txtRazaoSocial.setText("");
-        txtTelPrincipal.setText("");
-        txtTelSecundario.setText("");
-        txtUF.setText("");
-        }else{
-         JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n" + 
-                 "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");
-           
+
+        if (flagVerificaTudo == true) {
+            daoFornecedor.inserir(fornecedor);
+
+            btnBuscar.setEnabled(true);
+            btnCadastrar.setEnabled(false);
+            btnAlterar.setEnabled(false);
+            btnExcluir.setEnabled(false);
+
+            txtCNPJ.setEnabled(true);
+            txtRazaoSocial.setEnabled(false);
+            txtBairro.setEnabled(false);
+            txtCEP.setEnabled(false);
+            txtCidade.setEnabled(false);
+            txtComplemento.setEnabled(false);
+            txtEmail.setEnabled(false);
+            txtLogradouro.setEnabled(false);
+            txtNumero.setEnabled(false);
+            txtPais.setEnabled(false);
+            txtTelPrincipal.setEnabled(false);
+            txtTelSecundario.setEnabled(false);
+            txtUF.setEnabled(false);
+
+            JOptionPane.showMessageDialog(null, "Cadastro do Fornecedor: " + txtRazaoSocial.getText() + " concluido com Sucesso");
+
+            txtCNPJ.setText("");
+            txtBairro.setText("");
+            txtCEP.setText("");
+            txtCidade.setText("");
+            txtComplemento.setText("");
+            txtEmail.setText("");
+            txtLogradouro.setText("");
+            txtNumero.setText("");
+            txtPais.setText("");
+            txtRazaoSocial.setText("");
+            txtTelPrincipal.setText("");
+            txtTelSecundario.setText("");
+            txtUF.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente por favor verifique os dados\n"
+                    + "Os Seguintes Campos sao Obrigatorios: CEP, Email , Numero , Razao Social");
+
         }
-        
+
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        daoFornecedor.excluir(fornecedor.getCNPJ().replace(".", "").replace("-", "").replace("/", "")); 
-        
+        daoFornecedor.excluir(fornecedor.getCNPJ().replace(".", "").replace("-", "").replace("/", ""));
+
         btnBuscar.setEnabled(true);
         btnCadastrar.setEnabled(false);
         btnAlterar.setEnabled(false);
         btnExcluir.setEnabled(false);
-        
+
         txtCNPJ.setEnabled(true);
         txtRazaoSocial.setEnabled(false);
         txtBairro.setEnabled(false);
@@ -603,7 +598,7 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         txtTelPrincipal.setEnabled(false);
         txtTelSecundario.setEnabled(false);
         txtUF.setEnabled(false);
-        
+
         txtCNPJ.setText("");
         txtBairro.setText("");
         txtCEP.setText("");
@@ -617,9 +612,9 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
         txtTelPrincipal.setText("");
         txtTelSecundario.setText("");
         txtUF.setText("");
-        
+
         JOptionPane.showMessageDialog(null, "Fornecedor Excluido com Sucesso");
-        
+
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void txtUFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUFActionPerformed
@@ -697,6 +692,6 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
     private javax.swing.JTextField txtUF;
     // End of variables declaration//GEN-END:variables
 private Conexao conexao = null;
-private Fornecedor fornecedor = null;
-private DaoFornecedor daoFornecedor = null;
+    private Fornecedor fornecedor = null;
+    private DaoFornecedor daoFornecedor = null;
 }

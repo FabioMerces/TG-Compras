@@ -26,18 +26,17 @@ public class DaoFornecedor {
     }
 
     public Fornecedor consultar(String CNPJ) {
-        Fornecedor f = null;
+        Fornecedor f = new Fornecedor();
         ResultSet rs;
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("SELECT * FROM tbl_Fornecedor "
-                    + "WHERE CNPJ = ?");
+            ps = conn.prepareStatement("SELECT * FROM tbl_Fornecedor"
+                    + " WHERE CNPJ = ?");
             ps.setString(1, CNPJ);
 
             rs = ps.executeQuery();
-            
+
             if (rs.next() == true) {
-                f = new Fornecedor();
                 f.setCNPJ(rs.getString("CNPJ"));
                 f.setNomeFornecedor(rs.getString("NomeFornecedor"));
                 f.setLogradouro(rs.getString("Logradouro"));

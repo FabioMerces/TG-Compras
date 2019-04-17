@@ -155,25 +155,25 @@ public class GUI_AssociarMaterialFornecedor extends javax.swing.JFrame {
                 throw new Exception("Não é possível ligação entre material e fornecedor."
                         + "\nMaterial não informado.");
             } else {
-                ArrayList<Fornecedor> listaFornecedores = matForn.getFornecedores();
-
+                List<Fornecedor> listaFornecedores = matForn.getFornecedores();
                 if (!txtCNPJ.getText().isEmpty()) {/*Inserção do Fornecedor pelo txt */
                     CNPJ = txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", "");
                     /*Adcionar validaCNPJ dps(Motivo: Teste Livre)*/
                     fornecedor = daoFornecedor.consultar(CNPJ);
 
-                    if (fornecedor == null) {
+                    if (fornecedor.getCNPJ() == null) {
                         throw new Exception("Fornecedor não cadstrado ou CNPJ incorreto.");
                     }
                 } else {/*Inserção do Fornecedor pelo combobox */
                     fornecedor = listaComboFornecedor.get(cmbFornecedor.getSelectedIndex());
                 }
                 for (int i = 0; i < listaFornecedores.size(); i++) {
-                    if (listaFornecedores.get(i) == fornecedor) {
+                    if (listaFornecedores.get(i).getCNPJ().equals(fornecedor.getCNPJ())) {
                         throw new Exception("Material e Fornecedor informados já vínculados.");
                     }
                 }
                 matForn.addFornecedor(fornecedor);
+                matForn.setCodMaterial(material.getCodMaterial());
                 if (JOptionPane.showConfirmDialog(null, "Deseja vincular Material[" + material.getNomeMaterial()
                         + "] e Fornecedor[" + fornecedor.getNomeFornecedor() + "] ?", "Confirmação de Vínculo",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
@@ -195,27 +195,17 @@ public class GUI_AssociarMaterialFornecedor extends javax.swing.JFrame {
         listaComboFornecedor = daoFornecedor.listarFornecedores();
         listaComboMaterial = daoMaterial.listarMaterial();
         try {
-            //cmbFornecedor.removeAllItems();
-            //System.out.println("TESTE1");
-            //cmbMaterial.removeAllItems();
-             //System.out.println("TESTE2");
             for (int i = 0; i < listaComboFornecedor.size(); i++) {
-                if (listaComboFornecedor.get(i) == null) {
-                    throw new Exception("Não há Fornecedores cadastrados");
-                } else {
-                    cmbFornecedor.addItem(listaComboFornecedor.get(i).getNomeFornecedor());
-                }
+                cmbFornecedor.addItem(listaComboFornecedor.get(i).getNomeFornecedor());
             }
             for (int i = 0; i < listaComboMaterial.size(); i++) {
-                if (listaComboMaterial.get(i) == null) {
-                    throw new Exception("Não há Cursos cadastrados");
-                } else {
-                    cmbMaterial.addItem(listaComboMaterial.get(i).getNomeMaterial());
-                }
+                cmbMaterial.addItem(listaComboMaterial.get(i).getNomeMaterial());
+
             }
             txtCodigoMaterial.setText("");
+            txtCNPJ.setText("");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao iniciar: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Falha ao iniciar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_formWindowOpened
 
@@ -234,23 +224,23 @@ public class GUI_AssociarMaterialFornecedor extends javax.swing.JFrame {
                             + "Use a lista de materiais p/ procura-lo por nome caso não lembre seu código.");
                 } else {
                     for (int i = 0; i < listaComboMaterial.size(); i++) {
-                        if(material.getCodMaterial() == listaComboMaterial.get(i).getCodMaterial()){
+                        if (material.getCodMaterial() == listaComboMaterial.get(i).getCodMaterial()) {
                             cmbMaterial.setSelectedItem(material.getNomeMaterial());
+                            matForn = daoMatForn.consultar(material.getCodMaterial());
+                            break;
                         }
                     }
-                    matForn = daoMatForn.consultar(material.getCodMaterial());
-                     System.out.println("teste");
                     if (matForn == null) {
-                        /* Material sem vínculo */
+                        /* Material Sem Sínculo */
                         matForn = new Fornecedor_Material();
                         matForn.setCodMaterial(material.getCodMaterial());
                     } else {
-                        System.out.println("hehe");
+                        /*Material Com Vinculo */
                     }
                 }
             }
         } catch (Exception ex) {
-           JOptionPane.showMessageDialog(null, "Falha ao buscar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao buscar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
@@ -263,7 +253,7 @@ public class GUI_AssociarMaterialFornecedor extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbMaterialActionPerformed
 
     private void cmbFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFornecedorActionPerformed
-        if(listaComboFornecedor != null){
+        if (listaComboFornecedor != null) {
             txtCNPJ.setText(listaComboFornecedor.get(cmbFornecedor.getSelectedIndex()).getCNPJ());
         } else {
             System.out.println("Lista de Fornecedores vázia.");
