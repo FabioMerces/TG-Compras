@@ -61,9 +61,6 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
         //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
         dm = (DefaultTableModel) jTableFornecedores.getModel();
         
-       
-        
-        
     }
 
     /**
@@ -245,7 +242,6 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
 
         }else{
             ftxtCNPJ.setEnabled(false);
-            
         }
     }//GEN-LAST:event_rbPesquisaPorCNPJActionPerformed
 
