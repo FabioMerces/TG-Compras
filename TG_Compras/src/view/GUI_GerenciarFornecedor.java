@@ -360,67 +360,70 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        fornecedor = null;
+        try {
+            fornecedor = null;
 
-        String CNPJ = txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", "");
-        fornecedor = daoFornecedor.consultar(CNPJ);
+            String CNPJ = txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", "");
+            fornecedor = daoFornecedor.consultar(CNPJ);
 
-        if (fornecedor == null) {
-            btnBuscar.setEnabled(false);
-            btnCadastrar.setEnabled(true);
-            btnAlterar.setEnabled(false);
-            btnExcluir.setEnabled(false);
+            if (fornecedor == null) {
+                btnBuscar.setEnabled(false);
+                btnCadastrar.setEnabled(true);
+                btnAlterar.setEnabled(false);
+                btnExcluir.setEnabled(false);
 
-            txtCNPJ.setEnabled(false);
-            txtRazaoSocial.setEnabled(true);
-            txtBairro.setEnabled(true);
-            txtCEP.setEnabled(true);
-            txtCidade.setEnabled(true);
-            txtComplemento.setEnabled(true);
-            txtEmail.setEnabled(true);
-            txtLogradouro.setEnabled(true);
-            txtNumero.setEnabled(true);
-            txtPais.setEnabled(true);
-            txtTelPrincipal.setEnabled(true);
-            txtTelSecundario.setEnabled(true);
-            txtUF.setEnabled(true);
+                txtCNPJ.setEnabled(false);
+                txtRazaoSocial.setEnabled(true);
+                txtBairro.setEnabled(true);
+                txtCEP.setEnabled(true);
+                txtCidade.setEnabled(true);
+                txtComplemento.setEnabled(true);
+                txtEmail.setEnabled(true);
+                txtLogradouro.setEnabled(true);
+                txtNumero.setEnabled(true);
+                txtPais.setEnabled(true);
+                txtTelPrincipal.setEnabled(true);
+                txtTelSecundario.setEnabled(true);
+                txtUF.setEnabled(true);
 
-        } else {
-            btnBuscar.setEnabled(false);
-            btnCadastrar.setEnabled(false);
-            btnAlterar.setEnabled(true);
-            btnExcluir.setEnabled(true);
+            } else {
+                btnBuscar.setEnabled(false);
+                btnCadastrar.setEnabled(false);
+                btnAlterar.setEnabled(true);
+                btnExcluir.setEnabled(true);
 
-            txtCNPJ.setEnabled(false);
-            txtRazaoSocial.setEnabled(true);
-            txtBairro.setEnabled(true);
-            txtCEP.setEnabled(true);
-            txtCidade.setEnabled(true);
-            txtComplemento.setEnabled(true);
-            txtEmail.setEnabled(true);
-            txtLogradouro.setEnabled(true);
-            txtNumero.setEnabled(true);
-            txtPais.setEnabled(true);
-            txtTelPrincipal.setEnabled(true);
-            txtTelSecundario.setEnabled(true);
-            txtUF.setEnabled(true);
+                txtCNPJ.setEnabled(false);
+                txtRazaoSocial.setEnabled(true);
+                txtBairro.setEnabled(true);
+                txtCEP.setEnabled(true);
+                txtCidade.setEnabled(true);
+                txtComplemento.setEnabled(true);
+                txtEmail.setEnabled(true);
+                txtLogradouro.setEnabled(true);
+                txtNumero.setEnabled(true);
+                txtPais.setEnabled(true);
+                txtTelPrincipal.setEnabled(true);
+                txtTelSecundario.setEnabled(true);
+                txtUF.setEnabled(true);
 
-            txtCNPJ.setText(fornecedor.getCNPJ());
-            txtRazaoSocial.setText(fornecedor.getNomeFornecedor());
-            txtBairro.setText(fornecedor.getBairro());
-            txtCEP.setText(fornecedor.getCEP());
-            txtCidade.setText(fornecedor.getCidade());
-            txtComplemento.setText(fornecedor.getComplemento());
-            txtEmail.setText(fornecedor.getEmailFornecedor());
-            txtLogradouro.setText(fornecedor.getLogradouro());
-            txtNumero.setText(Integer.toString(fornecedor.getNumero()));
-            txtPais.setText(fornecedor.getPais());
-            txtTelPrincipal.setText(fornecedor.getTelPrincipal());
-            txtTelSecundario.setText(fornecedor.getTelSecundario());
-            txtUF.setText(fornecedor.getUF());
+                txtCNPJ.setText(fornecedor.getCNPJ());
+                txtRazaoSocial.setText(fornecedor.getNomeFornecedor());
+                txtBairro.setText(fornecedor.getBairro());
+                txtCEP.setText(fornecedor.getCEP());
+                txtCidade.setText(fornecedor.getCidade());
+                txtComplemento.setText(fornecedor.getComplemento());
+                txtEmail.setText(fornecedor.getEmailFornecedor());
+                txtLogradouro.setText(fornecedor.getLogradouro());
+                txtNumero.setText(Integer.toString(fornecedor.getNumero()));
+                txtPais.setText(fornecedor.getPais());
+                txtTelPrincipal.setText(fornecedor.getTelPrincipal());
+                txtTelSecundario.setText(fornecedor.getTelSecundario());
+                txtUF.setText(fornecedor.getUF());
 
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened

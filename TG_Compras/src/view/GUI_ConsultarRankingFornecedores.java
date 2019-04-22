@@ -5,9 +5,19 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoFornecedor;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Fornecedor;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
- * @author M
+ * @author Matheus Jorge
  */
 public class GUI_ConsultarRankingFornecedores extends javax.swing.JFrame {
 
@@ -35,6 +45,11 @@ public class GUI_ConsultarRankingFornecedores extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consulta Ranking de Fornecedores");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Ranking de Fornecedores");
@@ -84,6 +99,26 @@ public class GUI_ConsultarRankingFornecedores extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        
+        /*Pesquisa fornecedores ordenando-os pela maior a menos NotaFinal e organiza o Ranking*/
+        String sqlquery = "SELECT Row_Number() OVER(ORDER BY 4) AS Ranking, CNPJ, NomeFornecedor, (NotaQualidade+NotaPosVenda+NotaVelocidade+NotaPreco)/4 AS NotaFinal, NotaQualidade, NotaPosVenda, NotaVelocidade, NotaPreco FROM tbl_fornecedor ORDER BY NotaFinal DESC";
+
+        Statement stmt;
+        ResultSet rs;
+
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableRanking.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
@@ -124,4 +159,8 @@ public class GUI_ConsultarRankingFornecedores extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableRanking;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao = null;
+    DaoFornecedor daoFornecedor;
+    Fornecedor fornecedor = null;
+
 }

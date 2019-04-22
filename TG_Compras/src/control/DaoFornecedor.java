@@ -26,7 +26,7 @@ public class DaoFornecedor {
     }
 
     public Fornecedor consultar(String CNPJ) {
-        Fornecedor f = new Fornecedor();
+        Fornecedor f = null;
         ResultSet rs;
         PreparedStatement ps = null;
         try {
@@ -37,6 +37,8 @@ public class DaoFornecedor {
             rs = ps.executeQuery();
 
             if (rs.next() == true) {
+                f = new Fornecedor();
+
                 f.setCNPJ(rs.getString("CNPJ"));
                 f.setNomeFornecedor(rs.getString("NomeFornecedor"));
                 f.setLogradouro(rs.getString("Logradouro"));

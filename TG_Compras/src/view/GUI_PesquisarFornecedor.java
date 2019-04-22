@@ -6,18 +6,14 @@
 package view;
 
 import control.Conexao;
-import control.DaoFornecedor;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import model.Fornecedor;
 import net.proteanit.sql.DbUtils;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
@@ -32,38 +28,30 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
      * Creates new form GUI_PesquisarFornecedor
      */
     //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
-    DefaultTableModel dm=null;
-    
+    DefaultTableModel dm = null;
+
     public GUI_PesquisarFornecedor() {
         initComponents();
-        
+
         jTableFornecedores.setAutoCreateRowSorter(true);
-        
-        
+
         conexao = new Conexao("GABRIEL", "GABRIEL");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
-        daoFornecedor = new DaoFornecedor(conexao.conectar());
-        
-        
+
         //PARA CARREGAR DADOS DO BANCO DE DADOS NA TABELA
         String sqlquery = "Select CNPJ , NOMEFORNECEDOR , CEP , CIDADE , UF , TELPRINCIPAL , TELSECUNDARIO , EMAIL from tbl_fornecedor";
         Statement stmt;
         ResultSet rs;
-        try{
-            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             rs = stmt.executeQuery(sqlquery);
             jTableFornecedores.setModel(DbUtils.resultSetToTableModel(rs));
-        }catch (SQLException ex){
-            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE,null,ex);
-        }    
-        
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
         dm = (DefaultTableModel) jTableFornecedores.getModel();
-        
-       
-        
-        
     }
 
     /**
@@ -229,51 +217,56 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
     //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
-     private void filter(String query){        
-         TableRowSorter<DefaultTableModel> tr=new TableRowSorter<>(dm);
-         jTableFornecedores.setRowSorter(tr);         
-         tr.setRowFilter(RowFilter.regexFilter(query));
+    private void filter(String query) {
+        TableRowSorter<DefaultTableModel> tr = (TableRowSorter) jTableFornecedores.getRowSorter();
+        if (query.length() == 0) {
+            tr.setRowFilter(null);
+        } else {
+            try {
+                RowFilter<DefaultTableModel, Object> rf = RowFilter.regexFilter(query, 0, 1);
+                tr.setRowFilter(rf);
+            } catch (java.util.regex.PatternSyntaxException e) {
+                tr.setRowFilter(null);
+            }
         }
-    
+    }
+
     private void rbPesquisaPorCNPJActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisaPorCNPJActionPerformed
-        if(rbPesquisaPorCNPJ.isSelected()){
+        if (rbPesquisaPorCNPJ.isSelected()) {
             ftxtCNPJ.setEnabled(true);
             txtNomeFornecedor.setText("");
             txtNomeFornecedor.setEnabled(false);
 
-        }else{
+        } else {
             ftxtCNPJ.setEnabled(false);
-            
+
         }
     }//GEN-LAST:event_rbPesquisaPorCNPJActionPerformed
 
     private void rbPesquisarPorNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarPorNomeActionPerformed
-        if(rbPesquisarPorNome.isSelected()){
+        if (rbPesquisarPorNome.isSelected()) {
             txtNomeFornecedor.setEnabled(true);
-            ftxtCNPJ.setEnabled(false);         
+            ftxtCNPJ.setEnabled(false);
 
-        }else{
+        } else {
             txtNomeFornecedor.setEnabled(false);
         }
     }//GEN-LAST:event_rbPesquisarPorNomeActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-    
+
     }//GEN-LAST:event_formWindowOpened
 
     private void ftxtCNPJKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ftxtCNPJKeyReleased
         //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
         String query = ftxtCNPJ.getText().replace(".", "").replace("-", "").replace("/", "").trim();
-        System.out.println(query);
         filter(query);
     }//GEN-LAST:event_ftxtCNPJKeyReleased
 
     private void txtNomeFornecedorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeFornecedorKeyReleased
         //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
         String query = txtNomeFornecedor.getText();
-        System.out.println(query);
         filter(query);
     }//GEN-LAST:event_txtNomeFornecedorKeyReleased
 
@@ -335,9 +328,5 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbPesquisarPorNome;
     private javax.swing.JTextField txtNomeFornecedor;
     // End of variables declaration//GEN-END:variables
-private Conexao conexao = null;
-private Fornecedor fornecedor = null;
-private DaoFornecedor daoFornecedor = null;
-private List<Fornecedor> listaComboFornecedor = null;
-private Connection conn;
+    private Conexao conexao = null;
 }

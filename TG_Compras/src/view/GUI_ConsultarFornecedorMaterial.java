@@ -1,9 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
+
+import control.Conexao;
+import control.DaoMaterial;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Material;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -46,6 +56,11 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisar Fornecedor de Material");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("Codigo do Material");
 
@@ -53,30 +68,50 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
 
         txtCodigoMaterial.setEnabled(false);
 
-        cmbNomeMaterial.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbNomeMaterial.setEnabled(false);
+        cmbNomeMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbNomeMaterialActionPerformed(evt);
+            }
+        });
 
         btnPesquisarFornecedores.setText("Pesquisar Fornecedores Disponíveis");
+        btnPesquisarFornecedores.setEnabled(false);
+        btnPesquisarFornecedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarFornecedoresActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Tabela de Fornecedores Disponíveis");
 
         jTableFornecedoresDisponiveis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "CNPJ", "Nome Fornecedor", "Nota do Fornecedor"
+                "CNPJ", "Nome Fornecedor", "Nota Velocidade", "Nota Preço", "Nota Pos Venda", "Nota Qualidade"
             }
         ));
         jScrollPane1.setViewportView(jTableFornecedoresDisponiveis);
 
         btnPesquisarMaterial.setText("Pesquisar Material");
         btnPesquisarMaterial.setEnabled(false);
+        btnPesquisarMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarMaterialActionPerformed(evt);
+            }
+        });
 
         btnCopiarCNPJ.setText("Copiar CNPJ do Fornecedor Selecionado");
+        btnCopiarCNPJ.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopiarCNPJActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbPesquisaPorCodigo);
         rbPesquisaPorCodigo.setText("Pesquisar material pelo codigo");
@@ -124,7 +159,7 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
                     .addComponent(btnPesquisarFornecedores)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCopiarCNPJ))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,26 +192,101 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void rbPesquisaPorCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisaPorCodigoActionPerformed
-        if(rbPesquisaPorCodigo.isSelected()){
+        if (rbPesquisaPorCodigo.isSelected()) {
             txtCodigoMaterial.setEnabled(true);
             btnPesquisarMaterial.setEnabled(true);
+            btnPesquisarFornecedores.setEnabled(true);
             cmbNomeMaterial.setEnabled(false);
-        }else{
+        } else {
             txtCodigoMaterial.setEnabled(false);
             btnPesquisarMaterial.setEnabled(false);
         }
     }//GEN-LAST:event_rbPesquisaPorCodigoActionPerformed
 
     private void rbPesquisarPorNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarPorNomeActionPerformed
-        if(rbPesquisarPorNome.isSelected()){
+        if (rbPesquisarPorNome.isSelected()) {
             cmbNomeMaterial.setEnabled(true);
+            btnPesquisarFornecedores.setEnabled(true);
             txtCodigoMaterial.setEnabled(false);
             btnPesquisarMaterial.setEnabled(false);
-            
-        }else{
+
+        } else {
             cmbNomeMaterial.setEnabled(false);
         }
     }//GEN-LAST:event_rbPesquisarPorNomeActionPerformed
+
+    private void btnPesquisarFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarFornecedoresActionPerformed
+        String sqlquery = "SELECT tbl_fornecedor.cnpj , tbl_fornecedor.nomefornecedor, tbl_fornecedor.notavelocidade, tbl_fornecedor.notapreco, tbl_fornecedor.notaposvenda, tbl_fornecedor.notaqualidade FROM tbl_fornecedor "
+                + " INNER JOIN tbl_fornecedor_material ON tbl_fornecedor_material.cnpj = tbl_fornecedor.cnpj WHERE tbl_fornecedor_material.codmaterial = " + Integer.parseInt(txtCodigoMaterial.getText().trim());
+
+        Statement stmt;
+        ResultSet rs;
+
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableFornecedoresDisponiveis.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnPesquisarFornecedoresActionPerformed
+
+    private void btnCopiarCNPJActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarCNPJActionPerformed
+        String myString = jTableFornecedoresDisponiveis.getValueAt(jTableFornecedoresDisponiveis.getSelectedRow(), 0).toString();
+        StringSelection stringSelection = new StringSelection(myString);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }//GEN-LAST:event_btnCopiarCNPJActionPerformed
+
+    private void btnPesquisarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarMaterialActionPerformed
+        material = null;
+        try {
+            if (txtCodigoMaterial.getText().isEmpty()) {
+                throw new Exception("Codigo do Material não foi informado.\n"
+                        + "Por favor informar um código de material p/ pesquisa.");
+            } else {
+                material = daoMaterial.consultar(Integer.parseInt(txtCodigoMaterial.getText().trim()));
+
+                if (material == null) {
+                    throw new Exception("Codigo do material informado não existe.\n "
+                            + "Use a lista de materiais p/ procura-lo pelo seu nome caso não lembre seu código.");
+                } else {
+                    for (int i = 0; i < listaComboMaterial.size(); i++) {
+                        if (material.getCodMaterial() == listaComboMaterial.get(i).getCodMaterial()) {
+                            cmbNomeMaterial.setSelectedItem(material.getNomeMaterial());
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar material: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnPesquisarMaterialActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoMaterial = new DaoMaterial(conexao.conectar());
+        listaComboMaterial = daoMaterial.listarMaterial();
+        try {
+            for (int i = 0; i < listaComboMaterial.size(); i++) {
+                cmbNomeMaterial.addItem(listaComboMaterial.get(i).getNomeMaterial());
+            }
+            txtCodigoMaterial.setText("");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao iniciar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void cmbNomeMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNomeMaterialActionPerformed
+        if (listaComboMaterial != null) {
+            txtCodigoMaterial.setText(String.valueOf(listaComboMaterial.get(cmbNomeMaterial.getSelectedIndex()).getCodMaterial()));
+        } else {
+            System.out.println("Lista de Materiais vázia.");
+        }
+    }//GEN-LAST:event_cmbNomeMaterialActionPerformed
 
     /**
      * @param args the command line arguments
@@ -230,4 +340,8 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbPesquisarPorNome;
     private javax.swing.JTextField txtCodigoMaterial;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao = null;
+    Material material = null;
+    private List<Material> listaComboMaterial;
+    DaoMaterial daoMaterial;
 }

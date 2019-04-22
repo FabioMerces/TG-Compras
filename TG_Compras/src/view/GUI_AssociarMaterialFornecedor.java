@@ -4,7 +4,6 @@ import control.Conexao;
 import control.DaoFornecedor;
 import control.DaoMaterial;
 import control.DaoMaterialFornecedor;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import model.Fornecedor;
@@ -200,7 +199,6 @@ public class GUI_AssociarMaterialFornecedor extends javax.swing.JFrame {
             }
             for (int i = 0; i < listaComboMaterial.size(); i++) {
                 cmbMaterial.addItem(listaComboMaterial.get(i).getNomeMaterial());
-
             }
             txtCodigoMaterial.setText("");
             txtCNPJ.setText("");
