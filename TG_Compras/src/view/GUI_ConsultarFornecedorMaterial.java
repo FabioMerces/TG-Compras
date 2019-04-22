@@ -51,6 +51,8 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
 
         jLabel2.setText("Nome do Material");
 
+        txtCodigoMaterial.setEnabled(false);
+
         cmbNomeMaterial.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbNomeMaterial.setEnabled(false);
 

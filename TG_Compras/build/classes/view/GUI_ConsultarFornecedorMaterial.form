@@ -106,6 +106,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtCodigoMaterial">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="cmbNomeMaterial">
       <Properties>
