@@ -60,27 +60,12 @@ public class DaoMaterialFornecedor {
         try {
             ps = conn.prepareStatement("INSERT INTO tbl_Fornecedor_Material (CNPJ, CodMaterial)"
                     + " VALUES(?,?)");
-            ps.setString(1, fornecedores.get(fornecedores.size() - 1).getCNPJ());
+            ps.setString(1, fornecedores.get(fornecedores.size()-1).getCNPJ());
             ps.setInt(2, fm.getCodMaterial());
 
             ps.execute();
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
-    }
-
-    public ResultSet pesquisar(int CodMaterial) {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            ps = conn.prepareStatement("Select CNPJ from tbl_Fornecedor_Material"
-                    + " WHERE CodMaterial = ?");
-            ps.setInt(1, CodMaterial);
-            ps = conn.prepareStatement("Select CNPJ , NOMEFORNECEDOR, NOTAVELOCIDADE, NOTAPRECO, NOTAPOSVENDA, NOTAQUALIDADE from tbl_fornecedor"
-                    + " WHERE CNPJ = ?");
-        } catch (SQLException ex) {
-            System.out.println(ex.toString());
-        }
-        return (rs);
     }
 }

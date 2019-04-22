@@ -200,6 +200,7 @@ public class GUI_AssociarMaterialFornecedor extends javax.swing.JFrame {
             }
             for (int i = 0; i < listaComboMaterial.size(); i++) {
                 cmbMaterial.addItem(listaComboMaterial.get(i).getNomeMaterial());
+
             }
             txtCodigoMaterial.setText("");
             txtCNPJ.setText("");
