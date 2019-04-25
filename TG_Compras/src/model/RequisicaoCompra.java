@@ -24,10 +24,6 @@ public class RequisicaoCompra {
         return materiais;
     }
 
-    public void setMateriais(ArrayList<Material> materiais) {
-        this.materiais = materiais;
-    }
-    
     public String getDataSolicitacao() {
         return dataSolicitacao;
     }
@@ -68,8 +64,6 @@ public class RequisicaoCompra {
         this.codRequisicao = codRequisicao;
     }
 
-  
-
     public String getDescricaoMateriaisNaoEncontrados() {
         return descricaoMateriaisNaoEncontrados;
     }
@@ -80,6 +74,5 @@ public class RequisicaoCompra {
     
     public void addMateriais(Material m){
         materiais.add(m);
-    }
-    
+    } 
 }

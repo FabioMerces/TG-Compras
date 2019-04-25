@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import control.Conexao;
@@ -17,7 +12,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.Material;
 import net.proteanit.sql.DbUtils;
-import java.awt.datatransfer.*;
 import javax.swing.JOptionPane;
 import model.MateriaisSolicitados;
 import model.RequisicaoCompra;
@@ -33,12 +27,11 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
      */
     DefaultTableModel dm = null;
     int flagConfirma = 0;
-    
+
     public GUI_RequisicaoCompra() {
         initComponents();
-        jTableRequisicaodeCompra.setAutoCreateRowSorter(true); 
-        
-        
+        jTableRequisicaodeCompra.setAutoCreateRowSorter(true);
+
     }
 
     /**
@@ -62,7 +55,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         chkMaterialNaoCadastrado = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextAreaDescricaoMaterial = new javax.swing.JTextArea();
+        txtDescricaoMaterial = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         btnEnviarRequisicao = new javax.swing.JButton();
         btnRemoverDaLista = new javax.swing.JButton();
@@ -112,21 +105,16 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         jLabel5.setText("Tabela da Requisição de Compra");
 
         chkMaterialNaoCadastrado.setText("Não Encontrei Meu(s) Material(is) no Sistema");
-        chkMaterialNaoCadastrado.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                chkMaterialNaoCadastradoMouseClicked(evt);
-            }
-        });
         chkMaterialNaoCadastrado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkMaterialNaoCadastradoActionPerformed(evt);
             }
         });
 
-        jTextAreaDescricaoMaterial.setColumns(20);
-        jTextAreaDescricaoMaterial.setRows(5);
-        jTextAreaDescricaoMaterial.setEnabled(false);
-        jScrollPane2.setViewportView(jTextAreaDescricaoMaterial);
+        txtDescricaoMaterial.setColumns(20);
+        txtDescricaoMaterial.setRows(5);
+        txtDescricaoMaterial.setEnabled(false);
+        jScrollPane2.setViewportView(txtDescricaoMaterial);
 
         jLabel6.setText("Descreva em detalhes o(s) material(is) que deseja requerir");
 
@@ -272,30 +260,26 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
 
     private void chkMaterialNaoCadastradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkMaterialNaoCadastradoActionPerformed
 
-        if (chkMaterialNaoCadastrado.isSelected()){
-            jTextAreaDescricaoMaterial.setEnabled(true);
-        }else{
-            jTextAreaDescricaoMaterial.setEnabled(false);
+        if (chkMaterialNaoCadastrado.isSelected()) {
+            txtDescricaoMaterial.setEnabled(true);
+        } else {
+            txtDescricaoMaterial.setEnabled(false);
         }
     }//GEN-LAST:event_chkMaterialNaoCadastradoActionPerformed
 
-    private void chkMaterialNaoCadastradoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkMaterialNaoCadastradoMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chkMaterialNaoCadastradoMouseClicked
+    private void Filter(String query) {
 
-    private void Filter (String query){
-    
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
         jTablePesquisaMaterial.setRowSorter(tr);
         tr.setRowFilter(RowFilter.regexFilter(query));
     }
-    
+
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         conexao = new Conexao("GABRIEL", "GABRIEL");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
-        
+
         String sqlquery = "SELECT CodMaterial , NomeMaterial , UnidMedida , DescriptMaterial FROM tbl_material";
 
         Statement stmt;
@@ -315,74 +299,96 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     private void txtNomeMaterialKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeMaterialKeyReleased
         //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
         String query = txtNomeMaterial.getText().trim();
-        System.out.println(query);
         Filter(query);
     }//GEN-LAST:event_txtNomeMaterialKeyReleased
 
     private void btnAdicionarNaListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarNaListaActionPerformed
-       if(jTablePesquisaMaterial.getSelectedRow() == -1){
-            JOptionPane.showMessageDialog(null, "Nao existe nenhum material Selecionado na Tabela", "Erro", JOptionPane.ERROR_MESSAGE);
-        }else if(txtQuantidade.getText().equals("")){
-             JOptionPane.showMessageDialog(null, "A quantidade do material requisitado nao esta definida", "Erro", JOptionPane.ERROR_MESSAGE);
+        try {
+            if (jTablePesquisaMaterial.getSelectedRow() == -1) {
+                throw new Exception("Nao existe nenhum Material selecionado na Tabela");
+            } else if (txtQuantidade.getText().equals("")) {
+                throw new Exception("A quantidade do Material requisitado não esta definida");
+            } else {
+                String codigo, nome;
+                int qtde;
+
+                codigo = jTablePesquisaMaterial.getValueAt(jTablePesquisaMaterial.getSelectedRow(), 0).toString();
+                nome = jTablePesquisaMaterial.getValueAt(jTablePesquisaMaterial.getSelectedRow(), 1).toString();
+                qtde = Integer.parseInt(txtQuantidade.getText().trim());
+
+                DefaultTableModel model = (DefaultTableModel) jTableRequisicaodeCompra.getModel();
+                model.addRow(new Object[]{codigo, nome, qtde});
+                txtQuantidade.setText("");
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao adicionar Material: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-       else{
-           String codigo , nome;
-           int qtde;
-           
-           codigo = jTablePesquisaMaterial.getValueAt(jTablePesquisaMaterial.getSelectedRow(), 0).toString();
-           nome = jTablePesquisaMaterial.getValueAt(jTablePesquisaMaterial.getSelectedRow(), 1).toString();
-           qtde = Integer.parseInt(txtQuantidade.getText().trim());
-            System.out.println("Coluna ok");
-           
-            DefaultTableModel model = (DefaultTableModel) jTableRequisicaodeCompra.getModel();
-            model.addRow(new Object[]{codigo, nome , qtde});
-            txtQuantidade.setText("");
-        }
-        
-        
-        
     }//GEN-LAST:event_btnAdicionarNaListaActionPerformed
 
     private void btnRemoverDaListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverDaListaActionPerformed
-        if(jTableRequisicaodeCompra.getSelectedRow() == -1){
-            JOptionPane.showMessageDialog(null, "Nao existe nenhum material Selecionado na Tabela", "Erro", JOptionPane.ERROR_MESSAGE);
-        }else{
-            int SelectedRow;
-            SelectedRow = jTableRequisicaodeCompra.getSelectedRow(); 
-            
-            DefaultTableModel model = (DefaultTableModel) jTableRequisicaodeCompra.getModel();
-             model.removeRow(SelectedRow);
+        try {
+            if (jTableRequisicaodeCompra.getSelectedRow() == -1) {
+                JOptionPane.showMessageDialog(null, "Nao existe nenhum material Selecionado na Tabela", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else {
+                int SelectedRow = jTableRequisicaodeCompra.getSelectedRow();
+
+                DefaultTableModel model = (DefaultTableModel) jTableRequisicaodeCompra.getModel();
+                model.removeRow(SelectedRow);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha na remoção do material: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnRemoverDaListaActionPerformed
 
     private void btnEnviarRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarRequisicaoActionPerformed
-        
-        int input = JOptionPane.showConfirmDialog(rootPane, "Confirma TODOS os itens da Requisicao de Compras ?, Depois de Envia-la nao podera ser alterada ","ATENCAO!",2);
-        System.out.println(input);
-        if(input == 0){
-         for (int count = 0; count < jTableRequisicaodeCompra.getModel().getRowCount(); count++){
-
-                String CodMatSol = jTableRequisicaodeCompra.getModel().getValueAt(count, 0).toString();
-                System.out.println(CodMatSol); 
-                
-
-
-                
-                jTextAreaDescricaoMaterial.setText(jTextAreaDescricaoMaterial.getText() + " " +CodMatSol);
-                material = daoMaterial.consultar(Integer.parseInt(CodMatSol));
-                                //NAO PEGA ISSO NAO SEI PORQUE???????????
-                                //requisicaoCompra.addMateriais(material);
-                
-                //NAO PEGA ISSO NAO SEI PORQUE???????????
-                materiaisSolicitados.addMateriais(material);
-                
+        material = null;
+        requisicaoCompra = new RequisicaoCompra();
+        materiaisSolicitados = new MateriaisSolicitados();
+        try {
+            if (jTableRequisicaodeCompra.getModel().getRowCount() == 0) {
+                throw new Exception("Nenhum material informado na Requisição.");
             }
-        }else{
-        JOptionPane.showMessageDialog(null, "A Requisicao de Compra nao Foi Enviada", "Erro", JOptionPane.ERROR_MESSAGE);
-        
+            int input = JOptionPane.showConfirmDialog(null, "Confirma TODOS os itens da Requisicao de Compras ?, Depois de Envia-la nao podera ser alterada ", "ATENCAO!", 2);
+            if (input == 0) {
+                for (int count = 0; count < jTableRequisicaodeCompra.getModel().getRowCount(); count++) {
+
+                    String CodMatSol = jTableRequisicaodeCompra.getModel().getValueAt(count, 0).toString();
+                    System.out.println(CodMatSol);
+
+                    txtDescricaoMaterial.setText(txtDescricaoMaterial.getText() + " " + CodMatSol);
+                    material = daoMaterial.consultar(Integer.parseInt(CodMatSol));
+                    System.out.println(material.getNomeMaterial());
+                    if (material == null) {
+                        throw new Exception("Falha ao incluir material na Requisição;"
+                                + "\n[Material não encontrado]");
+                    } else {
+                        //Burguês: NAO PEGA ISSO NAO SEI PORQUE???????????
+                        /*Pseudo entrou no lobby: Cara não está funcionando pq você não inicializou o objeto "requisicaoCompra"
+                          Pseudo: Grrr...
+                          Pseudo corrigiu o erro [Linha 346]
+                          Pseudo Saiu do lobby
+                        */
+                        requisicaoCompra.addMateriais(material);
+                        
+                        //Burguês: NAO PEGA ISSO NAO SEI PORQUE???????????
+                        /*Pseudo entrou no lobby: Cara não está funcionando pq você não inicializou o objeto "materiaisSolicitados"
+                          Pseudo: Grrr...
+                          Pseudo corrigiu o erro [Linha 347]
+                          Pseudo Saiu do lobby
+                        */
+                        materiaisSolicitados.addMateriais(material);
+                        //Vou voltar ao meu trabalho termine ai
+                    }
+
+                }
+            } else {
+                throw new Exception("A Requisicao de Compra não foi Enviada.");
+
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao enviar requisição: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        
-      
     }//GEN-LAST:event_btnEnviarRequisicaoActionPerformed
 
     /**
@@ -438,7 +444,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTablePesquisaMaterial;
     private javax.swing.JTable jTableRequisicaodeCompra;
-    private javax.swing.JTextArea jTextAreaDescricaoMaterial;
+    private javax.swing.JTextArea txtDescricaoMaterial;
     private javax.swing.JTextField txtIdFuncionario;
     private javax.swing.JTextField txtNomeMaterial;
     private javax.swing.JTextField txtQuantidade;
@@ -449,5 +455,5 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     private DaoMaterial daoMaterial;
     private RequisicaoCompra requisicaoCompra;
     private MateriaisSolicitados materiaisSolicitados;
-   
+
 }

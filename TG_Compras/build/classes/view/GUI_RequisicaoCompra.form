@@ -228,7 +228,6 @@
         <Property name="text" type="java.lang.String" value="N&#xe3;o Encontrei Meu(s) Material(is) no Sistema"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="chkMaterialNaoCadastradoMouseClicked"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkMaterialNaoCadastradoActionPerformed"/>
       </Events>
     </Component>
@@ -239,7 +238,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTextArea" name="jTextAreaDescricaoMaterial">
+        <Component class="javax.swing.JTextArea" name="txtDescricaoMaterial">
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
