@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Gabriel Pilan
@@ -16,7 +18,16 @@ public class RequisicaoCompra {
     private String descricaoMateriaisNaoEncontrados;
     private String dataSolicitacao;
     private String situacaoSolicitacao;
+    private ArrayList<Material>materiais = new ArrayList();
 
+    public ArrayList<Material> getMateriais() {
+        return materiais;
+    }
+
+    public void setMateriais(ArrayList<Material> materiais) {
+        this.materiais = materiais;
+    }
+    
     public String getDataSolicitacao() {
         return dataSolicitacao;
     }
@@ -67,5 +78,8 @@ public class RequisicaoCompra {
         this.descricaoMateriaisNaoEncontrados = descricaoMateriaisNaoEncontrados;
     }
     
+    public void addMateriais(Material m){
+        materiais.add(m);
+    }
     
 }

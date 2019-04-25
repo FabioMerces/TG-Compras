@@ -19,6 +19,8 @@ import model.Material;
 import net.proteanit.sql.DbUtils;
 import java.awt.datatransfer.*;
 import javax.swing.JOptionPane;
+import model.MateriaisSolicitados;
+import model.RequisicaoCompra;
 
 /**
  *
@@ -30,6 +32,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
      * Creates new form GUI_RequisicaoCompra
      */
     DefaultTableModel dm = null;
+    int flagConfirma = 0;
     
     public GUI_RequisicaoCompra() {
         initComponents();
@@ -129,6 +132,11 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
 
         btnEnviarRequisicao.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnEnviarRequisicao.setText("Enviar Requisição");
+        btnEnviarRequisicao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarRequisicaoActionPerformed(evt);
+            }
+        });
 
         btnRemoverDaLista.setText("Remover Item Selecionado da Requisição");
         btnRemoverDaLista.addActionListener(new java.awt.event.ActionListener() {
@@ -347,6 +355,36 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRemoverDaListaActionPerformed
 
+    private void btnEnviarRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarRequisicaoActionPerformed
+        
+        int input = JOptionPane.showConfirmDialog(rootPane, "Confirma TODOS os itens da Requisicao de Compras ?, Depois de Envia-la nao podera ser alterada ","ATENCAO!",2);
+        System.out.println(input);
+        if(input == 0){
+         for (int count = 0; count < jTableRequisicaodeCompra.getModel().getRowCount(); count++){
+
+                String CodMatSol = jTableRequisicaodeCompra.getModel().getValueAt(count, 0).toString();
+                System.out.println(CodMatSol); 
+                
+
+
+                
+                jTextAreaDescricaoMaterial.setText(jTextAreaDescricaoMaterial.getText() + " " +CodMatSol);
+                material = daoMaterial.consultar(Integer.parseInt(CodMatSol));
+                                //NAO PEGA ISSO NAO SEI PORQUE???????????
+                                //requisicaoCompra.addMateriais(material);
+                
+                //NAO PEGA ISSO NAO SEI PORQUE???????????
+                materiaisSolicitados.addMateriais(material);
+                
+            }
+        }else{
+        JOptionPane.showMessageDialog(null, "A Requisicao de Compra nao Foi Enviada", "Erro", JOptionPane.ERROR_MESSAGE);
+        
+        }
+        
+      
+    }//GEN-LAST:event_btnEnviarRequisicaoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -409,4 +447,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     private Conexao conexao;
     private Material material;
     private DaoMaterial daoMaterial;
+    private RequisicaoCompra requisicaoCompra;
+    private MateriaisSolicitados materiaisSolicitados;
+   
 }

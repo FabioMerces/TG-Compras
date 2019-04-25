@@ -10,6 +10,7 @@ public class MateriaisSolicitados {
     private int codRequisicaoCompra;
     private ArrayList<Material>materiais;
     private ArrayList<Integer>qtdeMateriais;
+    private ArrayList<String>materiaisSoli;
 
     public int getCodRequisicaoCompra() {
         return codRequisicaoCompra; 
@@ -34,5 +35,18 @@ public class MateriaisSolicitados {
     public void addQtdeMaterial(int qtde) {
         qtdeMateriais.add(qtde);
     }
+    
+    public void addMateriaisSoli (int i , String s){
+        materiaisSoli.add(i , s);
+    }
+
+    public ArrayList<String> getMateriaisSoli() {
+        return materiaisSoli;
+    }
+
+    public void setMateriaisSoli(ArrayList<String> materiaisSoli) {
+        this.materiaisSoli = materiaisSoli;
+    }
+    
     
 }
