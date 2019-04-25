@@ -143,6 +143,11 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
         });
 
         txtNomeFornecedor.setEnabled(false);
+        txtNomeFornecedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNomeFornecedorActionPerformed(evt);
+            }
+        });
         txtNomeFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtNomeFornecedorKeyReleased(evt);
@@ -277,6 +282,10 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
     }//GEN-LAST:event_btnCopiarCNPJActionPerformed
+
+    private void txtNomeFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeFornecedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomeFornecedorActionPerformed
 
     /**
      * @param args the command line arguments

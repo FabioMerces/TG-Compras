@@ -5,6 +5,21 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoMaterial;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.Material;
+import net.proteanit.sql.DbUtils;
+import java.awt.datatransfer.*;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Gabriel Pilan
@@ -14,9 +29,13 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     /**
      * Creates new form GUI_RequisicaoCompra
      */
+    DefaultTableModel dm = null;
+    
     public GUI_RequisicaoCompra() {
         initComponents();
         jTableRequisicaodeCompra.setAutoCreateRowSorter(true); 
+        
+        
     }
 
     /**
@@ -49,10 +68,16 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         jTablePesquisaMaterial = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
         txtSetor = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Requisicao de Compra");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("ID Funcionário Requisitante:");
 
@@ -64,14 +89,16 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
 
         jLabel4.setText("Quantidade");
 
-        btnAdicionarNaLista.setText("Adicionar Item(ns) a Requisição");
+        btnAdicionarNaLista.setText("Adicionar Item Selecionado a Requisição");
+        btnAdicionarNaLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarNaListaActionPerformed(evt);
+            }
+        });
 
         jTableRequisicaodeCompra.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"", "", ""},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Código", "Nome do Material", "Quantidade"
@@ -103,7 +130,18 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         btnEnviarRequisicao.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnEnviarRequisicao.setText("Enviar Requisição");
 
-        btnRemoverDaLista.setText("Remover Item da Requisição");
+        btnRemoverDaLista.setText("Remover Item Selecionado da Requisição");
+        btnRemoverDaLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverDaListaActionPerformed(evt);
+            }
+        });
+
+        txtNomeMaterial.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNomeMaterialKeyReleased(evt);
+            }
+        });
 
         jTablePesquisaMaterial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -126,6 +164,8 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         txtSetor.setEditable(false);
         txtSetor.setEnabled(false);
 
+        jLabel8.setText("Tabela de Materiais");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -133,11 +173,6 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 615, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -169,11 +204,20 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
                                             .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGap(0, 0, Short.MAX_VALUE))
                                         .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(btnRemoverDaLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnAdicionarNaLista)))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnAdicionarNaLista)
+                                    .addGap(5, 5, 5))))
+                        .addContainerGap(91, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 615, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRemoverDaLista))
+                            .addComponent(jLabel8))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,26 +230,24 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
                     .addComponent(txtIdFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
                     .addComponent(txtSetor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtNomeMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtNomeMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 20, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addComponent(btnAdicionarNaLista)
-                        .addGap(7, 7, 7)
-                        .addComponent(btnRemoverDaLista)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdicionarNaLista))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRemoverDaLista))
                 .addGap(31, 31, 31)
                 .addComponent(chkMaterialNaoCadastrado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -232,6 +274,78 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     private void chkMaterialNaoCadastradoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkMaterialNaoCadastradoMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_chkMaterialNaoCadastradoMouseClicked
+
+    private void Filter (String query){
+    
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
+        jTablePesquisaMaterial.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(query));
+    }
+    
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoMaterial = new DaoMaterial(conexao.conectar());
+        
+        String sqlquery = "SELECT CodMaterial , NomeMaterial , UnidMedida , DescriptMaterial FROM tbl_material";
+
+        Statement stmt;
+        ResultSet rs;
+
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTablePesquisaMaterial.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
+        dm = (DefaultTableModel) jTablePesquisaMaterial.getModel();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void txtNomeMaterialKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeMaterialKeyReleased
+        //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
+        String query = txtNomeMaterial.getText().trim();
+        System.out.println(query);
+        Filter(query);
+    }//GEN-LAST:event_txtNomeMaterialKeyReleased
+
+    private void btnAdicionarNaListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarNaListaActionPerformed
+       if(jTablePesquisaMaterial.getSelectedRow() == -1){
+            JOptionPane.showMessageDialog(null, "Nao existe nenhum material Selecionado na Tabela", "Erro", JOptionPane.ERROR_MESSAGE);
+        }else if(txtQuantidade.getText().equals("")){
+             JOptionPane.showMessageDialog(null, "A quantidade do material requisitado nao esta definida", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+       else{
+           String codigo , nome;
+           int qtde;
+           
+           codigo = jTablePesquisaMaterial.getValueAt(jTablePesquisaMaterial.getSelectedRow(), 0).toString();
+           nome = jTablePesquisaMaterial.getValueAt(jTablePesquisaMaterial.getSelectedRow(), 1).toString();
+           qtde = Integer.parseInt(txtQuantidade.getText().trim());
+            System.out.println("Coluna ok");
+           
+            DefaultTableModel model = (DefaultTableModel) jTableRequisicaodeCompra.getModel();
+            model.addRow(new Object[]{codigo, nome , qtde});
+            txtQuantidade.setText("");
+        }
+        
+        
+        
+    }//GEN-LAST:event_btnAdicionarNaListaActionPerformed
+
+    private void btnRemoverDaListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverDaListaActionPerformed
+        if(jTableRequisicaodeCompra.getSelectedRow() == -1){
+            JOptionPane.showMessageDialog(null, "Nao existe nenhum material Selecionado na Tabela", "Erro", JOptionPane.ERROR_MESSAGE);
+        }else{
+            int SelectedRow;
+            SelectedRow = jTableRequisicaodeCompra.getSelectedRow(); 
+            
+            DefaultTableModel model = (DefaultTableModel) jTableRequisicaodeCompra.getModel();
+             model.removeRow(SelectedRow);
+        }
+    }//GEN-LAST:event_btnRemoverDaListaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,6 +394,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -291,4 +406,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     private javax.swing.JTextField txtQuantidade;
     private javax.swing.JTextField txtSetor;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao;
+    private Material material;
+    private DaoMaterial daoMaterial;
 }
