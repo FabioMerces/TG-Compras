@@ -72,7 +72,15 @@ public class GUI_ConsultarRankingFornecedores extends javax.swing.JFrame {
             new String [] {
                 "Ranking", "CNPJ", "Nome/Razão Social", "Nota Final", "Nota Qualidade", "Nota Pos Venda", "Nota Velocidade de Entrega", "Nota Preço"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTableRanking);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
