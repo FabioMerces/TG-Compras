@@ -125,6 +125,11 @@ public class GUI_ConsultarRankingFornecedores extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+        
+        
+        
     }//GEN-LAST:event_formWindowOpened
 
     /**
