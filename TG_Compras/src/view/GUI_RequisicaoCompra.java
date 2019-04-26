@@ -2,6 +2,7 @@ package view;
 
 import control.Conexao;
 import control.DaoMaterial;
+import control.DaoRequisicaoCompra;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -279,6 +280,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
+        daoReq = new DaoRequisicaoCompra(conexao.conectar());
 
         String sqlquery = "SELECT CodMaterial , NomeMaterial , UnidMedida , DescriptMaterial FROM tbl_material";
 
@@ -363,28 +365,12 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
                         throw new Exception("Falha ao incluir material na Requisição;"
                                 + "\n[Material não encontrado]");
                     } else {
-                        //Burguês: NAO PEGA ISSO NAO SEI PORQUE???????????
-                        /*Pseudo entrou no lobby: Cara não está funcionando pq você não inicializou o objeto "requisicaoCompra"
-                          Pseudo: Grrr...
-                          Pseudo corrigiu o erro [Linha 346]
-                          Pseudo Saiu do lobby
-                        */
-                        requisicaoCompra.addMateriais(material);
-                        
-                        //Burguês: NAO PEGA ISSO NAO SEI PORQUE???????????
-                        /*Pseudo entrou no lobby: Cara não está funcionando pq você não inicializou o objeto "materiaisSolicitados"
-                          Pseudo: Grrr...
-                          Pseudo corrigiu o erro [Linha 347]
-                          Pseudo Saiu do lobby
-                        */
                         materiaisSolicitados.addMateriais(material);
-                        //Vou voltar ao meu trabalho termine ai
+                        requisicaoCompra.setMatSolicitados(materiaisSolicitados);
                     }
-
                 }
             } else {
                 throw new Exception("A Requisicao de Compra não foi Enviada.");
-
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Erro ao enviar requisição: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -453,6 +439,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     private Conexao conexao;
     private Material material;
     private DaoMaterial daoMaterial;
+    private DaoRequisicaoCompra daoReq;
     private RequisicaoCompra requisicaoCompra;
     private MateriaisSolicitados materiaisSolicitados;
 

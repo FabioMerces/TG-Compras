@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import model.MateriaisSolicitados;
 import model.RequisicaoCompra;
+
 /**
  *
  * @author Matheus Jorge
  */
 public class DaoRequisicaoCompra {
+
     private Connection conn;
 
     public DaoRequisicaoCompra(Connection conn) {
@@ -23,11 +25,12 @@ public class DaoRequisicaoCompra {
         RequisicaoCompra rq = null;
         ResultSet rs;
         PreparedStatement ps = null;
+        DaoMateriaisSolicitados daoMS = new DaoMateriaisSolicitados(conn);
         try {
             ps = conn.prepareStatement("SELECT * FROM tbl_Solicitacao_Compra "
                     + "WHERE NumSocilitacao = ?");
             ps.setInt(1, codRequisicao);
-            
+
             rs = ps.executeQuery();
 
             if (rs.next() == true) {
@@ -35,17 +38,18 @@ public class DaoRequisicaoCompra {
                 rq.setIdFuncionarioRequisitante(rs.getString("IdFuncionario"));
                 rq.setSetorFuncionarioRequisitante(rs.getString("Setor"));
                 rq.setCodRequisicao(rs.getInt("codRequisicao"));
-                rq.setDescricaoMateriaisNaoEncontrados(rs.getString("descricaoMaterial")); 
+                rq.setDescricaoMateriaisNaoEncontrados(rs.getString("descricaoMaterial"));
+                rq.setMatSolicitados(daoMS.consultar(codRequisicao));
             }
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
         return (rq);
     }
-    
+
     public void inserir(RequisicaoCompra rq, MateriaisSolicitados ms) {
         PreparedStatement ps = null;
-        
+
         try {
             ps = conn.prepareStatement("INSERT INTO tbl_Solicitacao_Compra (CPF, Setor,"
                     + " NumSolicitacao, DescMaterial, DataSolicitacao, SituacaoSolicitacao)"
@@ -56,18 +60,18 @@ public class DaoRequisicaoCompra {
             ps.setString(4, rq.getDescricaoMateriaisNaoEncontrados());
             ps.setString(5, rq.getDataSolicitacao());
             ps.setString(6, rq.getSituacaoSolicitacao());
-		/*Verificar otimização, enviar dados "MateriaisSolicitados" via chamada desta classe(consistencia de dados)*/
+            /*Verificar otimização, enviar dados "MateriaisSolicitados" via chamada desta classe(consistencia de dados)*/
             ps.execute();
-		
-			DaoMateriaisSolicitados daoMS = new DaoMateriaisSolicitados(this.conn);
-			daoMS.inserir(ms);
-		} catch (SQLException ex) {
+
+            DaoMateriaisSolicitados daoMS = new DaoMateriaisSolicitados(this.conn);
+            daoMS.inserir(ms);
+        } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
     }
-    
-	/*Verificar método de alteração de requisição de compra DEPOIS*/
-	/*INCOMPLETO
+
+    /*Verificar método de alteração de requisição de compra DEPOIS*/
+ /*                 INCOMPLETO
     public void alterar(RequisicaoCompra rq) {
         PreparedStatement ps = null;
         try {

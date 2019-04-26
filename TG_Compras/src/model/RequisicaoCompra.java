@@ -18,9 +18,9 @@ public class RequisicaoCompra {
     private String descricaoMateriaisNaoEncontrados;
     private String dataSolicitacao;
     private String situacaoSolicitacao;
-    private ArrayList<Material>materiais = new ArrayList();
+    private MateriaisSolicitados materiais;
 
-    public ArrayList<Material> getMateriais() {
+    public MateriaisSolicitados getMateriais() {
         return materiais;
     }
 
@@ -72,7 +72,7 @@ public class RequisicaoCompra {
         this.descricaoMateriaisNaoEncontrados = descricaoMateriaisNaoEncontrados;
     }
     
-    public void addMateriais(Material m){
-        materiais.add(m);
+    public void setMatSolicitados(MateriaisSolicitados ms){
+        materiais = ms;
     } 
 }
