@@ -6,6 +6,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 public class RequisicaoCompra {
     private int codRequisicao;
     private String idFuncionarioRequisitante;
-    private String setorFuncionarioRequisitante;
+    private int setorFuncionarioRequisitante;
     private String descricaoMateriaisNaoEncontrados;
     private String dataSolicitacao;
     private String situacaoSolicitacao;
@@ -48,11 +49,11 @@ public class RequisicaoCompra {
         this.idFuncionarioRequisitante = idFuncionarioRequisitante;
     }
 
-    public String getSetorFuncionarioRequisitante() {
+    public int getSetorFuncionarioRequisitante() {
         return setorFuncionarioRequisitante;
     }
 
-    public void setSetorFuncionarioRequisitante(String setorFuncionarioRequisitante) {
+    public void setSetorFuncionarioRequisitante(int setorFuncionarioRequisitante) {
         this.setorFuncionarioRequisitante = setorFuncionarioRequisitante;
     }
 
@@ -75,4 +76,17 @@ public class RequisicaoCompra {
     public void setMatSolicitados(MateriaisSolicitados ms){
         materiais = ms;
     } 
+    
+    public int GeraCodReq (){
+    Random rand = new Random();
+
+                 // Obtain a number between [0 - 4999].
+                int codigo = rand.nextInt(5000);
+
+                // Add 1 to the result to get a number from the required range
+                // (i.e., [1 - 50]).
+                codigo += 1;
+                
+                return codigo;
+    }
 }

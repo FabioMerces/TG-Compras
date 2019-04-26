@@ -1,11 +1,16 @@
 package view;
 
 import control.Conexao;
+import control.DaoMateriaisSolicitados;
 import control.DaoMaterial;
 import control.DaoRequisicaoCompra;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.RowFilter;
@@ -32,7 +37,9 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     public GUI_RequisicaoCompra() {
         initComponents();
         jTableRequisicaodeCompra.setAutoCreateRowSorter(true);
-
+     
+        
+        
     }
 
     /**
@@ -78,6 +85,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
 
         jLabel1.setText("ID Funcionário Requisitante:");
 
+        txtIdFuncionario.setText("12345678900");
         txtIdFuncionario.setEnabled(false);
 
         jLabel2.setText("Requisição de Compra");
@@ -159,6 +167,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         jLabel7.setText("Setor do Funcionario Requisitante");
 
         txtSetor.setEditable(false);
+        txtSetor.setText("15");
         txtSetor.setEnabled(false);
 
         jLabel8.setText("Tabela de Materiais");
@@ -353,6 +362,27 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
             }
             int input = JOptionPane.showConfirmDialog(null, "Confirma TODOS os itens da Requisicao de Compras ?, Depois de Envia-la nao podera ser alterada ", "ATENCAO!", 2);
             if (input == 0) {
+                
+               //Gerando Codigo da Requisicao
+                int codigo;
+                codigo = requisicaoCompra.GeraCodReq();
+                requisicaoCompra.setCodRequisicao(codigo);
+                requisicaoCompra.setIdFuncionarioRequisitante(txtIdFuncionario.getText());
+                requisicaoCompra.setSetorFuncionarioRequisitante(Integer.parseInt(txtSetor.getText()));
+                
+                
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                Date date = new Date();
+                
+                requisicaoCompra.setDataSolicitacao(dateFormat.format(date));
+                System.out.println(dateFormat.format(date));
+                
+                requisicaoCompra.setDescricaoMateriaisNaoEncontrados(txtDescricaoMaterial.getText());
+                requisicaoCompra.setSituacaoSolicitacao("Em Aberto");
+                
+                materiaisSolicitados.setCodRequisicaoCompra(codigo);
+                
+                
                 for (int count = 0; count < jTableRequisicaodeCompra.getModel().getRowCount(); count++) {
 
                     String CodMatSol = jTableRequisicaodeCompra.getModel().getValueAt(count, 0).toString();
@@ -365,10 +395,21 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
                         throw new Exception("Falha ao incluir material na Requisição;"
                                 + "\n[Material não encontrado]");
                     } else {
+                        
+                       // requisicaoCompra.setMatSolicitados(materiaisSolicitados);
                         materiaisSolicitados.addMateriais(material);
-                        requisicaoCompra.setMatSolicitados(materiaisSolicitados);
+                        materiaisSolicitados.addQtdeMaterial(Integer.parseInt(jTableRequisicaodeCompra.getModel().getValueAt(count, 2).toString()));
+                        
                     }
                 }
+            
+            //requisicaoCompra.setMatSolicitados(materiaisSolicitados);
+            
+            daoReq.inserir(requisicaoCompra, materiaisSolicitados);
+            //System.out.println("Entrou aqui");
+            
+            
+            
             } else {
                 throw new Exception("A Requisicao de Compra não foi Enviada.");
             }
@@ -442,5 +483,5 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     private DaoRequisicaoCompra daoReq;
     private RequisicaoCompra requisicaoCompra;
     private MateriaisSolicitados materiaisSolicitados;
-
+    private DaoMateriaisSolicitados daoMateriaisSolicitados;
 }

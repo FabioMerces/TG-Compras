@@ -53,7 +53,7 @@ public class DaoMateriaisSolicitados {
         try {
             while (i < mat.size() && mat.get(i) != null) {
                 ps = null;
-                ps = conn.prepareStatement("INSERT INTO tbl_Materiais_Solicitados (NumSolicitacao,"
+                ps = conn.prepareStatement("INSERT INTO tbl_Material_Solicitado (NumSolicitacao,"
                         + " CodMaterial, QtdeMaterial)"
                         + " VALUES(?,?,?)");
                 ps.setInt(1, ms.getCodRequisicaoCompra());

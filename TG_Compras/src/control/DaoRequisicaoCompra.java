@@ -36,7 +36,7 @@ public class DaoRequisicaoCompra {
             if (rs.next() == true) {
                 rq = new RequisicaoCompra();
                 rq.setIdFuncionarioRequisitante(rs.getString("IdFuncionario"));
-                rq.setSetorFuncionarioRequisitante(rs.getString("Setor"));
+                rq.setSetorFuncionarioRequisitante(rs.getInt("Setor"));
                 rq.setCodRequisicao(rs.getInt("codRequisicao"));
                 rq.setDescricaoMateriaisNaoEncontrados(rs.getString("descricaoMaterial"));
                 rq.setMatSolicitados(daoMS.consultar(codRequisicao));
@@ -55,18 +55,24 @@ public class DaoRequisicaoCompra {
                     + " NumSolicitacao, DescMaterial, DataSolicitacao, SituacaoSolicitacao)"
                     + " VALUES(?,?,?,?,?,?)");
             ps.setString(1, rq.getIdFuncionarioRequisitante());
-            ps.setString(2, rq.getSetorFuncionarioRequisitante());
-            ps.setInt(3, rq.getCodRequisicao());
+            ps.setInt(2, rq.getSetorFuncionarioRequisitante());
+            ps.setInt(3, rq.getCodRequisicao());           
             ps.setString(4, rq.getDescricaoMateriaisNaoEncontrados());
             ps.setString(5, rq.getDataSolicitacao());
             ps.setString(6, rq.getSituacaoSolicitacao());
             /*Verificar otimização, enviar dados "MateriaisSolicitados" via chamada desta classe(consistencia de dados)*/
+            System.out.println("Erro aqui");
+            //O erro esta na hora de executar pois ele da um Invalid Number nao sei pq?
+            //Deve ser algo a ver ou com o Codigo de requisicao pois ele eh do tipo imt
+            //O SETOR EHDO TIPO INTEIRO NAO STRING
             ps.execute();
-
+            
             DaoMateriaisSolicitados daoMS = new DaoMateriaisSolicitados(this.conn);
             daoMS.inserir(ms);
+            
         } catch (SQLException ex) {
             System.out.println(ex.toString());
+            
         }
     }
 
