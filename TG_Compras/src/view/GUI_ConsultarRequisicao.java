@@ -5,18 +5,41 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoMateriaisSolicitados;
+import control.DaoMaterial;
+import control.DaoRequisicaoCompra;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.MateriaisSolicitados;
+import model.Material;
+import model.RequisicaoCompra;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author Gabriel Pilan
  */
 public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
+    
+     DefaultTableModel dm = null;
     /**
      * Creates new form GUI_ConsultarRequisicao
      */
     public GUI_ConsultarRequisicao() {
         initComponents();
         jTableRequisicao.setAutoCreateRowSorter(true);
+       
     }
 
     /**
@@ -43,7 +66,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
         btnBuscarCotacao = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtPedidoDeCompra = new javax.swing.JTextField();
-        btnBuscar = new javax.swing.JButton();
+        btnBuscarPedidoCompra = new javax.swing.JButton();
         rbPesquisarRequisicaoCompra = new javax.swing.JRadioButton();
         rbPesquisarPedidoCompra = new javax.swing.JRadioButton();
         rbPesquisarCotacao = new javax.swing.JRadioButton();
@@ -52,10 +75,16 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         btnBuscarSetor = new javax.swing.JButton();
+        btnRecarregaTabela = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar Requisicao");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("Tabela de Requsições");
 
@@ -87,22 +116,47 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                 txtIdRequisicaoActionPerformed(evt);
             }
         });
+        txtIdRequisicao.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtIdRequisicaoKeyReleased(evt);
+            }
+        });
 
         btnBuscarRequisicao.setText("Buscar");
+        btnBuscarRequisicao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarRequisicaoActionPerformed(evt);
+            }
+        });
 
         chkFiltrarRequisicoesAberto.setText("Filtrar por Requisições em Aberto");
 
         btnFazerCotacao.setText("Fazer Cotação(oes) da Requisição Selecionada");
 
         btnCopiarIDRequisicao.setText("Copiar Id da Requisição Selecionada");
+        btnCopiarIDRequisicao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopiarIDRequisicaoActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Id da Cotação Relacionada");
 
         btnBuscarCotacao.setText("Buscar");
+        btnBuscarCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarCotacaoActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Id do Pedido de Compra");
 
-        btnBuscar.setText("Buscar");
+        btnBuscarPedidoCompra.setText("Buscar");
+        btnBuscarPedidoCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarPedidoCompraActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbPesquisarRequisicaoCompra);
         rbPesquisarRequisicaoCompra.setText("Pesquisar por ID da Requisição de Compra");
@@ -126,6 +180,13 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
         btnBuscarSetor.setText("Buscar");
 
+        btnRecarregaTabela.setText("Recarregar a Tabela");
+        btnRecarregaTabela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecarregaTabelaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -138,10 +199,6 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(rbPesquisarRequisicaoCompra)
                             .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnFazerCotacao)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCopiarIDRequisicao))
                             .addComponent(chkFiltrarRequisicoesAberto)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,7 +218,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                                             .addComponent(txtIdRequisicao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnBuscar)
+                                            .addComponent(btnBuscarPedidoCompra)
                                             .addComponent(btnBuscarRequisicao)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -174,8 +231,14 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(btnBuscarCotacao)
-                                            .addComponent(btnBuscarSetor))))))
-                        .addGap(0, 367, Short.MAX_VALUE)))
+                                            .addComponent(btnBuscarSetor)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnFazerCotacao)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCopiarIDRequisicao)
+                                .addGap(29, 29, 29)
+                                .addComponent(btnRecarregaTabela)))
+                        .addGap(0, 286, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -193,7 +256,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtPedidoDeCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar)
+                    .addComponent(btnBuscarPedidoCompra)
                     .addComponent(rbPesquisarPedidoCompra))
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -216,7 +279,8 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFazerCotacao)
-                    .addComponent(btnCopiarIDRequisicao))
+                    .addComponent(btnCopiarIDRequisicao)
+                    .addComponent(btnRecarregaTabela))
                 .addContainerGap())
         );
 
@@ -227,6 +291,117 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdRequisicaoActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+       conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoMaterial = new DaoMaterial(conexao.conectar());
+        daoReq = new DaoRequisicaoCompra(conexao.conectar());
+        
+        String sqlquery = "select * from tbl_solicitacao_compra";
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dm =  (DefaultTableModel) jTableRequisicao.getModel();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnCopiarIDRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarIDRequisicaoActionPerformed
+        //PARA COPIAR O TEXTO SELECIONADO DA TABELA PARA O BUFFER (CLIPBOARD)
+        String myString = jTableRequisicao.getValueAt(jTableRequisicao.getSelectedRow(), 0).toString();
+        StringSelection stringSelection = new StringSelection(myString);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }//GEN-LAST:event_btnCopiarIDRequisicaoActionPerformed
+
+    private void txtIdRequisicaoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdRequisicaoKeyReleased
+        //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
+        //String query = txtIdRequisicao.getText().trim();
+        //Filter(query);
+    }//GEN-LAST:event_txtIdRequisicaoKeyReleased
+
+    private void btnBuscarRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarRequisicaoActionPerformed
+        String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + txtIdRequisicao.getText().trim();
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dm =  (DefaultTableModel) jTableRequisicao.getModel();
+    }//GEN-LAST:event_btnBuscarRequisicaoActionPerformed
+
+    private void btnRecarregaTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregaTabelaActionPerformed
+        String sqlquery = "select * from tbl_solicitacao_compra";
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dm =  (DefaultTableModel) jTableRequisicao.getModel();
+    }//GEN-LAST:event_btnRecarregaTabelaActionPerformed
+
+    private void btnBuscarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPedidoCompraActionPerformed
+        //Inserir o numero da requisicao de compra na tabela PedidoCompra para essa busca funcionar
+        String codigo = "";//"select numero da requisicao de compra from tbl_pedido_compra";
+        String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigo;
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dm =  (DefaultTableModel) jTableRequisicao.getModel();
+    }//GEN-LAST:event_btnBuscarPedidoCompraActionPerformed
+
+    private void btnBuscarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCotacaoActionPerformed
+    //Inserir o numero da requisicao de compra na tabela cotacao para essa busca funcionar
+    String codigo = " ";//"select numerodarequisicaodecompra from tbl_cotacao";
+        String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigo;
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dm =  (DefaultTableModel) jTableRequisicao.getModel();
+    }//GEN-LAST:event_btnBuscarCotacaoActionPerformed
+
+    private void Filter(String query){
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
+        jTableRequisicao.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(query));
+    }
     /**
      * @param args the command line arguments
      */
@@ -266,12 +441,13 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarCotacao;
+    private javax.swing.JButton btnBuscarPedidoCompra;
     private javax.swing.JButton btnBuscarRequisicao;
     private javax.swing.JButton btnBuscarSetor;
     private javax.swing.JButton btnCopiarIDRequisicao;
     private javax.swing.JButton btnFazerCotacao;
+    private javax.swing.JButton btnRecarregaTabela;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkFiltrarRequisicoesAberto;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -291,4 +467,11 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
     private javax.swing.JTextField txtIdRequisicao;
     private javax.swing.JTextField txtPedidoDeCompra;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao;
+    private Material material;
+    private DaoMaterial daoMaterial;
+    private DaoRequisicaoCompra daoReq;
+    private RequisicaoCompra requisicaoCompra;
+    private MateriaisSolicitados materiaisSolicitados;
+    private DaoMateriaisSolicitados daoMateriaisSolicitados;
 }

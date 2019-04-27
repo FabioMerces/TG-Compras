@@ -61,7 +61,7 @@ public class DaoRequisicaoCompra {
             ps.setString(5, rq.getDataSolicitacao());
             ps.setString(6, rq.getSituacaoSolicitacao());
             /*Verificar otimização, enviar dados "MateriaisSolicitados" via chamada desta classe(consistencia de dados)*/
-            System.out.println("Erro aqui");
+            //System.out.println("Erro aqui");
             //O erro esta na hora de executar pois ele da um Invalid Number nao sei pq?
             //Deve ser algo a ver ou com o Codigo de requisicao pois ele eh do tipo imt
             //O SETOR EHDO TIPO INTEIRO NAO STRING

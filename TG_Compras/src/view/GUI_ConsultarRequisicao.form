@@ -14,6 +14,9 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -37,11 +40,6 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="rbPesquisarRequisicaoCompra" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnFazerCotacao" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="btnCopiarIDRequisicao" min="-2" max="-2" attributes="0"/>
-                          </Group>
                           <Component id="chkFiltrarRequisicoesAberto" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -64,7 +62,7 @@
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="btnBuscar" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btnBuscarPedidoCompra" min="-2" max="-2" attributes="0"/>
                                           <Component id="btnBuscarRequisicao" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -86,8 +84,15 @@
                                   </Group>
                               </Group>
                           </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="btnFazerCotacao" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnCopiarIDRequisicao" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              <Component id="btnRecarregaTabela" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="0" pref="367" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="286" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -110,7 +115,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtPedidoDeCompra" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnBuscar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnBuscarPedidoCompra" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="rbPesquisarPedidoCompra" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
@@ -137,6 +142,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnFazerCotacao" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnCopiarIDRequisicao" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnRecarregaTabela" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -223,12 +229,16 @@
     <Component class="javax.swing.JTextField" name="txtIdRequisicao">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtIdRequisicaoActionPerformed"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtIdRequisicaoKeyReleased"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnBuscarRequisicao">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarRequisicaoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JCheckBox" name="chkFiltrarRequisicoesAberto">
       <Properties>
@@ -244,6 +254,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Copiar Id da Requisi&#xe7;&#xe3;o Selecionada"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCopiarIDRequisicaoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -256,6 +269,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarCotacaoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
@@ -264,10 +280,13 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtPedidoDeCompra">
     </Component>
-    <Component class="javax.swing.JButton" name="btnBuscar">
+    <Component class="javax.swing.JButton" name="btnBuscarPedidoCompra">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarPedidoCompraActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rbPesquisarRequisicaoCompra">
       <Properties>
@@ -334,6 +353,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnRecarregaTabela">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Recarregar a Tabela"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRecarregaTabelaActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
