@@ -5,6 +5,22 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoCotacao;
+import control.DaoMaterial;
+import control.DaoRequisicaoCompra;
+import model.Cotacao;
+import model.Material;
+import model.RequisicaoCompra;
+import java.awt.HeadlessException;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Gabriel Pilan
@@ -70,6 +86,11 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gerenciar Cotacoes de uma Requisicao");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("ID Requisição de Compra");
 
@@ -246,6 +267,28 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         new GUI_ConsultarFornecedorMaterial().setVisible(true);
     }//GEN-LAST:event_btnConsultarFornecedoresMaterialActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoMaterial = new DaoMaterial(conexao.conectar());
+        daoRequisicaoCompra = new DaoRequisicaoCompra(conexao.conectar());
+        
+        /*  Isso Serve para Colocar no Campo de ID da Requisicao 
+        o que estava no Clipboard (Buffer) de Memoria        */
+                Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Clipboard clipboard = toolkit.getSystemClipboard();
+        try {
+            String result = (String) clipboard.getData(DataFlavor.stringFlavor);
+                    txtIdRequisicao.setText(result);
+        } catch (UnsupportedFlavorException ex) {
+            Logger.getLogger(GUI_GerenciarCotacoesDeUmaRequisicao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GUI_GerenciarCotacoesDeUmaRequisicao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
@@ -310,4 +353,12 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField txtIdRequisicao;
     // End of variables declaration//GEN-END:variables
+
+    private Conexao conexao;
+    private Cotacao cotacao;
+    private DaoCotacao daoCotacao;
+    private RequisicaoCompra requisicaoCompra;
+    private DaoRequisicaoCompra daoRequisicaoCompra;
+    private Material material;
+    private DaoMaterial daoMaterial;
 }

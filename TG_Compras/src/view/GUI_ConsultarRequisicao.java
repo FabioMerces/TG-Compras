@@ -17,12 +17,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.MateriaisSolicitados;
 import model.Material;
 import model.RequisicaoCompra;
+import model.Setor;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -73,7 +75,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
         rbPesquisarTodas = new javax.swing.JRadioButton();
         rbPesquisarSetor = new javax.swing.JRadioButton();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbSetores = new javax.swing.JComboBox<>();
         btnBuscarSetor = new javax.swing.JButton();
         btnRecarregaTabela = new javax.swing.JButton();
 
@@ -130,8 +132,18 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
         });
 
         chkFiltrarRequisicoesAberto.setText("Filtrar por Requisições em Aberto");
+        chkFiltrarRequisicoesAberto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkFiltrarRequisicoesAbertoActionPerformed(evt);
+            }
+        });
 
         btnFazerCotacao.setText("Fazer Cotação(oes) da Requisição Selecionada");
+        btnFazerCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFazerCotacaoActionPerformed(evt);
+            }
+        });
 
         btnCopiarIDRequisicao.setText("Copiar Id da Requisição Selecionada");
         btnCopiarIDRequisicao.addActionListener(new java.awt.event.ActionListener() {
@@ -176,9 +188,12 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
         jLabel5.setText("Nome do Setor");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         btnBuscarSetor.setText("Buscar");
+        btnBuscarSetor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarSetorActionPerformed(evt);
+            }
+        });
 
         btnRecarregaTabela.setText("Recarregar a Tabela");
         btnRecarregaTabela.addActionListener(new java.awt.event.ActionListener() {
@@ -212,7 +227,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel2)
                                             .addComponent(jLabel4))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtPedidoDeCompra, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtIdRequisicao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -227,7 +242,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(txtCotacao, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(cmbSetores, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(btnBuscarCotacao)
@@ -268,7 +283,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rbPesquisarSetor)
                     .addComponent(jLabel5)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbSetores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscarSetor))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(chkFiltrarRequisicoesAberto)
@@ -312,8 +327,25 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
         dm =  (DefaultTableModel) jTableRequisicao.getModel();
+        
+        /*Implementar um jeito de carregar o setor no ComboBox de Setor*/
+        
+        sqlquery = "select NOMESETOR from tbl_setor";
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            while(rs.next()){
+            cmbSetores.addItem(rs.getString("NOMESETOR"));
+            }                  
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }//GEN-LAST:event_formWindowOpened
 
+    
     private void btnCopiarIDRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarIDRequisicaoActionPerformed
         //PARA COPIAR O TEXTO SELECIONADO DA TABELA PARA O BUFFER (CLIPBOARD)
         String myString = jTableRequisicao.getValueAt(jTableRequisicao.getSelectedRow(), 0).toString();
@@ -379,7 +411,6 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
             while(rs.next()){
             codigoRequisicaoCompra = rs.getInt("NUMSOLICITACAO");
             }
-            System.out.println(codigoRequisicaoCompra);
             String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigoRequisicaoCompra;
             rs = stmt.executeQuery(sqlquery);
             jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
@@ -392,8 +423,61 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
     private void btnBuscarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCotacaoActionPerformed
     //Inserir o numero da requisicao de compra na tabela cotacao para essa busca funcionar
-    String codigo = " ";//"select numerodarequisicaodecompra from tbl_cotacao";
-        String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigo;
+        String numCotacao =  txtCotacao.getText().trim();
+        int codigoCotacao = 0;
+    
+        String queryCotacao = "select NUMSOLICITACAO from tbl_cotacao where NUMCOTACAO = " + numCotacao;
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(queryCotacao);
+            while(rs.next()){
+            codigoCotacao = rs.getInt("NUMSOLICITACAO");
+            }          
+            String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigoCotacao;
+            rs = stmt.executeQuery(sqlquery);
+            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dm =  (DefaultTableModel) jTableRequisicao.getModel();
+    }//GEN-LAST:event_btnBuscarCotacaoActionPerformed
+
+    private void btnBuscarSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarSetorActionPerformed
+        String nomeSetor;
+        nomeSetor = "'" + cmbSetores.getSelectedItem().toString().trim() + "'";
+        int codigoSetor = 0;
+        
+        String querySetor = "Select CODSETOR from tbl_Setor where NOMESETOR = " +  nomeSetor;
+        
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(querySetor);
+            while(rs.next()){
+            codigoSetor = rs.getInt("CODSETOR");
+            }
+            String sqlquery = "select * from tbl_solicitacao_compra where SETOR = " + codigoSetor;
+            rs = stmt.executeQuery(sqlquery);
+            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dm =  (DefaultTableModel) jTableRequisicao.getModel();
+    }//GEN-LAST:event_btnBuscarSetorActionPerformed
+
+    private void chkFiltrarRequisicoesAbertoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFiltrarRequisicoesAbertoActionPerformed
+        if(chkFiltrarRequisicoesAberto.isSelected()){
+            String sqlquery = "select * from tbl_solicitacao_compra where SITUACAOSOLICITACAO = 'Em Aberto'";
+        
         Statement stmt;
         ResultSet rs;
         
@@ -406,7 +490,29 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
         dm =  (DefaultTableModel) jTableRequisicao.getModel();
-    }//GEN-LAST:event_btnBuscarCotacaoActionPerformed
+            
+        }else{
+            btnRecarregaTabelaActionPerformed(evt);
+        }
+    }//GEN-LAST:event_chkFiltrarRequisicoesAbertoActionPerformed
+
+    private void btnFazerCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFazerCotacaoActionPerformed
+        try {
+            if (jTableRequisicao.getSelectedRow() == -1) {
+                throw new Exception("Nao existe nenhuma Requisicao selecionado na Tabela");
+            }else {
+                String codigo;
+
+                codigo = jTableRequisicao.getValueAt(jTableRequisicao.getSelectedRow(), 0).toString();
+                System.out.println("O codigo da Requisicao selecionada eh: " + codigo);
+                btnCopiarIDRequisicaoActionPerformed(evt);
+                new GUI_GerenciarCotacoesDeUmaRequisicao().setVisible(true);                
+                }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnFazerCotacaoActionPerformed
 
     private void Filter(String query){
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
@@ -461,7 +567,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
     private javax.swing.JButton btnRecarregaTabela;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkFiltrarRequisicoesAberto;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cmbSetores;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -485,4 +591,5 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
     private RequisicaoCompra requisicaoCompra;
     private MateriaisSolicitados materiaisSolicitados;
     private DaoMateriaisSolicitados daoMateriaisSolicitados;
+    private Setor setor;
 }
