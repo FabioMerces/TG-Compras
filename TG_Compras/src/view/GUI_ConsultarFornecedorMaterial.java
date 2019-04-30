@@ -265,7 +265,7 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPesquisarMaterialActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("JesusOrly", "JesusOrly");
+        conexao = new Conexao("GABRIEL", "GABRIEL");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());

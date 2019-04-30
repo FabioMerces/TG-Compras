@@ -292,7 +292,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIdRequisicaoActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-       conexao = new Conexao("JesusOrly", "JesusOrly");
+       conexao = new Conexao("GABRIEL", "GABRIEL");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
@@ -363,19 +363,30 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
     private void btnBuscarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPedidoCompraActionPerformed
         //Inserir o numero da requisicao de compra na tabela PedidoCompra para essa busca funcionar
-        String codigo = "";//"select numero da requisicao de compra from tbl_pedido_compra";
-        String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigo;
+        String codigoPedidoCompra = txtPedidoDeCompra.getText().trim();
+        int codigoRequisicaoCompra = 0;
+        
+        String Query2 = "select NUMSOLICITACAO from tbl_pedido_compra where NUMPEDIDO = " + codigoPedidoCompra;
+        
+        
         Statement stmt;
         ResultSet rs;
+        System.out.println(codigoPedidoCompra);
         
         try{
             stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(Query2);
+            while(rs.next()){
+            codigoRequisicaoCompra = rs.getInt("NUMSOLICITACAO");
+            }
+            System.out.println(codigoRequisicaoCompra);
+            String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigoRequisicaoCompra;
             rs = stmt.executeQuery(sqlquery);
             jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
         
         } catch(SQLException ex){
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }        
         dm =  (DefaultTableModel) jTableRequisicao.getModel();
     }//GEN-LAST:event_btnBuscarPedidoCompraActionPerformed
 
