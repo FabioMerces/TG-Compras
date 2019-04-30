@@ -289,7 +289,7 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbNomeMaterialActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao = new Conexao("JesusOrly", "JesusOrly");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());

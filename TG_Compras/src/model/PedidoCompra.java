@@ -10,7 +10,7 @@ package model;
  * @author M
  */
 public class PedidoCompra {
-    private int NumPedido, NumCotacao;
+    private int NumPedido, NumCotacao, NumSolicitacao;
     private String CPFGerente, DataPedido, SituacaoPedido;
 
     public int getNumPedido() {
@@ -29,6 +29,14 @@ public class PedidoCompra {
         this.NumCotacao = NumCotacao;
     }
 
+    public int getNumSolicitacao() {
+        return NumSolicitacao;
+    }
+
+    public void setNumSolicitacao(int NumSolicitacao) {
+        this.NumSolicitacao = NumSolicitacao;
+    }
+    
     public String getCPFGerente() {
         return CPFGerente;
     }

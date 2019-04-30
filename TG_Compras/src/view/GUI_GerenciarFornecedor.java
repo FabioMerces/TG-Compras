@@ -427,7 +427,7 @@ public class GUI_GerenciarFornecedor extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao = new Conexao("JesusOrly", "JesusOrly");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoFornecedor = new DaoFornecedor(conexao.conectar());

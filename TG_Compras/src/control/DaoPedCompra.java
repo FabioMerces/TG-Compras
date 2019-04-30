@@ -34,6 +34,7 @@ public class DaoPedCompra {
                 pdc = new PedidoCompra();
                 pdc.setNumPedido(rs.getInt("NumPedido"));
                 pdc.setNumCotacao(rs.getInt("NumCotacao"));
+                pdc.setNumSolicitacao(rs.getInt("NumSolicitacao"));
                 pdc.setDataPedido(rs.getString("DataPedido"));
                 pdc.setSituacaoPedido(rs.getString("Situacao"));
                 pdc.setCPFGerente(rs.getString("CPFGerente"));
@@ -48,14 +49,15 @@ public class DaoPedCompra {
         PreparedStatement ps = null;
         
         try {
-            ps = conn.prepareStatement("INSERT INTO tbl_Pedido_Compra (NumPedido, NumCotacao,"
+            ps = conn.prepareStatement("INSERT INTO tbl_Pedido_Compra (NumPedido, NumCotacao, NumSolicitacao"
                     + " DataPedido, Situacao, CPFGerente)"
-                    + " VALUES(?,?,?,?,?)");
+                    + " VALUES(?,?,?,?,?,?)");
             ps.setInt(1, pdc.getNumPedido());
             ps.setInt(2, pdc.getNumCotacao());
-            ps.setString(3, pdc.getDataPedido());
-            ps.setString(4, pdc.getSituacaoPedido());
-            ps.setString(5, pdc.getCPFGerente());
+            ps.setInt(3, pdc.getNumSolicitacao());
+            ps.setString(4, pdc.getDataPedido());
+            ps.setString(5, pdc.getSituacaoPedido());
+            ps.setString(6, pdc.getCPFGerente());
           
             ps.execute();
         } catch (SQLException ex) {
@@ -66,14 +68,15 @@ public class DaoPedCompra {
      public void alterar(PedidoCompra pdc) {
 		PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("UPDATE tbl_Pedido_Compra set NumCotacao = ?,"
+            ps = conn.prepareStatement("UPDATE tbl_Pedido_Compra set NumCotacao = ?, set NumSolicitacao = ?"
                     + " DataPedido = ?, Situacao = ?, CPFGerente = ?"
                     + " WHERE NumPedido = ?");
             ps.setInt(1, pdc.getNumCotacao());
-            ps.setString(2, pdc.getDataPedido());
-            ps.setString(3, pdc.getSituacaoPedido());
-            ps.setString(4, pdc.getCPFGerente());
-            ps.setInt(5, pdc.getNumPedido());
+            ps.setInt(2, pdc.getNumSolicitacao());
+            ps.setString(3, pdc.getDataPedido());
+            ps.setString(4, pdc.getSituacaoPedido());
+            ps.setString(5, pdc.getCPFGerente());
+            ps.setInt(6, pdc.getNumPedido());
 
             ps.execute();
 

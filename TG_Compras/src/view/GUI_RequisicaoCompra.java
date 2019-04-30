@@ -286,7 +286,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     }
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao = new Conexao("JesusOrly", "JesusOrly");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
@@ -378,7 +378,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
                 requisicaoCompra.setDataSolicitacao(dateFormat.format(date));
                 System.out.println(dateFormat.format(date));
                 
-                requisicaoCompra.setDescricaoMateriaisNaoEncontrados(txtDescricaoMaterial.getText());
+                //equisicaoCompra.setDescricaoMateriaisNaoEncontrados(txtDescricaoMaterial.getText());
                 requisicaoCompra.setSituacaoSolicitacao("Em Aberto");
                 
                 materiaisSolicitados.setCodRequisicaoCompra(codigo);

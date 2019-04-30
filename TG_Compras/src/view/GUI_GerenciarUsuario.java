@@ -278,7 +278,7 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao = new Conexao("JesusOrly", "JesusOrly");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoUsuario = new DaoUsuario(conexao.conectar());

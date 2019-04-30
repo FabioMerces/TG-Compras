@@ -35,7 +35,7 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
 
         jTableFornecedores.setAutoCreateRowSorter(true);
 
-        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao = new Conexao("JesusOrly", "JesusOrly");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
 
