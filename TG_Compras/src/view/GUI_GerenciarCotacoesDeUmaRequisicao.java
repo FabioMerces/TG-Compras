@@ -18,8 +18,16 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -30,10 +38,18 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
     /**
      * Creates new form GUI_CadastrarCotacao
      */
+    DefaultTableModel dm = null;
+
     public GUI_GerenciarCotacoesDeUmaRequisicao() {
         initComponents();
         jTableCotacaoMaterial.setAutoCreateRowSorter(true);
         jTableMaterialRequisitado.setAutoCreateRowSorter(true);
+    }
+
+    private void Filter(String query) {
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
+        jTableMaterialRequisitado.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(query));
     }
 
     /**
@@ -95,6 +111,11 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         jLabel1.setText("ID Requisição de Compra");
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Tabela do(s) Material(is) Requistado(s)");
 
@@ -131,14 +152,39 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jTableCotacaoMaterial);
 
         btnAdicionarMaterialTabelaCotacao.setText("Adicionar Material Selecionado a Tabela de Cotação");
+        btnAdicionarMaterialTabelaCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarMaterialTabelaCotacaoActionPerformed(evt);
+            }
+        });
 
         btnAlterarStatusCotacao.setText("Alterar dados do Item Selecionado");
+        btnAlterarStatusCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarStatusCotacaoActionPerformed(evt);
+            }
+        });
 
         btnSolicitarCotacao.setText("Solicitar cotação do item selecionado");
+        btnSolicitarCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSolicitarCotacaoActionPerformed(evt);
+            }
+        });
 
         btnSalvar.setText("Salvar Cotações");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         btnCotacaoVencedora.setText("Selecionar uma cotação Vencedora");
+        btnCotacaoVencedora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCotacaoVencedoraActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Descrição do(s) Material(is) não encontrado(s) pelo requerente");
 
@@ -155,10 +201,20 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         });
 
         btnInserirMaterialCadastrado.setText("Inserir na Tabela de Cotação um Material já Cadastrado no Sistema");
+        btnInserirMaterialCadastrado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInserirMaterialCadastradoActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("OU");
 
         btnExcluirItemCotacao.setText("Excluir Item Selecionado");
+        btnExcluirItemCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirItemCotacaoActionPerformed(evt);
+            }
+        });
 
         btnConsultarFornecedoresMaterial.setText("Consultar Fornecedores do Material Selecionado");
         btnConsultarFornecedoresMaterial.addActionListener(new java.awt.event.ActionListener() {
@@ -273,21 +329,78 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
         daoRequisicaoCompra = new DaoRequisicaoCompra(conexao.conectar());
-        
-        /*  Isso Serve para Colocar no Campo de ID da Requisicao 
-        o que estava no Clipboard (Buffer) de Memoria        */
-                Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Clipboard clipboard = toolkit.getSystemClipboard();
-        try {
-            String result = (String) clipboard.getData(DataFlavor.stringFlavor);
-                    txtIdRequisicao.setText(result);
-        } catch (UnsupportedFlavorException ex) {
-            Logger.getLogger(GUI_GerenciarCotacoesDeUmaRequisicao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(GUI_GerenciarCotacoesDeUmaRequisicao.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
 
     }//GEN-LAST:event_formWindowOpened
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        try {
+            System.out.printf("1 \n");
+            requisicaoCompra = null;
+            if (txtIdRequisicao.getText().isEmpty()) {
+                System.out.printf("2 \n");
+                throw new Exception("Codigo de Requisicao não foi informado.\n"
+                        + "Por favor informar um código de requisicao p/ pesquisa.");
+            } else {
+                System.out.printf("3 \n");
+                requisicaoCompra = daoRequisicaoCompra.consultar(Integer.parseInt(txtIdRequisicao.getText().trim()));
+                System.out.println(txtIdRequisicao.getText().trim());
+                if (requisicaoCompra == null) {
+                    System.out.printf("4 \n");
+                    throw new Exception("Codigo de requisicao informado não existe.\n ");
+                } else {
+                    //String sqlquery = "SELECT tms.numsolicitacao, tms.codmaterial, tm.nomematerial, tms.qtdematerial from tbl_material tm, tbl_material_solicitado tms where tm.codmaterial = tms.codmaterial";
+                    //String sqlquery = "SELECT tbl_material_solicitado.numsolicitacao, tbl_material_solicitado.codmaterial, tbl_material.nomematerial, tbl_material_solicitado.qtdematerial from tbl_material inner join tbl_material_solicitado on tbl_material.codmaterial = tbl_material_solicitado.codmaterial";
+                    String sqlquery = "SELECT tms.numsolicitacao, tms.codmaterial, tm.nomematerial, tms.qtdematerial "
+                            + "from tbl_material tm, tbl_material_solicitado tms "
+                            + "where tms.codmaterial = tm.codmaterial AND tms.numsolicitacao = " + txtIdRequisicao.getText().trim();
+                    Statement stmt;
+                    ResultSet rs;
+
+                    try {
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableMaterialRequisitado.setModel(DbUtils.resultSetToTableModel(rs));
+
+                    } catch (SQLException ex) {
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    dm = (DefaultTableModel) jTableMaterialRequisitado.getModel();
+                }
+            }
+        } catch (Exception ex) {
+            System.out.printf("5 \n");
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar requisicao: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnAdicionarMaterialTabelaCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarMaterialTabelaCotacaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAdicionarMaterialTabelaCotacaoActionPerformed
+
+    private void btnInserirMaterialCadastradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirMaterialCadastradoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnInserirMaterialCadastradoActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnAlterarStatusCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarStatusCotacaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAlterarStatusCotacaoActionPerformed
+
+    private void btnExcluirItemCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirItemCotacaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnExcluirItemCotacaoActionPerformed
+
+    private void btnSolicitarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarCotacaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSolicitarCotacaoActionPerformed
+
+    private void btnCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCotacaoVencedoraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCotacaoVencedoraActionPerformed
 
     /**
      * @param args the command line arguments

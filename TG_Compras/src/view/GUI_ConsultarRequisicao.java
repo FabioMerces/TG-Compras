@@ -34,7 +34,7 @@ import net.proteanit.sql.DbUtils;
 public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
     
-     DefaultTableModel dm = null;
+    DefaultTableModel dm = null;
     /**
      * Creates new form GUI_ConsultarRequisicao
      */

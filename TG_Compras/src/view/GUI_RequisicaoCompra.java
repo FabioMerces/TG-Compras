@@ -378,7 +378,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
                 requisicaoCompra.setDataSolicitacao(dateFormat.format(date));
                 System.out.println(dateFormat.format(date));
                 
-                //equisicaoCompra.setDescricaoMateriaisNaoEncontrados(txtDescricaoMaterial.getText());
+                requisicaoCompra.setDescricaoMateriaisNaoEncontrados(txtDescricaoMaterial.getText());
                 requisicaoCompra.setSituacaoSolicitacao("Em Aberto");
                 
                 materiaisSolicitados.setCodRequisicaoCompra(codigo);
@@ -389,7 +389,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
                     String CodMatSol = jTableRequisicaodeCompra.getModel().getValueAt(count, 0).toString();
                     System.out.println(CodMatSol);
 
-                    txtDescricaoMaterial.setText(txtDescricaoMaterial.getText() + " " + CodMatSol);
+                    //txtDescricaoMaterial.setText(txtDescricaoMaterial.getText() + " " + CodMatSol);
                     material = daoMaterial.consultar(Integer.parseInt(CodMatSol));
                     System.out.println(material.getNomeMaterial());
                     if (material == null) {

@@ -16,8 +16,8 @@ public class RequisicaoCompra {
     private int codRequisicao;
     private String idFuncionarioRequisitante;
     private int setorFuncionarioRequisitante;
-    private String descricaoMateriaisNaoEncontrados;
     private String dataSolicitacao;
+    private String descricaoMateriaisNaoEncontrados;
     private String situacaoSolicitacao;
     private MateriaisSolicitados materiais;
 

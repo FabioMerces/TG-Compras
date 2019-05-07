@@ -28,7 +28,7 @@ public class DaoRequisicaoCompra {
         DaoMateriaisSolicitados daoMS = new DaoMateriaisSolicitados(conn);
         try {
             ps = conn.prepareStatement("SELECT * FROM tbl_Solicitacao_Compra "
-                    + "WHERE NumSocilitacao = ?");
+                    + "WHERE NumSolicitacao = ?");
             ps.setInt(1, codRequisicao);
 
             rs = ps.executeQuery();
@@ -38,7 +38,7 @@ public class DaoRequisicaoCompra {
                 rq.setIdFuncionarioRequisitante(rs.getString("IdFuncionario"));
                 rq.setSetorFuncionarioRequisitante(rs.getInt("Setor"));
                 rq.setCodRequisicao(rs.getInt("codRequisicao"));
-                //rq.setDescricaoMateriaisNaoEncontrados(rs.getString("descricaoMaterial"));
+                rq.setDescricaoMateriaisNaoEncontrados(rs.getString("descricaoMaterial"));
                 rq.setMatSolicitados(daoMS.consultar(codRequisicao));
             }
         } catch (SQLException ex) {
@@ -52,14 +52,14 @@ public class DaoRequisicaoCompra {
 
         try {
             ps = conn.prepareStatement("INSERT INTO tbl_Solicitacao_Compra (CPF, Setor,"
-                    + " NumSolicitacao, DataSolicitacao, SituacaoSolicitacao)"
-                    + " VALUES(?,?,?,?,?)");
+                    + " NumSolicitacao, DataSolicitacao, DescMatNotFound, SituacaoSolicitacao)"
+                    + " VALUES(?,?,?,?,?,?)");
             ps.setString(1, rq.getIdFuncionarioRequisitante());
             ps.setInt(2, rq.getSetorFuncionarioRequisitante());
             ps.setInt(3, rq.getCodRequisicao());           
-            //ps.setString(4, rq.getDescricaoMateriaisNaoEncontrados());
             ps.setString(4, rq.getDataSolicitacao());
-            ps.setString(5, rq.getSituacaoSolicitacao());
+            ps.setString(5, rq.getDescricaoMateriaisNaoEncontrados());
+            ps.setString(6, rq.getSituacaoSolicitacao());
             /*Verificar otimização, enviar dados "MateriaisSolicitados" via chamada desta classe(consistencia de dados)*/
             //System.out.println("Erro aqui");
             //O erro esta na hora de executar pois ele da um Invalid Number nao sei pq?
