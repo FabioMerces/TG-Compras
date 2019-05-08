@@ -26,8 +26,8 @@ public class DaoMateriaisSolicitados {
         ResultSet rs;
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("SELECT * FROM tbl_Materiais_Solicitados "
-                    + "WHERE NumSocilitacao = ?");
+            ps = conn.prepareStatement("SELECT * FROM tbl_Material_Solicitado "
+                    + "WHERE NumSolicitacao = ?");
             ps.setInt(1, codRequisicao);
 
             rs = ps.executeQuery();

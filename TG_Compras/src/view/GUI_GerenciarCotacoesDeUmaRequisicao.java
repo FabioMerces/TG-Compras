@@ -79,7 +79,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         btnCotacaoVencedora = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextAreaDescricaoMaterial = new javax.swing.JTextArea();
         btnCadastrarMateriais = new javax.swing.JButton();
         btnInserirMaterialCadastrado = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
@@ -188,10 +188,9 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
 
         jLabel4.setText("Descrição do(s) Material(is) não encontrado(s) pelo requerente");
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane4.setViewportView(jTextArea1);
+        jTextAreaDescricaoMaterial.setColumns(20);
+        jTextAreaDescricaoMaterial.setRows(5);
+        jScrollPane4.setViewportView(jTextAreaDescricaoMaterial);
 
         btnCadastrarMateriais.setText("Ir para Cadastro de Materiais");
         btnCadastrarMateriais.addActionListener(new java.awt.event.ActionListener() {
@@ -335,18 +334,20 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         try {
-            System.out.printf("1 \n");
+            
             requisicaoCompra = null;
             if (txtIdRequisicao.getText().isEmpty()) {
-                System.out.printf("2 \n");
+                
                 throw new Exception("Codigo de Requisicao não foi informado.\n"
                         + "Por favor informar um código de requisicao p/ pesquisa.");
             } else {
-                System.out.printf("3 \n");
+                
                 requisicaoCompra = daoRequisicaoCompra.consultar(Integer.parseInt(txtIdRequisicao.getText().trim()));
-                System.out.println(txtIdRequisicao.getText().trim());
+                System.out.println(requisicaoCompra.getCodRequisicao());
+                //System.out.println(txtIdRequisicao.getText().trim());
+                
                 if (requisicaoCompra == null) {
-                    System.out.printf("4 \n");
+                    
                     throw new Exception("Codigo de requisicao informado não existe.\n ");
                 } else {
                     //String sqlquery = "SELECT tms.numsolicitacao, tms.codmaterial, tm.nomematerial, tms.qtdematerial from tbl_material tm, tbl_material_solicitado tms where tm.codmaterial = tms.codmaterial";
@@ -356,20 +357,29 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                             + "where tms.codmaterial = tm.codmaterial AND tms.numsolicitacao = " + txtIdRequisicao.getText().trim();
                     Statement stmt;
                     ResultSet rs;
-
+                    
+                     
                     try {
                         stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                         rs = stmt.executeQuery(sqlquery);
                         jTableMaterialRequisitado.setModel(DbUtils.resultSetToTableModel(rs));
 
                     } catch (SQLException ex) {
+                        
                         Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     dm = (DefaultTableModel) jTableMaterialRequisitado.getModel();
+                    
+                    requisicaoCompra = daoRequisicaoCompra.consultar(Integer.parseInt(txtIdRequisicao.getText().trim()));
+                    jTextAreaDescricaoMaterial.setText("");
+                    jTextAreaDescricaoMaterial.setText(requisicaoCompra.getDescricaoMateriaisNaoEncontrados());
+                    System.out.println(requisicaoCompra.getCodRequisicao());
+                    System.out.println(requisicaoCompra.getDescricaoMateriaisNaoEncontrados());
+                    
                 }
             }
         } catch (Exception ex) {
-            System.out.printf("5 \n");
+            
             JOptionPane.showMessageDialog(null, "Falha ao pesquisar requisicao: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -463,7 +473,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTableCotacaoMaterial;
     private javax.swing.JTable jTableMaterialRequisitado;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextAreaDescricaoMaterial;
     private javax.swing.JTextField txtIdRequisicao;
     // End of variables declaration//GEN-END:variables
 

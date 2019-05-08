@@ -35,14 +35,18 @@ public class DaoRequisicaoCompra {
 
             if (rs.next() == true) {
                 rq = new RequisicaoCompra();
-                rq.setIdFuncionarioRequisitante(rs.getString("IdFuncionario"));
-                rq.setSetorFuncionarioRequisitante(rs.getInt("Setor"));
-                rq.setCodRequisicao(rs.getInt("codRequisicao"));
-                rq.setDescricaoMateriaisNaoEncontrados(rs.getString("descricaoMaterial"));
+                
+                rq.setCodRequisicao(rs.getInt("NUMSOLICITACAO"));
+                rq.setIdFuncionarioRequisitante(rs.getString("CPF"));
+                rq.setSetorFuncionarioRequisitante(rs.getInt("SETOR"));
+                rq.setDataSolicitacao(rs.getString("DATASOLICITACAO"));
+                rq.setDescricaoMateriaisNaoEncontrados(rs.getString("DESCMATNOTFOUND"));
+                rq.setSituacaoSolicitacao(rs.getString("SITUACAOSOLICITACAO"));
                 rq.setMatSolicitados(daoMS.consultar(codRequisicao));
             }
         } catch (SQLException ex) {
             System.out.println(ex.toString());
+            
         }
         return (rq);
     }
