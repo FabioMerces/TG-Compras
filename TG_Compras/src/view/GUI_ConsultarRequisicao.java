@@ -33,7 +33,7 @@ import net.proteanit.sql.DbUtils;
  */
 public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
-    
+    public static String IdRequisicao;
     DefaultTableModel dm = null;
     /**
      * Creates new form GUI_ConsultarRequisicao
@@ -113,6 +113,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
         jLabel2.setText("Id Requisição");
 
+        txtIdRequisicao.setEnabled(false);
         txtIdRequisicao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdRequisicaoActionPerformed(evt);
@@ -125,6 +126,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
         });
 
         btnBuscarRequisicao.setText("Buscar");
+        btnBuscarRequisicao.setEnabled(false);
         btnBuscarRequisicao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarRequisicaoActionPerformed(evt);
@@ -154,7 +156,10 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
         jLabel3.setText("Id da Cotação Relacionada");
 
+        txtCotacao.setEnabled(false);
+
         btnBuscarCotacao.setText("Buscar");
+        btnBuscarCotacao.setEnabled(false);
         btnBuscarCotacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarCotacaoActionPerformed(evt);
@@ -163,7 +168,10 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
         jLabel4.setText("Id do Pedido de Compra");
 
+        txtPedidoDeCompra.setEnabled(false);
+
         btnBuscarPedidoCompra.setText("Buscar");
+        btnBuscarPedidoCompra.setEnabled(false);
         btnBuscarPedidoCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarPedidoCompraActionPerformed(evt);
@@ -172,23 +180,51 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
         buttonGroup1.add(rbPesquisarRequisicaoCompra);
         rbPesquisarRequisicaoCompra.setText("Pesquisar por ID da Requisição de Compra");
+        rbPesquisarRequisicaoCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbPesquisarRequisicaoCompraActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbPesquisarPedidoCompra);
         rbPesquisarPedidoCompra.setText("Pesquisar por ID do Pedido de Compra");
+        rbPesquisarPedidoCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbPesquisarPedidoCompraActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbPesquisarCotacao);
         rbPesquisarCotacao.setText("Pesquisar por ID da Cotação Relacionada");
+        rbPesquisarCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbPesquisarCotacaoActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbPesquisarTodas);
         rbPesquisarTodas.setSelected(true);
         rbPesquisarTodas.setText("Pesquisar todas as Requisições de Compra");
+        rbPesquisarTodas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbPesquisarTodasActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbPesquisarSetor);
         rbPesquisarSetor.setText("Pesquisar pelo Setor que Requeriu a Compra");
+        rbPesquisarSetor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbPesquisarSetorActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Nome do Setor");
 
+        cmbSetores.setEnabled(false);
+
         btnBuscarSetor.setText("Buscar");
+        btnBuscarSetor.setEnabled(false);
         btnBuscarSetor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarSetorActionPerformed(evt);
@@ -504,15 +540,88 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                 String codigo;
 
                 codigo = jTableRequisicao.getValueAt(jTableRequisicao.getSelectedRow(), 0).toString();
-                System.out.println("O codigo da Requisicao selecionada eh: " + codigo);
                 btnCopiarIDRequisicaoActionPerformed(evt);
-                new GUI_GerenciarCotacoesDeUmaRequisicao().setVisible(true);                
+                IdRequisicao = codigo;
+                new GUI_GerenciarCotacoesDeUmaRequisicao().setVisible(true);
                 }
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Falha: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnFazerCotacaoActionPerformed
+
+    private void rbPesquisarRequisicaoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarRequisicaoCompraActionPerformed
+        if(rbPesquisarRequisicaoCompra.isSelected()){
+        txtIdRequisicao.setEnabled(true);
+        btnBuscarRequisicao.setEnabled(true);
+        
+        txtCotacao.setEnabled(false);
+        btnBuscarCotacao.setEnabled(false);
+        txtPedidoDeCompra.setEnabled(false);
+        btnBuscarPedidoCompra.setEnabled(false);
+        cmbSetores.setEnabled(false);
+        btnBuscarSetor.setEnabled(false);
+        }
+    }//GEN-LAST:event_rbPesquisarRequisicaoCompraActionPerformed
+
+    private void rbPesquisarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarPedidoCompraActionPerformed
+        if(rbPesquisarPedidoCompra.isSelected()){
+        txtPedidoDeCompra.setEnabled(true);
+        btnBuscarPedidoCompra.setEnabled(true);
+        
+        
+        txtCotacao.setEnabled(false);
+        btnBuscarCotacao.setEnabled(false);
+        txtIdRequisicao.setEnabled(false);
+        btnBuscarRequisicao.setEnabled(false);
+        cmbSetores.setEnabled(false);
+        btnBuscarSetor.setEnabled(false);
+        }
+    }//GEN-LAST:event_rbPesquisarPedidoCompraActionPerformed
+
+    private void rbPesquisarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarCotacaoActionPerformed
+        if(rbPesquisarCotacao.isSelected()){
+            txtCotacao.setEnabled(true);
+        btnBuscarCotacao.setEnabled(true);
+        
+        
+        
+        txtPedidoDeCompra.setEnabled(false);
+        btnBuscarPedidoCompra.setEnabled(false);
+        txtIdRequisicao.setEnabled(false);
+        btnBuscarRequisicao.setEnabled(false);
+        cmbSetores.setEnabled(false);
+        btnBuscarSetor.setEnabled(false);
+        }
+    }//GEN-LAST:event_rbPesquisarCotacaoActionPerformed
+
+    private void rbPesquisarSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarSetorActionPerformed
+        if(rbPesquisarSetor.isSelected()){
+            cmbSetores.setEnabled(true);
+        btnBuscarSetor.setEnabled(true);
+
+        
+        
+        
+        txtPedidoDeCompra.setEnabled(false);
+        btnBuscarPedidoCompra.setEnabled(false);
+        txtIdRequisicao.setEnabled(false);
+        btnBuscarRequisicao.setEnabled(false);
+            txtCotacao.setEnabled(false);
+        btnBuscarCotacao.setEnabled(false);
+        }
+    }//GEN-LAST:event_rbPesquisarSetorActionPerformed
+
+    private void rbPesquisarTodasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarTodasActionPerformed
+        txtPedidoDeCompra.setEnabled(false);
+        btnBuscarPedidoCompra.setEnabled(false);
+        txtIdRequisicao.setEnabled(false);
+        btnBuscarRequisicao.setEnabled(false);
+        cmbSetores.setEnabled(false);
+        btnBuscarSetor.setEnabled(false);
+        txtCotacao.setEnabled(false);
+        btnBuscarCotacao.setEnabled(false);
+    }//GEN-LAST:event_rbPesquisarTodasActionPerformed
 
     private void Filter(String query){
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);

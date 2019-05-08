@@ -227,6 +227,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtIdRequisicao">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtIdRequisicaoActionPerformed"/>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtIdRequisicaoKeyReleased"/>
@@ -235,6 +238,7 @@
     <Component class="javax.swing.JButton" name="btnBuscarRequisicao">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarRequisicaoActionPerformed"/>
@@ -270,10 +274,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtCotacao">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnBuscarCotacao">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarCotacaoActionPerformed"/>
@@ -285,10 +293,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtPedidoDeCompra">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnBuscarPedidoCompra">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarPedidoCompraActionPerformed"/>
@@ -301,6 +313,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Pesquisar por ID da Requisi&#xe7;&#xe3;o de Compra"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbPesquisarRequisicaoCompraActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rbPesquisarPedidoCompra">
       <Properties>
@@ -309,6 +324,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Pesquisar por ID do Pedido de Compra"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbPesquisarPedidoCompraActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rbPesquisarCotacao">
       <Properties>
@@ -317,6 +335,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Pesquisar por ID da Cota&#xe7;&#xe3;o Relacionada"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbPesquisarCotacaoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rbPesquisarTodas">
       <Properties>
@@ -326,6 +347,9 @@
         <Property name="selected" type="boolean" value="true"/>
         <Property name="text" type="java.lang.String" value="Pesquisar todas as Requisi&#xe7;&#xf5;es de Compra"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbPesquisarTodasActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rbPesquisarSetor">
       <Properties>
@@ -334,6 +358,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Pesquisar pelo Setor que Requeriu a Compra"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbPesquisarSetorActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
@@ -345,6 +372,7 @@
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
         </Property>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -353,6 +381,7 @@
     <Component class="javax.swing.JButton" name="btnBuscarSetor">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarSetorActionPerformed"/>

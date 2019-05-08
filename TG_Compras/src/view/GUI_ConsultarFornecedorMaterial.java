@@ -114,6 +114,7 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(rbPesquisaPorCodigo);
+        rbPesquisaPorCodigo.setSelected(true);
         rbPesquisaPorCodigo.setText("Pesquisar material pelo codigo");
         rbPesquisaPorCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -278,6 +279,16 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+        String Codigo;
+        Codigo = GUI_GerenciarCotacoesDeUmaRequisicao.codigoMaterialSelecionado;
+        
+        if(Codigo != null){
+        txtCodigoMaterial.setText(Codigo);
+        }
+        
+        txtCodigoMaterial.setEnabled(true);
+        btnPesquisarMaterial.setEnabled(true);
+        btnPesquisarFornecedores.setEnabled(true);
     }//GEN-LAST:event_formWindowOpened
 
     private void cmbNomeMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNomeMaterialActionPerformed
