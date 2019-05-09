@@ -14,6 +14,9 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -59,9 +62,13 @@
                           </Group>
                       </Group>
                   </Group>
-                  <Component id="btnCopiarIDCotacao" min="-2" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="828" max="-2" attributes="0"/>
                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="btnCopiarIDCotacao" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="btnRecarregaTabela" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
           </Group>
@@ -90,9 +97,12 @@
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="214" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnCopiarIDCotacao" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnRecarregaTabela" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="btnCopiarIDCotacao" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -104,10 +114,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtIDCotacao">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnBuscarCotacao">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarCotacaoActionPerformed"/>
@@ -177,6 +191,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Filtrar somente por cota&#xe7;&#xf5;es em aberto"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkStatusCotacaoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
@@ -189,16 +206,26 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtIDRequisicao">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnBuscarRequisicao">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarRequisicaoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnCopiarIDCotacao">
       <Properties>
         <Property name="text" type="java.lang.String" value="Copiar ID da Cota&#xe7;&#xe3;o"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCopiarIDCotacaoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rbIDCotacao">
       <Properties>
@@ -207,6 +234,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Pesquisar por ID da Cota&#xe7;&#xe3;o"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbIDCotacaoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rbIDRequisicao">
       <Properties>
@@ -215,6 +245,17 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Pesquisar por ID da Requisi&#xe7;&#xe3;o"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbIDRequisicaoActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnRecarregaTabela">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Recarregar a Tabela"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRecarregaTabelaActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

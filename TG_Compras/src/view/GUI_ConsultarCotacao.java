@@ -5,6 +5,25 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoCotacao;
+import control.DaoRequisicaoCompra;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.Cotacao;
+import model.RequisicaoCompra;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author Gabriel Pilan
@@ -17,6 +36,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
     public GUI_ConsultarCotacao() {
         initComponents();
         jTableCotacoes.setAutoCreateRowSorter(true);
+        
     }
 
     /**
@@ -42,14 +62,23 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         btnCopiarIDCotacao = new javax.swing.JButton();
         rbIDCotacao = new javax.swing.JRadioButton();
         rbIDRequisicao = new javax.swing.JRadioButton();
+        btnRecarregaTabela = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar Cotacao");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("Id Cotação");
 
+        txtIDCotacao.setEnabled(false);
+
         btnBuscarCotacao.setText("Buscar");
+        btnBuscarCotacao.setEnabled(false);
         btnBuscarCotacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarCotacaoActionPerformed(evt);
@@ -81,20 +110,55 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTableCotacoes);
 
         chkStatusCotacao.setText("Filtrar somente por cotações em aberto");
+        chkStatusCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkStatusCotacaoActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Tabela de Cotações");
 
         jLabel3.setText("Id Requisição");
 
+        txtIDRequisicao.setEnabled(false);
+
         btnBuscarRequisicao.setText("Buscar");
+        btnBuscarRequisicao.setEnabled(false);
+        btnBuscarRequisicao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarRequisicaoActionPerformed(evt);
+            }
+        });
 
         btnCopiarIDCotacao.setText("Copiar ID da Cotação");
+        btnCopiarIDCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopiarIDCotacaoActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbIDCotacao);
         rbIDCotacao.setText("Pesquisar por ID da Cotação");
+        rbIDCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbIDCotacaoActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbIDRequisicao);
         rbIDRequisicao.setText("Pesquisar por ID da Requisição");
+        rbIDRequisicao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbIDRequisicaoActionPerformed(evt);
+            }
+        });
+
+        btnRecarregaTabela.setText("Recarregar a Tabela");
+        btnRecarregaTabela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecarregaTabelaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -123,9 +187,12 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(btnBuscarCotacao))))
-                    .addComponent(btnCopiarIDCotacao)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 828, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnCopiarIDCotacao)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRecarregaTabela)))
                 .addGap(94, 94, 94))
         );
         layout.setVerticalGroup(
@@ -149,17 +216,184 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnCopiarIDCotacao)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCopiarIDCotacao)
+                    .addComponent(btnRecarregaTabela))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCotacaoActionPerformed
-        // TODO add your handling code here:
+        cotacao = null;
+        try {
+            if (txtIDCotacao.getText().isEmpty()) {
+                throw new Exception("Id Cotacao não foi informado.\n"
+                        + "Por favor informar um código de cotacao para pesquisa.");
+            } else {
+                cotacao = daoCotacao.consultar(Integer.parseInt(txtIDCotacao.getText().trim()));
+
+                if (cotacao == null) {
+                    throw new Exception("Id Cotacao informado não existe.\n ");
+                } else {
+                    String sqlquery = "select * from tbl_cotacao where NUMCOTACAO = " + txtIDCotacao.getText().trim();
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableCotacoes.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();       
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar material: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnBuscarCotacaoActionPerformed
+
+    private void filter(String query) {
+        //TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
+        TableRowSorter<DefaultTableModel> tr = (TableRowSorter) jTableCotacoes.getRowSorter();
+        if (query.length() == 0) {
+            tr.setRowFilter(null);
+        } else {
+            try {
+                RowFilter<DefaultTableModel, Object> rf = RowFilter.regexFilter(query, 0, 1);
+                tr.setRowFilter(rf);
+            } catch (java.util.regex.PatternSyntaxException e) {
+                tr.setRowFilter(null);
+            }
+        }
+    }
+    
+    private void rbIDCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbIDCotacaoActionPerformed
+        if(rbIDCotacao.isSelected()){
+            txtIDCotacao.setEnabled(true);
+            btnBuscarCotacao.setEnabled(true);
+            txtIDRequisicao.setEnabled(false);
+            btnBuscarRequisicao.setEnabled(false);
+        }
+    }//GEN-LAST:event_rbIDCotacaoActionPerformed
+
+    private void rbIDRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbIDRequisicaoActionPerformed
+        if(rbIDRequisicao.isSelected()){
+            txtIDCotacao.setEnabled(false);
+            btnBuscarCotacao.setEnabled(false);
+            txtIDRequisicao.setEnabled(true);
+            btnBuscarRequisicao.setEnabled(true);
+        }
+    }//GEN-LAST:event_rbIDRequisicaoActionPerformed
+
+    private void btnRecarregaTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregaTabelaActionPerformed
+        String sqlquery = "select * from tbl_cotacao";
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableCotacoes.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();       
+    }//GEN-LAST:event_btnRecarregaTabelaActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoCotacao = new DaoCotacao(conexao.conectar());
+        daoRequisicao = new DaoRequisicaoCompra(conexao.conectar());
+        String sqlquery = "select * from tbl_cotacao";
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableCotacoes.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnBuscarRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarRequisicaoActionPerformed
+        requisicao = null;
+        try {
+            if (txtIDRequisicao.getText().isEmpty()) {
+                throw new Exception("Id Requisicao não foi informado.\n"
+                        + "Por favor informar um código de Requisicao para pesquisa.");
+            } else {
+                requisicao = daoRequisicao.consultar(Integer.parseInt(txtIDRequisicao.getText().trim()));
+
+                if (requisicao == null) {
+                    throw new Exception("Id Requisicao de Compra informado não existe.\n ");
+                } else {
+                    String sqlquery = "select * from tbl_cotacao where NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableCotacoes.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();       
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Requisicao: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBuscarRequisicaoActionPerformed
+
+    private void chkStatusCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkStatusCotacaoActionPerformed
+        if(chkStatusCotacao.isSelected()){
+            //Arrumar aqui dps
+            String sqlquery = "select * from tbl_cotacao where SITUACAOCOTACAO = 'Em Aberto' ";
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableCotacoes.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();       
+            
+        }else{
+            btnRecarregaTabelaActionPerformed(evt);
+        }
+    }//GEN-LAST:event_chkStatusCotacaoActionPerformed
+
+    private void btnCopiarIDCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarIDCotacaoActionPerformed
+        //PARA COPIAR O TEXTO SELECIONADO DA TABELA PARA O BUFFER (CLIPBOARD)
+        String myString = jTableCotacoes.getValueAt(jTableCotacoes.getSelectedRow(), 0).toString();
+        StringSelection stringSelection = new StringSelection(myString);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }//GEN-LAST:event_btnCopiarIDCotacaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -200,6 +434,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscarCotacao;
     private javax.swing.JButton btnBuscarRequisicao;
     private javax.swing.JButton btnCopiarIDCotacao;
+    private javax.swing.JButton btnRecarregaTabela;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkStatusCotacao;
     private javax.swing.JLabel jLabel1;
@@ -212,4 +447,9 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
     private javax.swing.JTextField txtIDCotacao;
     private javax.swing.JTextField txtIDRequisicao;
     // End of variables declaration//GEN-END:variables
+private Conexao conexao = null;
+private Cotacao cotacao;
+private DaoCotacao daoCotacao;
+private RequisicaoCompra requisicao;
+private DaoRequisicaoCompra daoRequisicao;
 }

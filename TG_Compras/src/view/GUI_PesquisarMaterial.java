@@ -97,6 +97,11 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
         jLabel4.setText("Selecione uma opção de pesquisa do material");
 
         txtCodigoMaterial.setEnabled(false);
+        txtCodigoMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoMaterialActionPerformed(evt);
+            }
+        });
         txtCodigoMaterial.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtCodigoMaterialKeyReleased(evt);
@@ -322,6 +327,10 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_formWindowOpened
+
+    private void txtCodigoMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoMaterialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoMaterialActionPerformed
 
     /**
      * @param args the command line arguments

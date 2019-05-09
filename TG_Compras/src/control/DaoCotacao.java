@@ -23,8 +23,7 @@ public class DaoCotacao {
         ResultSet rs;
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("SELECT * FROM tbl_Cotacao "
-                    + "WHERE NumCotacao = ?");
+            ps = conn.prepareStatement("SELECT * FROM tbl_Cotacao WHERE NumCotacao = ?");
             ps.setInt(1, NumCotacao);
 
             rs = ps.executeQuery();
@@ -39,14 +38,15 @@ public class DaoCotacao {
 		c.setCNPJ(rs.getString("CNPJ"));
                 c.setCodMaterial(rs.getInt("CodMaterial"));
 				
-                ps = conn.prepareStatement("SELECT QtdeMaterial FROM tbl_Material_Solicitados"
-                        + " WHERE NumCotacao = ? and CodMaterial = ?");
+                ps = conn.prepareStatement("SELECT QtdeMaterial FROM tbl_Material_Solicitado"
+                        + " WHERE NumSolicitacao = ? and CodMaterial = ?");
                 ps.setInt(1, rs.getInt("NumSolicitacao"));
                 ps.setInt(2, rs.getInt("CodMaterial"));
                 
                 rs = ps.executeQuery();
-                
+                if(rs.next() == true){
                 c.setQtdeMaterial(rs.getInt("QtdeMaterial"));
+                }
             }
         } catch (SQLException ex) {
             System.out.println("Falha ao consultar Cotação: " + ex.toString());
