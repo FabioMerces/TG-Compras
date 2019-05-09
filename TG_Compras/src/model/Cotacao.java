@@ -11,9 +11,9 @@ package model;
  */
 public class Cotacao {
     private int NumCotacao, NumSolicitacaoCompra;
-    private int CodMaterial, QtdeMaterial, DataCotacao;
+    private int CodMaterial, QtdeMaterial;
     private float PrecoMaterial;
-	private String SituacaoCotacao, CNPJ;
+	private String SituacaoCotacao, CNPJ, DataCotacao;
 
     public int getNumCotacao() {
         return NumCotacao;
@@ -63,13 +63,15 @@ public class Cotacao {
         this.QtdeMaterial = QtdeMaterial;
     }
 
-    public int getDataCotacao() {
+    public String getDataCotacao() {
         return DataCotacao;
     }
 
-    public void setDataCotacao(int Data) {
-        this.DataCotacao = Data;
+    public void setDataCotacao(String DataCotacao) {
+        this.DataCotacao = DataCotacao;
     }
+
+    
 
     public float getPrecoMaterial() {
         return PrecoMaterial;

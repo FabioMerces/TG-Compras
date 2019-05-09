@@ -66,6 +66,11 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Selecionar Cotacao Vencedora");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("ID Requisição de Compra");
 
@@ -359,6 +364,10 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     private void txtIDCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDCotacaoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIDCotacaoActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        txtIDRequisicao.setText(GUI_GerenciarCotacoesDeUmaRequisicao.idRequisicaoCompra);
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments

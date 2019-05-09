@@ -33,7 +33,7 @@ public class DaoCotacao {
                 c = new Cotacao();
                 c.setNumCotacao(rs.getInt("NumCotacao"));
                 c.setNumSolicitacaoCompra(rs.getInt("NumSolicitacao"));
-                c.setDataCotacao(rs.getInt("DataCotacao"));
+                c.setDataCotacao(rs.getString("DataCotacao"));
                 c.setPrecoMaterial(rs.getFloat("PrecoUnitario"));
 		c.setSituacaoCotacao(rs.getString("SituacaoCotacao"));
 		c.setCNPJ(rs.getString("CNPJ"));
@@ -59,14 +59,16 @@ public class DaoCotacao {
         
         try {
             ps = conn.prepareStatement("INSERT INTO tbl_Cotacao (NumCotacao, NumSolicitacao,"
-                    + " DataCotacao, CNPJ, CodMaterial, SituacaoCotacao)"
-                    + " VALUES(?,?,?,?,?,?)");
+                    + " DataCotacao, CNPJ, CodMaterial, PrecoUnitario ,SituacaoCotacao)"
+                    + " VALUES(?,?,?,?,?,?,?)");
+            
             ps.setInt(1, c.getNumCotacao());
             ps.setInt(2, c.getNumSolicitacaoCompra());
-            ps.setInt(3, c.getDataCotacao());
+            ps.setString(3, c.getDataCotacao());
             ps.setString(4, c.getCNPJ());
             ps.setInt(5, c.getCodMaterial());
-            ps.setString(6, c.getSituacaoCotacao());
+            ps.setFloat(6, c.getPrecoMaterial());
+            ps.setString(7, c.getSituacaoCotacao());
           
             ps.execute();
         } catch (SQLException ex) {
@@ -82,7 +84,7 @@ public class DaoCotacao {
                     + " WHERE NumCotacao = ?");
             ps.setString(1, c.getCNPJ());
             ps.setInt(2, c.getCodMaterial());
-            ps.setInt(3, c.getDataCotacao());
+            ps.setString(3, c.getDataCotacao());
             ps.setFloat(4, c.getPrecoMaterial());
 			ps.setString(5, c.getSituacaoCotacao());
 			ps.setInt(6, c.getNumCotacao());
