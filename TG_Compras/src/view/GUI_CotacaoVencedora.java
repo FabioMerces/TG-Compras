@@ -5,6 +5,25 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoCotacao;
+import control.DaoMateriaisSolicitados;
+import control.DaoMaterial;
+import control.DaoRequisicaoCompra;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Cotacao;
+import model.MateriaisSolicitados;
+import model.Material;
+import model.RequisicaoCompra;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author Gabriel Pilan
@@ -17,8 +36,8 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     public GUI_CotacaoVencedora() {
         initComponents();
         jTableComparacaoFornecedores.setAutoCreateRowSorter(true);
-        jTableCompararValor.setAutoCreateRowSorter(true); 
-   }
+        jTableCompararValor.setAutoCreateRowSorter(true);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -60,6 +79,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         txtCotacaoVencedora = new javax.swing.JTextField();
         btnCopiarCodigo = new javax.swing.JButton();
+        btnConsultarCotacoes = new javax.swing.JButton();
 
         jScrollPane3.setViewportView(jEditorPane1);
 
@@ -100,7 +120,11 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTableCompararValor);
 
-        cmbCodigoMaterial.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbCodigoMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCodigoMaterialActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Necessidades da Compra");
 
@@ -181,8 +205,18 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         btnCriarPedidodeCompra.setText("Criar Pedido de Compra do Material ");
 
         btnCalcularNota.setText("Calcular Nota dos Fornecedores");
+        btnCalcularNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCalcularNotaActionPerformed(evt);
+            }
+        });
 
         btnPesquisar.setText("Pesquisar ");
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarActionPerformed(evt);
+            }
+        });
 
         jLabel8.setText("Codigo da Cotação Vencedora");
 
@@ -193,6 +227,13 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
 
         btnCopiarCodigo.setText("Copiar Codigo da Cotação vencedora");
 
+        btnConsultarCotacoes.setText("Consultar Cotacoes do Material");
+        btnConsultarCotacoes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarCotacoesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -202,8 +243,6 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbCodigoMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -214,7 +253,13 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtIDCotacao, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(txtIDCotacao, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(cmbCodigoMaterial, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnConsultarCotacoes))))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel6))
@@ -283,8 +328,10 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cmbCodigoMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbCodigoMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnConsultarCotacoes))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -330,33 +377,33 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void chkMenorPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkMenorPrecoActionPerformed
-        if (chkMenorPreco.isSelected()){
+        if (chkMenorPreco.isSelected()) {
             cmbImportanciaMenorPreco.setEnabled(true);
-        }else{
+        } else {
             cmbImportanciaMenorPreco.setEnabled(false);
         }
     }//GEN-LAST:event_chkMenorPrecoActionPerformed
 
     private void chkMaiorQualidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkMaiorQualidadeActionPerformed
-        if (chkMaiorQualidade.isSelected()){
+        if (chkMaiorQualidade.isSelected()) {
             cmbImportanciaMaiorQualidade.setEnabled(true);
-        }else{
+        } else {
             cmbImportanciaMaiorQualidade.setEnabled(false);
         }
     }//GEN-LAST:event_chkMaiorQualidadeActionPerformed
 
     private void chkEntregaRapidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEntregaRapidaActionPerformed
-        if (chkEntregaRapida.isSelected()){
+        if (chkEntregaRapida.isSelected()) {
             cmbImportanciaEntregaRapida.setEnabled(true);
-        }else{
+        } else {
             cmbImportanciaEntregaRapida.setEnabled(false);
         }
     }//GEN-LAST:event_chkEntregaRapidaActionPerformed
 
     private void chkPossuiGarantiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPossuiGarantiaActionPerformed
-       if (chkPossuiGarantia.isSelected()){
+        if (chkPossuiGarantia.isSelected()) {
             cmbImportanciaPossuiGarantia.setEnabled(true);
-        }else{
+        } else {
             cmbImportanciaPossuiGarantia.setEnabled(false);
         }
     }//GEN-LAST:event_chkPossuiGarantiaActionPerformed
@@ -367,7 +414,133 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         txtIDRequisicao.setText(GUI_GerenciarCotacoesDeUmaRequisicao.idRequisicaoCompra);
+
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoCotacao = new DaoCotacao(conexao.conectar());
+        daoRequisicao = new DaoRequisicaoCompra(conexao.conectar());
+        daoMateriaisSolicitados = new DaoMateriaisSolicitados(conexao.conectar());
+        daoMaterial = new DaoMaterial(conexao.conectar());
+        
+
     }//GEN-LAST:event_formWindowOpened
+
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+        cmbCodigoMaterial.removeAllItems();
+        requisicao = null;
+        listaComboMaterial = null;
+        try {
+            if (txtIDRequisicao.getText().isEmpty()) {
+                throw new Exception("Id Requisicao não foi informado.\n"
+                        + "Por favor informar um código de Requisicao para pesquisa.");
+            } else {
+
+                requisicao = daoRequisicao.consultar(Integer.parseInt(txtIDRequisicao.getText().trim()));
+
+                if (requisicao == null) {
+                    throw new Exception("Id Requisicao de Compra informado não existe.\n ");
+                } else {
+                    //System.out.println(daoMateriaisSolicitados.listarMateriaisSolicitadosDeUmaRequisicao(txtIDRequisicao.getText().trim()));
+
+                    listaComboMaterial = daoMateriaisSolicitados.listarMateriaisSolicitadosDeUmaRequisicao(txtIDRequisicao.getText().trim());
+                    
+                    try {
+                        for (int i = 0; i < listaComboMaterial.size(); i++) {                           
+                            cmbCodigoMaterial.addItem(listaComboMaterial.get(i).getNomeMaterial());
+                            
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Falha ao iniciar: xxx" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                    
+                    material = listaComboMaterial.get(cmbCodigoMaterial.getSelectedIndex());
+                    
+                    /*
+                    Pegar o Nome do Fornecedor e o Valor atraves do Material
+                    
+                    Pesquisar na tabela Cotacao usando a Requisicao de Compra 
+                    o campo CNPJ e Valor pelo Codigo do material
+                 
+                    
+                    
+                    
+                   
+                    
+                     String sqlquery;
+                     
+                             sqlquery = "select tbl_fornecedor.nomefornecedor, PRECOUNITARIO from tbl_cotacao " 
+                            + "inner join tbl_fornecedor on tbl_fornecedor.cnpj = tbl_cotacao.cnpj "
+                            +"where codmaterial = " + material.getCodMaterial()
+                                     + "and numsolicitacao = " + txtIDRequisicao.getText();
+                    
+                    Statement stmt;
+        ResultSet rs;
+
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableCompararValor.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                    
+                    
+                    
+                    
+                */}
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Requisicao: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void cmbCodigoMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCodigoMaterialActionPerformed
+        /*System.out.println("teste");
+        String sqlquery;
+                     
+                             sqlquery = "select tbl_fornecedor.nomefornecedor, PRECOUNITARIO from tbl_cotacao " 
+                            + "inner join tbl_fornecedor on tbl_fornecedor.cnpj = tbl_cotacao.cnpj "
+                            +"where codmaterial = " + material.getCodMaterial()
+                                     + "and numsolicitacao = " + txtIDRequisicao.getText();
+                    
+                    Statement stmt;
+        ResultSet rs;
+
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableCompararValor.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+    }//GEN-LAST:event_cmbCodigoMaterialActionPerformed
+
+    private void btnConsultarCotacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarCotacoesActionPerformed
+        material = listaComboMaterial.get(cmbCodigoMaterial.getSelectedIndex());
+        String sqlquery;
+                     
+                             sqlquery = "select tbl_fornecedor.nomefornecedor, PRECOUNITARIO from tbl_cotacao " 
+                            + "inner join tbl_fornecedor on tbl_fornecedor.cnpj = tbl_cotacao.cnpj "
+                            +"where codmaterial = " + material.getCodMaterial()
+                                     + "and numsolicitacao = " + txtIDRequisicao.getText();
+                    
+                    Statement stmt;
+        ResultSet rs;
+
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableCompararValor.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnConsultarCotacoesActionPerformed
+
+    private void btnCalcularNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularNotaActionPerformed
+        int qntdFornecedores = jTableCompararValor.getRowCount();
+    }//GEN-LAST:event_btnCalcularNotaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -406,6 +579,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalcularNota;
+    private javax.swing.JButton btnConsultarCotacoes;
     private javax.swing.JButton btnCopiarCodigo;
     private javax.swing.JButton btnCriarPedidodeCompra;
     private javax.swing.JButton btnPesquisar;
@@ -437,4 +611,14 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     private javax.swing.JTextField txtIDCotacao;
     private javax.swing.JTextField txtIDRequisicao;
     // End of variables declaration//GEN-END:variables
+private Conexao conexao = null;
+    private Cotacao cotacao;
+    private DaoCotacao daoCotacao;
+    private RequisicaoCompra requisicao;
+    private DaoRequisicaoCompra daoRequisicao;
+    private List<Material> listaComboMaterial;
+    private MateriaisSolicitados materiaisSolicitados;
+    private DaoMateriaisSolicitados daoMateriaisSolicitados;
+    private Material material;
+    private DaoMaterial daoMaterial;
 }
