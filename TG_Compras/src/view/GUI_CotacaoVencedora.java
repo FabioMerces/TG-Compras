@@ -7,18 +7,26 @@ package view;
 
 import control.Conexao;
 import control.DaoCotacao;
+import control.DaoFornecedor;
 import control.DaoMateriaisSolicitados;
 import control.DaoMaterial;
 import control.DaoRequisicaoCompra;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import model.Cotacao;
+import model.Fornecedor;
 import model.MateriaisSolicitados;
 import model.Material;
 import model.RequisicaoCompra;
@@ -37,7 +45,10 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         initComponents();
         jTableComparacaoFornecedores.setAutoCreateRowSorter(true);
         jTableCompararValor.setAutoCreateRowSorter(true);
+        
     }
+    
+    public static String CotacaoVencedora;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -80,6 +91,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         txtCotacaoVencedora = new javax.swing.JTextField();
         btnCopiarCodigo = new javax.swing.JButton();
         btnConsultarCotacoes = new javax.swing.JButton();
+        btnSalvarCotacaoVencedora = new javax.swing.JButton();
 
         jScrollPane3.setViewportView(jEditorPane1);
 
@@ -174,20 +186,21 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
 
         jTableComparacaoFornecedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Menor Preco", null, null, null},
-                {"Maior Qualidade", null, null, null},
-                {"Entrega Mais Rapida", null, null, null},
-                {"Pos Venda", null, null, null},
-                {"Media Total", null, null, null},
-                {"Media Ponderada", null, null, null},
-                {"Vencedor", null, null, null}
+                {"Nome do Fornecedor", null, null, null, null},
+                {"Menor Preco", null, null, null, null},
+                {"Maior Qualidade", null, null, null, null},
+                {"Entrega Mais Rapida", null, null, null, null},
+                {"Pos Venda", null, null, null, null},
+                {"Media Total", null, null, null, null},
+                {"Media Ponderada", null, null, null, null},
+                {"Vencedor", null, null, null, null}
             },
             new String [] {
-                "Requisito", "Nota Fornecedor 1", "Nota Fornecedor 2", "Nota Fornecedor 3"
+                "Requisito", "Nota Fornecedor1", "Nota Fornecedor2", "Nota Fornecedor3", "Nota Fornecedor4"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true
+                false, true, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -203,6 +216,11 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         txtFornecedorVencedor.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
         btnCriarPedidodeCompra.setText("Criar Pedido de Compra do Material ");
+        btnCriarPedidodeCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCriarPedidodeCompraActionPerformed(evt);
+            }
+        });
 
         btnCalcularNota.setText("Calcular Nota dos Fornecedores");
         btnCalcularNota.addActionListener(new java.awt.event.ActionListener() {
@@ -226,6 +244,11 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         txtCotacaoVencedora.setEnabled(false);
 
         btnCopiarCodigo.setText("Copiar Codigo da Cotação vencedora");
+        btnCopiarCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopiarCodigoActionPerformed(evt);
+            }
+        });
 
         btnConsultarCotacoes.setText("Consultar Cotacoes do Material");
         btnConsultarCotacoes.addActionListener(new java.awt.event.ActionListener() {
@@ -233,6 +256,8 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                 btnConsultarCotacoesActionPerformed(evt);
             }
         });
+
+        btnSalvarCotacaoVencedora.setText("Salvar Cotacao Vencedora");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -295,14 +320,17 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCriarPedidodeCompra)
+                                .addComponent(jLabel7)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtFornecedorVencedor, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtFornecedorVencedor))
+                                        .addComponent(btnSalvarCotacaoVencedora)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnCriarPedidodeCompra))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel8)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -358,8 +386,8 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtFornecedorVencedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -368,8 +396,10 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(txtCotacaoVencedora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCopiarCodigo))
-                .addGap(18, 18, 18)
-                .addComponent(btnCriarPedidodeCompra)
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCriarPedidodeCompra)
+                    .addComponent(btnSalvarCotacaoVencedora))
                 .addContainerGap())
         );
 
@@ -422,6 +452,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         daoRequisicao = new DaoRequisicaoCompra(conexao.conectar());
         daoMateriaisSolicitados = new DaoMateriaisSolicitados(conexao.conectar());
         daoMaterial = new DaoMaterial(conexao.conectar());
+        daoFornecedor = new DaoFornecedor(conexao.conectar());
         
 
     }//GEN-LAST:event_formWindowOpened
@@ -521,7 +552,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         material = listaComboMaterial.get(cmbCodigoMaterial.getSelectedIndex());
         String sqlquery;
                      
-                             sqlquery = "select tbl_fornecedor.nomefornecedor, PRECOUNITARIO from tbl_cotacao " 
+                             sqlquery = "select tbl_fornecedor.CNPJ, tbl_fornecedor.nomefornecedor, PRECOUNITARIO from tbl_cotacao " 
                             + "inner join tbl_fornecedor on tbl_fornecedor.cnpj = tbl_cotacao.cnpj "
                             +"where codmaterial = " + material.getCodMaterial()
                                      + "and numsolicitacao = " + txtIDRequisicao.getText();
@@ -536,11 +567,150 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
+       
+        //ARRUMAR UMA MANEIRA DE IMPLEMENTAR UM RESET NA TABELA
+//JTable table = new JTable();
+       //table = jTableComparacaoFornecedores;
+       //DefaultTableModel model = (DefaultTableModel) jTableComparacaoFornecedores.getModel();
+       
+       //model.setRowCount(8);
+       //jTableComparacaoFornecedores = table;
     }//GEN-LAST:event_btnConsultarCotacoesActionPerformed
 
     private void btnCalcularNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularNotaActionPerformed
         int qntdFornecedores = jTableCompararValor.getRowCount();
+        int row,column;
+        String CNPJ;       
+        
+        for(int cont=0;cont<qntdFornecedores;cont++){
+        
+        CNPJ = jTableCompararValor.getValueAt(cont , 0).toString();
+        fornecedor = daoFornecedor.consultar(CNPJ);
+
+        
+        jTableComparacaoFornecedores.setValueAt(fornecedor.getNomeFornecedor(), 0, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPreco(), 1, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaQualidade(), 2, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaVelocidadeEntrega(), 3, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPosVenda(), 4, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 5, cont + 1);
+        
+        
+        //Implementar a Media Ponderada aqui
+        if(chkEntregaRapida.isSelected() == false && chkMaiorQualidade.isSelected()==false
+                && chkMenorPreco.isSelected()==false && chkPossuiGarantia.isSelected()==false){
+            
+        jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 6, cont + 1);
+        
+        }else{
+        int mediaPonderada=0;
+        int divisor=4;
+        int notaEntrega = fornecedor.getNotaVelocidadeEntrega(),
+                notaQualidade = fornecedor.getNotaQualidade(),
+                notaPreco = fornecedor.getNotaPreco(),
+                notaGarantia = fornecedor.getNotaPosVenda();
+        String importancia;
+        //Baixa * 2, Intermediaria * 3, Alta * 4
+        
+        if(chkEntregaRapida.isSelected()){
+            importancia = cmbImportanciaEntregaRapida.getSelectedItem().toString();
+            if(importancia.trim().equals("Baixa")){
+                divisor = divisor + 1;
+                notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 2);
+            }else if(importancia.trim().equals("Intermediaria")){
+                divisor = divisor + 2;
+                notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 3);
+            }else{
+                divisor = divisor + 3;
+                notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 4);
+            }
+        }if(chkMaiorQualidade.isSelected()){
+            importancia = cmbImportanciaMaiorQualidade.getSelectedItem().toString();
+            if(importancia.trim().equals("Baixa")){
+                divisor = divisor + 1;
+                notaQualidade = (fornecedor.getNotaQualidade() * 2);
+            }else if(importancia.trim().equals("Intermediaria")){
+                divisor = divisor + 2;
+                notaQualidade = (fornecedor.getNotaQualidade()  * 3);
+            }else{
+                divisor = divisor + 3;
+                notaQualidade = (fornecedor.getNotaQualidade()  * 4);
+            }
+        }if(chkMenorPreco.isSelected()){
+            importancia = cmbImportanciaMenorPreco.getSelectedItem().toString();
+            if(importancia.trim().equals("Baixa")){
+                divisor = divisor + 1;
+                notaPreco = (fornecedor.getNotaPreco()* 2);
+            }else if(importancia.trim().equals("Intermediaria")){
+                divisor = divisor + 2;
+                notaPreco = (fornecedor.getNotaPreco()* 3);
+            }else{
+                divisor = divisor + 3;
+                notaPreco = (fornecedor.getNotaPreco()* 4);
+            }
+        }if(chkPossuiGarantia.isSelected()){
+            importancia = cmbImportanciaPossuiGarantia.getSelectedItem().toString();
+            if(importancia.trim().equals("Baixa")){
+                divisor = divisor + 1;
+                notaGarantia = (fornecedor.getNotaPosVenda() * 2);
+            }else if(importancia.trim().equals("Intermediaria")){
+                divisor = divisor + 2;
+                notaGarantia = (fornecedor.getNotaPosVenda()  * 3);
+            }else{
+                divisor = divisor + 3;
+                notaGarantia = (fornecedor.getNotaPosVenda()  * 4);
+            }
+        }
+        
+            
+            
+        
+        mediaPonderada = notaEntrega + notaGarantia + notaPreco + notaQualidade;
+        mediaPonderada = mediaPonderada / divisor;
+        
+        jTableComparacaoFornecedores.setValueAt(mediaPonderada, 6, cont + 1);
+        }
+        
+        }
+        
+       
+       for(int cont=4;cont>qntdFornecedores;cont--){
+       
+       jTableComparacaoFornecedores.removeColumn(jTableComparacaoFornecedores.getColumn("Nota Fornecedor" + cont));
+       
+       }
+       int MaiorNota=0;
+       int ColumnFornecedorVencedor=0;
+       for (int cont=1;cont<=qntdFornecedores;cont++){
+           
+           if(Integer.parseInt(jTableComparacaoFornecedores.getValueAt(6, cont).toString()) > MaiorNota){
+               MaiorNota = Integer.parseInt(jTableComparacaoFornecedores.getValueAt(6, cont).toString());
+               ColumnFornecedorVencedor = cont;
+           }
+       
+       }
+       jTableComparacaoFornecedores.setValueAt("VENCEDOR!!!", 7 , ColumnFornecedorVencedor);
+       
+       txtFornecedorVencedor.setText(jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString());
+        
+       Random rand = new Random();
+        int numcotacao = rand.nextInt(5000);
+        numcotacao += 1;
+       txtCotacaoVencedora.setText(Integer.toString(numcotacao));
+       CotacaoVencedora = txtCotacaoVencedora.getText();
     }//GEN-LAST:event_btnCalcularNotaActionPerformed
+
+    private void btnCopiarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarCodigoActionPerformed
+        //PARA COPIAR O TEXTO SELECIONADO DA TABELA PARA O BUFFER (CLIPBOARD)
+        String myString = txtCotacaoVencedora.getText();
+        StringSelection stringSelection = new StringSelection(myString);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }//GEN-LAST:event_btnCopiarCodigoActionPerformed
+
+    private void btnCriarPedidodeCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarPedidodeCompraActionPerformed
+       new GUI_GerenciarPedidoCompra().setVisible(true);
+    }//GEN-LAST:event_btnCriarPedidodeCompraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -583,6 +753,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     private javax.swing.JButton btnCopiarCodigo;
     private javax.swing.JButton btnCriarPedidodeCompra;
     private javax.swing.JButton btnPesquisar;
+    private javax.swing.JButton btnSalvarCotacaoVencedora;
     private javax.swing.JCheckBox chkEntregaRapida;
     private javax.swing.JCheckBox chkMaiorQualidade;
     private javax.swing.JCheckBox chkMenorPreco;
@@ -621,4 +792,6 @@ private Conexao conexao = null;
     private DaoMateriaisSolicitados daoMateriaisSolicitados;
     private Material material;
     private DaoMaterial daoMaterial;
+    private Fornecedor fornecedor;
+    private DaoFornecedor daoFornecedor;
 }

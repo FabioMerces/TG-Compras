@@ -114,18 +114,21 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnCriarPedidodeCompra" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="txtFornecedorVencedor" min="-2" pref="160" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="txtFornecedorVencedor" max="32767" attributes="0"/>
+                                      <Component id="btnSalvarCotacaoVencedora" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="btnCriarPedidodeCompra" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="1" attributes="0">
+                                  <Group type="102" attributes="0">
                                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="txtCotacaoVencedora" min="-2" pref="121" max="-2" attributes="0"/>
@@ -192,8 +195,8 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane2" min="-2" pref="142" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+              <Component id="jScrollPane2" min="-2" pref="158" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtFornecedorVencedor" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -204,9 +207,12 @@
                   <Component id="txtCotacaoVencedora" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnCopiarCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="btnCriarPedidodeCompra" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnCriarPedidodeCompra" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnSalvarCotacaoVencedora" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -411,8 +417,9 @@
         <Component class="javax.swing.JTable" name="jTableComparacaoFornecedores">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="7">
+              <Table columnCount="5" rowCount="8">
                 <Column editable="false" title="Requisito" type="java.lang.Object">
+                  <Data value="Nome do Fornecedor"/>
                   <Data value="Menor Preco"/>
                   <Data value="Maior Qualidade"/>
                   <Data value="Entrega Mais Rapida"/>
@@ -421,13 +428,19 @@
                   <Data value="Media Ponderada"/>
                   <Data value="Vencedor"/>
                 </Column>
-                <Column editable="true" title="Nota Fornecedor 1" type="java.lang.Object"/>
-                <Column editable="true" title="Nota Fornecedor 2" type="java.lang.Object"/>
-                <Column editable="true" title="Nota Fornecedor 3" type="java.lang.Object"/>
+                <Column editable="true" title="Nota Fornecedor1" type="java.lang.Object"/>
+                <Column editable="true" title="Nota Fornecedor2" type="java.lang.Object"/>
+                <Column editable="true" title="Nota Fornecedor3" type="java.lang.Object"/>
+                <Column editable="true" title="Nota Fornecedor4" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>
@@ -479,6 +492,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Criar Pedido de Compra do Material "/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCriarPedidodeCompraActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnCalcularNota">
       <Properties>
@@ -519,6 +535,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Copiar Codigo da Cota&#xe7;&#xe3;o vencedora"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCopiarCodigoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnConsultarCotacoes">
       <Properties>
@@ -527,6 +546,11 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConsultarCotacoesActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnSalvarCotacaoVencedora">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Salvar Cotacao Vencedora"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

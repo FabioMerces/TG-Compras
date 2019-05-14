@@ -67,6 +67,11 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Criar Pedido de Compra");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel2.setText("ID Cotação Vencedora");
 
@@ -293,6 +298,10 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        txtIDCotacaoVencedora.setText(GUI_CotacaoVencedora.CotacaoVencedora);
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
