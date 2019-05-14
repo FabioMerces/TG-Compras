@@ -186,21 +186,21 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
 
         jTableComparacaoFornecedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Nome do Fornecedor", null, null, null, null},
-                {"Menor Preco", null, null, null, null},
-                {"Maior Qualidade", null, null, null, null},
-                {"Entrega Mais Rapida", null, null, null, null},
-                {"Pos Venda", null, null, null, null},
-                {"Media Total", null, null, null, null},
-                {"Media Ponderada", null, null, null, null},
-                {"Vencedor", null, null, null, null}
+                {"Nome do Fornecedor"},
+                {"Menor Preco"},
+                {"Maior Qualidade"},
+                {"Entrega Mais Rapida"},
+                {"Pos Venda"},
+                {"Media Total"},
+                {"Media Ponderada"},
+                {"Vencedor"}
             },
             new String [] {
-                "Requisito", "Nota Fornecedor1", "Nota Fornecedor2", "Nota Fornecedor3", "Nota Fornecedor4"
+                "Requisito"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true
+                false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -571,23 +571,43 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         //ARRUMAR UMA MANEIRA DE IMPLEMENTAR UM RESET NA TABELA
 //JTable table = new JTable();
        //table = jTableComparacaoFornecedores;
-       //DefaultTableModel model = (DefaultTableModel) jTableComparacaoFornecedores.getModel();
+       DefaultTableModel model = (DefaultTableModel) jTableComparacaoFornecedores.getModel();
        
-       //model.setRowCount(8);
+       model.setRowCount(0);
+       model.setColumnCount(1);
        //jTableComparacaoFornecedores = table;
     }//GEN-LAST:event_btnConsultarCotacoesActionPerformed
 
     private void btnCalcularNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularNotaActionPerformed
+        DefaultTableModel model = (DefaultTableModel) jTableComparacaoFornecedores.getModel();
+        model.setRowCount(0);
+        model.setColumnCount(1);
+        model.setRowCount(8);
+        jTableComparacaoFornecedores.setValueAt("Nome Fornecedor", 0, 0);
+        jTableComparacaoFornecedores.setValueAt("Menor Preco", 1, 0);
+        jTableComparacaoFornecedores.setValueAt("Maior Qualidade", 2, 0);
+        jTableComparacaoFornecedores.setValueAt("Entrega mais rapida", 3, 0);
+        jTableComparacaoFornecedores.setValueAt("Pos Venda", 4, 0);
+        jTableComparacaoFornecedores.setValueAt("Media Total", 5, 0);
+        jTableComparacaoFornecedores.setValueAt("Media Ponderada", 6, 0);
+        jTableComparacaoFornecedores.setValueAt("Vencedor", 7, 0);
+       
+        
         int qntdFornecedores = jTableCompararValor.getRowCount();
-        int row,column;
+        int cont=0;
         String CNPJ;       
         
-        for(int cont=0;cont<qntdFornecedores;cont++){
+        for(cont=0;cont<qntdFornecedores;cont++){
+            model.addColumn("Nota Fornecedor" + (cont+1));
+        }
+        
+        
+        for(cont=0;cont<qntdFornecedores;cont++){
         
         CNPJ = jTableCompararValor.getValueAt(cont , 0).toString();
         fornecedor = daoFornecedor.consultar(CNPJ);
-
-        
+            System.out.println(CNPJ);
+            System.out.println(cont);
         jTableComparacaoFornecedores.setValueAt(fornecedor.getNomeFornecedor(), 0, cont + 1);
         jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPreco(), 1, cont + 1);
         jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaQualidade(), 2, cont + 1);
@@ -673,15 +693,15 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         
         }
         
+       int qtdeColuna = jTableComparacaoFornecedores.getColumnCount();
+       for(cont=qtdeColuna;cont>qntdFornecedores+1;cont--){
        
-       for(int cont=4;cont>qntdFornecedores;cont--){
-       
-       jTableComparacaoFornecedores.removeColumn(jTableComparacaoFornecedores.getColumn("Nota Fornecedor" + cont));
+       jTableComparacaoFornecedores.removeColumn(jTableComparacaoFornecedores.getColumn("Nota Fornecedor" + (cont-1) ));
        
        }
        int MaiorNota=0;
        int ColumnFornecedorVencedor=0;
-       for (int cont=1;cont<=qntdFornecedores;cont++){
+       for (cont=1;cont<=qntdFornecedores;cont++){
            
            if(Integer.parseInt(jTableComparacaoFornecedores.getValueAt(6, cont).toString()) > MaiorNota){
                MaiorNota = Integer.parseInt(jTableComparacaoFornecedores.getValueAt(6, cont).toString());
