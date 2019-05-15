@@ -321,7 +321,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                     DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
             
         }else{
-            btnRecarregaTabelaActionPerformed(evt);
+            Refresh();
         }
     }//GEN-LAST:event_rbAguardandoAprovacaoActionPerformed
 
@@ -344,7 +344,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                     DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
             
         }else{
-            btnRecarregaTabelaActionPerformed(evt);
+            Refresh();
         }
     }//GEN-LAST:event_rbAguardandoContatoFornecedorActionPerformed
 
@@ -367,7 +367,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                     DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
             
         }else{
-            btnRecarregaTabelaActionPerformed(evt);
+            Refresh();
         }
     }//GEN-LAST:event_rbPedidoConcluidoActionPerformed
 
@@ -390,7 +390,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                     DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
             
         }else{
-            btnRecarregaTabelaActionPerformed(evt);
+            Refresh();
         }
     }//GEN-LAST:event_rbPedidoNegadoActionPerformed
 
@@ -460,6 +460,23 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                 tr.setRowFilter(null);
             }
         }
+    }
+    
+    private void Refresh() {
+        String sqlquery = "select * from tbl_cotacao";
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();  
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
