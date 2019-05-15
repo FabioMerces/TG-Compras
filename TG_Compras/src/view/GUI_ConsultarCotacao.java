@@ -367,7 +367,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
     private void chkStatusCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkStatusCotacaoActionPerformed
         if(chkStatusCotacao.isSelected()){
             //Arrumar aqui dps
-            String sqlquery = "select * from tbl_cotacao where SITUACAOCOTACAO = 'Em Aberto' ";
+            String sqlquery = "select * from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' ";
         
                     Statement stmt;
                     ResultSet rs;

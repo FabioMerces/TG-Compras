@@ -461,7 +461,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                 
 
                 DefaultTableModel model = (DefaultTableModel) jTableCotacaoMaterial.getModel();
-                model.addRow(new Object[]{"",txtIdRequisicao.getText(),"","",codigo, 0 ,"Em Aberto"});
+                model.addRow(new Object[]{"",txtIdRequisicao.getText(),"","",codigo, 0 ,"Aguardando Resposta do Fornecedor","NAO"});
             }
 
         } catch (Exception ex) {
