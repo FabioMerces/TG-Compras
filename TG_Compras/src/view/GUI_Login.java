@@ -173,24 +173,33 @@ public class GUI_Login extends javax.swing.JFrame {
             if (txtUsuario.getText().isEmpty()) {
                 throw new Exception("Login não foi informado.\n"
                         + "Por favor informar uma credencial valida para efetuar o login.");
-            } else if (txtSenha.getText().isEmpty()) {
+            } else if (String.valueOf(txtSenha.getPassword()).isEmpty()) {
                 throw new Exception("Senha não foi informada.\n"
                         + "Por favor informar a senha para efetuar o login.");
             } else {
-                String sqlquery = "select * from tbl_usuario where cpf = " + txtUsuario.getText().trim() + " and senha = " + txtSenha.getText().trim();
-
+                String password;
+                password = String.valueOf(txtSenha.getPassword());
+                String cpf;
+                cpf = txtUsuario.getText().trim();
+                String sqlquery = "select * from tbl_usuario where cpf = " + cpf + " and senha = '" + password + "'";
+                       // + "cpf = " + txtUsuario.getText().trim() + " and senha = " + password ;
+                System.out.println(sqlquery);
                 Statement stmt;
                 ResultSet rs;
-
+                //txtSenha.getPassword().;
                 try{
                     stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
                     rs = stmt.executeQuery(sqlquery);
-                    if(rs.next())
-                        throw new Exception("Resultado do login: " + sucesso + ".");
+                    if(rs.next()){
+                        JOptionPane.showMessageDialog(null, "Login concluido com Sucesso");
+
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Login nao esta correto verifique a senha e o usuario");
+                    }
 
                     
                 } catch(SQLException ex){
-                    Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE , null, ex);
                 }
                 
             }

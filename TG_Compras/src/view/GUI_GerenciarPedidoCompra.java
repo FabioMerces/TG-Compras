@@ -389,6 +389,11 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
         System.out.println(CodigoCotacaoVencedora);
         cotacao = daoCotacao.consultar(CodigoCotacaoVencedora);
         
+        if(cotacao == null){
+        JOptionPane.showMessageDialog(null, "Este codigo de Cotacao nao existe, verifique se o Codigo foi digitado corretamente");
+        
+        }else{
+        
         String CNPJ;
         CNPJ = cotacao.getCNPJ();
         fornecedor = daoFornecedor.consultar(CNPJ);
@@ -426,6 +431,7 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
             
         }
         
+       }
         
     }//GEN-LAST:event_btnPesquisarCotacaoVencedoraActionPerformed
 
@@ -457,6 +463,8 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
         pedidoCompra = daoPedCompra.consultar(cotacao.getNumCotacao());
         pedidoCompra.setSituacaoPedido(cmbStatusPedidoCompra.getSelectedItem().toString());
         daoPedCompra.alterar(pedidoCompra);
+        JOptionPane.showMessageDialog(null, "Status do Pedido de Compra alterado com sucesso");
+        
     }//GEN-LAST:event_btnAlterarPedidoCompraActionPerformed
 
     /**
