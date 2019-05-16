@@ -906,8 +906,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                                      + CNPJbd + "and PRECOUNITARIO = " + 
                                      jTableComparacaoFornecedores.getValueAt(7, ColumnFornecedorVencedor) + 
                                      "and NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
-// Talvez Colocar ' ' 
-                             
+     
                     Statement stmt;
         ResultSet rs;
 

@@ -4,9 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Gabriel%20Pilan/Documents/GitHub/TG-Compras/TG_Compras/src/view/GUI_CotacaoVencedora.java</file>
+            <file>file:/C:/Users/Gabriel%20Pilan/Documents/GitHub/TG-Compras/TG_Compras/src/control/DaoCotacao.java</file>
+            <file>file:/C:/Users/Gabriel%20Pilan/Documents/GitHub/TG-Compras/TG_Compras/src/model/MateriaisSolicitados.java</file>
             <file>file:/C:/Users/Gabriel%20Pilan/Documents/GitHub/TG-Compras/TG_Compras/src/view/GUI_GerenciarCotacoesDeUmaRequisicao.java</file>
-            <file>file:/C:/Users/Gabriel%20Pilan/Documents/GitHub/TG-Compras/TG_Compras/src/view/GUI_ConsultarCotacao.java</file>
-            <file>file:/C:/Users/Gabriel%20Pilan/Documents/GitHub/TG-Compras/TG_Compras/src/view/GUI_ConsultarCotacaoVencedora.java</file>
+            <file>file:/C:/Users/Gabriel%20Pilan/Documents/GitHub/TG-Compras/TG_Compras/src/model/Cotacao.java</file>
+            <file>file:/C:/Users/Gabriel%20Pilan/Documents/GitHub/TG-Compras/TG_Compras/src/control/DaoPedCompra.java</file>
             <file>file:/C:/Users/Gabriel%20Pilan/Documents/GitHub/TG-Compras/TG_Compras/src/view/GUI_GerenciarPedidoCompra.java</file>
         </group>
     </open-files>

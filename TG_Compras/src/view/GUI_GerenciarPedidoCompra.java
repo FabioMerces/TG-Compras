@@ -5,6 +5,30 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoCotacao;
+import control.DaoFornecedor;
+import control.DaoMateriaisSolicitados;
+import control.DaoMaterial;
+import control.DaoPedCompra;
+import control.DaoRequisicaoCompra;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Cotacao;
+import model.Fornecedor;
+import model.MateriaisSolicitados;
+import model.Material;
+import model.PedidoCompra;
+import model.RequisicaoCompra;
+
 /**
  *
  * @author Gabriel Pilan
@@ -59,6 +83,7 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
         btnFinalizarCompra = new javax.swing.JButton();
         jLabel21 = new javax.swing.JLabel();
         jLabelTeste = new javax.swing.JLabel();
+        btnCadastrarPedidoCompra = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Criar Pedido de Compra");
@@ -72,6 +97,11 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
         jLabel2.setText("ID Cotação Vencedora");
 
         btnPesquisarCotacaoVencedora.setText("Pesquisar");
+        btnPesquisarCotacaoVencedora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarCotacaoVencedoraActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Dados Fornecedor");
 
@@ -129,6 +159,11 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
         jLabel14.setText("Status");
 
         btnAlterarPedidoCompra.setText("Alterar Status do Pedido de Compra");
+        btnAlterarPedidoCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarPedidoCompraActionPerformed(evt);
+            }
+        });
 
         cmbStatusPedidoCompra.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Aguardando Aprovação da Gerencia", "Aguardando Contato com Fornecedor", "Concluído", "Negado" }));
         cmbStatusPedidoCompra.addActionListener(new java.awt.event.ActionListener() {
@@ -151,6 +186,13 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
         jLabelTeste.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabelTeste.setText("Teste");
 
+        btnCadastrarPedidoCompra.setText("Cadastrar Pedido de Compra");
+        btnCadastrarPedidoCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarPedidoCompraActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -161,40 +203,37 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel2)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(txtIDCotacaoVencedora))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(jLabel4)
-                                                    .addGap(18, 18, 18)
-                                                    .addComponent(txtCNPJ))
-                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                                    .addComponent(jLabel6)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addGap(29, 29, 29)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel7)
-                                                .addComponent(jLabel5))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(txtTelefone, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
-                                                .addComponent(txtNomeFornecedor))))
-                                    .addComponent(jLabel3))
-                                .addGap(18, 18, 18)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtIDCotacaoVencedora, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnPesquisarCotacaoVencedora))
+                            .addComponent(jLabel3)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnAlterarPedidoCompra)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnConsultarPedidosCompra))
                             .addComponent(jLabel20)
                             .addComponent(btnFinalizarCompra)
-                            .addComponent(jLabel21))
+                            .addComponent(jLabel21)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtEmail))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(51, 51, 51)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtNomeFornecedor)
+                                    .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addContainerGap(248, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,26 +244,27 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
                                 .addComponent(cmbStatusPedidoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabelTeste)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel9)
-                                        .addGap(33, 33, 33)
-                                        .addComponent(txtIDMaterial))
-                                    .addComponent(jLabel8)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel11)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(39, 39, 39)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
+                                .addGap(212, 212, 212)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(jLabel10)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(txtNomeMaterial))
-                                    .addGroup(layout.createSequentialGroup()
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(jLabel12)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtValorFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtValorFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel9)
+                                    .addGap(33, 33, 33)
+                                    .addComponent(txtIDMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
+                                .addComponent(jLabel8)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel11)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnCadastrarPedidoCompra))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -238,18 +278,24 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtNomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtNomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel8)
@@ -266,7 +312,9 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
                             .addComponent(txtValorFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel11)
                             .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addComponent(btnCadastrarPedidoCompra)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -291,6 +339,16 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoCotacao = new DaoCotacao(conexao.conectar());
+        daoRequisicao = new DaoRequisicaoCompra(conexao.conectar());
+        daoMateriaisSolicitados = new DaoMateriaisSolicitados(conexao.conectar());
+        daoMaterial = new DaoMaterial(conexao.conectar());
+        daoFornecedor = new DaoFornecedor(conexao.conectar());
+        daoPedCompra = new DaoPedCompra(conexao.conectar());
+        
         txtIDCotacaoVencedora.setText(GUI_CotacaoVencedora.CotacaoVencedora);
         jLabelTeste.setText("<html> Se o Status estiver: " + cmbStatusPedidoCompra.getSelectedItem().toString() + 
                         "<br/> sera necessario aguardar a aprovacao devido ao valor da compra </html>");
@@ -323,6 +381,83 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
     private void btnFinalizarCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarCompraActionPerformed
         new GUI_FinalizarCompra().setVisible(true);
     }//GEN-LAST:event_btnFinalizarCompraActionPerformed
+
+    private void btnPesquisarCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarCotacaoVencedoraActionPerformed
+        //Pegando os Objetos do Banco
+        int CodigoCotacaoVencedora = 0;
+        CodigoCotacaoVencedora = Integer.parseInt(txtIDCotacaoVencedora.getText().toString().trim());
+        System.out.println(CodigoCotacaoVencedora);
+        cotacao = daoCotacao.consultar(CodigoCotacaoVencedora);
+        
+        String CNPJ;
+        CNPJ = cotacao.getCNPJ();
+        fornecedor = daoFornecedor.consultar(CNPJ);
+        int codMat;
+        codMat = cotacao.getCodMaterial();
+        material = daoMaterial.consultar(codMat);
+        
+        //Setando eles nos Textos
+        txtCNPJ.setText(fornecedor.getCNPJ());
+        txtEmail.setText(fornecedor.getEmailFornecedor());
+        txtNomeFornecedor.setText(fornecedor.getNomeFornecedor());
+        txtTelefone.setText(fornecedor.getTelPrincipal());
+        
+        txtIDMaterial.setText(Integer.toString(material.getCodMaterial()));
+        txtNomeMaterial.setText(material.getNomeMaterial());
+        
+        txtQuantidade.setText(Integer.toString(cotacao.getQtdeMaterial()));
+        float ValorTotal = 0;
+        ValorTotal = cotacao.getQtdeMaterial() * cotacao.getPrecoMaterial();
+        txtValorFinal.setText(Float.toString(ValorTotal));
+        
+        pedidoCompra = daoPedCompra.consultar(cotacao.getNumCotacao());
+        if(pedidoCompra != null){
+            String compara;
+            compara = pedidoCompra.getSituacaoPedido();
+            if(compara.equals("Aguardando Aprovação da Gerencia")){
+                cmbStatusPedidoCompra.setSelectedIndex(0);
+            }else if(compara.equals("Aguardando Contato com Fornecedor")){
+                cmbStatusPedidoCompra.setSelectedIndex(1);
+            }else if(compara.equals("Concluído")){
+                cmbStatusPedidoCompra.setSelectedIndex(2);
+            }else{
+                cmbStatusPedidoCompra.setSelectedIndex(3);
+            }
+            
+        }
+        
+        
+    }//GEN-LAST:event_btnPesquisarCotacaoVencedoraActionPerformed
+
+    private void btnCadastrarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarPedidoCompraActionPerformed
+        pedidoCompra = new PedidoCompra();
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+	LocalDate localDate = LocalDate.now();
+        
+        ;
+        
+        //pedidoCompra.setCPFGerente(CPFGerente);
+        pedidoCompra.setDataPedido(dtf.format(localDate));
+        pedidoCompra.setNumCotacao(cotacao.getNumCotacao());
+        pedidoCompra.setNumPedido(cotacao.getNumCotacao());
+        pedidoCompra.setNumSolicitacao(cotacao.getNumSolicitacaoCompra());
+        pedidoCompra.setSituacaoPedido("Aguardando Contato com Fornecedor");
+        
+        
+        if(daoPedCompra.consultar(cotacao.getNumCotacao()) == null){
+            daoPedCompra.inserir(pedidoCompra);
+        }else{
+        JOptionPane.showMessageDialog(null, "Ja existe um Pedido de Compra cadastrado com esse Codigo de Cotacao");
+        }
+        
+    }//GEN-LAST:event_btnCadastrarPedidoCompraActionPerformed
+
+    private void btnAlterarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarPedidoCompraActionPerformed
+        pedidoCompra = daoPedCompra.consultar(cotacao.getNumCotacao());
+        pedidoCompra.setSituacaoPedido(cmbStatusPedidoCompra.getSelectedItem().toString());
+        daoPedCompra.alterar(pedidoCompra);
+    }//GEN-LAST:event_btnAlterarPedidoCompraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -362,6 +497,7 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterarPedidoCompra;
+    private javax.swing.JButton btnCadastrarPedidoCompra;
     private javax.swing.JButton btnConsultarPedidosCompra;
     private javax.swing.JButton btnFinalizarCompra;
     private javax.swing.JButton btnPesquisarCotacaoVencedora;
@@ -394,4 +530,18 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
     private javax.swing.JTextField txtTelefone;
     private javax.swing.JTextField txtValorFinal;
     // End of variables declaration//GEN-END:variables
+private Conexao conexao = null;
+    private Cotacao cotacao;
+    private DaoCotacao daoCotacao;
+    private RequisicaoCompra requisicao;
+    private DaoRequisicaoCompra daoRequisicao;
+    private List<Material> listaComboMaterial;
+    private MateriaisSolicitados materiaisSolicitados;
+    private DaoMateriaisSolicitados daoMateriaisSolicitados;
+    private Material material;
+    private DaoMaterial daoMaterial;
+    private Fornecedor fornecedor;
+    private DaoFornecedor daoFornecedor;
+    private PedidoCompra pedidoCompra;
+    private DaoPedCompra daoPedCompra;
 }

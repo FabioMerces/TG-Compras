@@ -49,7 +49,7 @@ public class DaoPedCompra {
         PreparedStatement ps = null;
         
         try {
-            ps = conn.prepareStatement("INSERT INTO tbl_Pedido_Compra (NumPedido, NumCotacao, NumSolicitacao"
+            ps = conn.prepareStatement("INSERT INTO tbl_Pedido_Compra (NumPedido, NumCotacao, NumSolicitacao,"
                     + " DataPedido, Situacao, CPFGerente)"
                     + " VALUES(?,?,?,?,?,?)");
             ps.setInt(1, pdc.getNumPedido());
@@ -68,9 +68,9 @@ public class DaoPedCompra {
      public void alterar(PedidoCompra pdc) {
 		PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("UPDATE tbl_Pedido_Compra set NumCotacao = ?, set NumSolicitacao = ?"
+            ps = conn.prepareStatement("UPDATE tbl_Pedido_Compra set NumCotacao = ?, NumSolicitacao = ?,"
                     + " DataPedido = ?, Situacao = ?, CPFGerente = ?"
-                    + " WHERE NumPedido = ?");
+                    + " WHERE NumPedido = ?"); 
             ps.setInt(1, pdc.getNumCotacao());
             ps.setInt(2, pdc.getNumSolicitacao());
             ps.setString(3, pdc.getDataPedido());
