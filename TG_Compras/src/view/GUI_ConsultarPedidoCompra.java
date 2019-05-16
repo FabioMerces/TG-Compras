@@ -8,7 +8,6 @@ package view;
 import control.Conexao;
 import control.DaoCotacao;
 import control.DaoPedCompra;
-import control.DaoRequisicaoCompra;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.Cotacao;
 import model.PedidoCompra;
-import model.RequisicaoCompra;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -67,6 +65,11 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar Pedido de Compra");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("ID Pedido de Compra");
 
@@ -304,8 +307,10 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
 
     private void rbAguardandoAprovacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAguardandoAprovacaoActionPerformed
         if(rbAguardandoAprovacao.isSelected()){
-            //Arrumar aqui dps
-            String sqlquery = "select * from tbl_Pedido_Compra where SITUACAO = 'Aguardando Aprovacao' ";
+            
+            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia'";
         
                     Statement stmt;
                     ResultSet rs;
@@ -327,8 +332,10 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
 
     private void rbAguardandoContatoFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAguardandoContatoFornecedorActionPerformed
         if(rbAguardandoContatoFornecedor.isSelected()){
-            //Arrumar aqui dps
-            String sqlquery = "select * from tbl_Pedido_Compra where SITUACAO = 'Aguardando contato' ";
+            
+            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor'";
         
                     Statement stmt;
                     ResultSet rs;
@@ -350,8 +357,10 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
 
     private void rbPedidoConcluidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPedidoConcluidoActionPerformed
         if(rbPedidoConcluido.isSelected()){
-            //Arrumar aqui dps
-            String sqlquery = "select * from tbl_Pedido_Compra where SITUACAOCOTACAO = 'Concluido' ";
+            
+            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Concluido'";
         
                     Statement stmt;
                     ResultSet rs;
@@ -373,8 +382,10 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
 
     private void rbPedidoNegadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPedidoNegadoActionPerformed
         if(rbPedidoNegado.isSelected()){
-            //Arrumar aqui dps
-            String sqlquery = "select * from tbl_Pedido_Compra where SITUACAOCOTACAO = 'Negado' ";
+            
+            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Negado'";
         
                     Statement stmt;
                     ResultSet rs;
@@ -411,6 +422,32 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
             btnBuscarIDPedidoCompra.setEnabled(true);
         }
     }//GEN-LAST:event_rbIDPedidoCompraActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoPedido = new DaoPedCompra(conexao.conectar());
+        daoCotacao = new DaoCotacao(conexao.conectar());
+        
+        String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ";
+
+        Statement stmt;
+        ResultSet rs;
+
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();
+
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -463,7 +500,9 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     }
     
     private void Refresh() {
-        String sqlquery = "select * from tbl_cotacao";
+        String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ";
         
         Statement stmt;
         ResultSet rs;
