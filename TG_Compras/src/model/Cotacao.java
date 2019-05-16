@@ -13,7 +13,17 @@ public class Cotacao {
     private int NumCotacao, NumSolicitacaoCompra;
     private int CodMaterial, QtdeMaterial;
     private float PrecoMaterial;
-	private String SituacaoCotacao, CNPJ, DataCotacao;
+    private String SituacaoCotacao, CNPJ, DataCotacao, CotacaoVencedora;
+
+    public String getCotacaoVencedora() {
+        return CotacaoVencedora;
+    }
+
+    public void setCotacaoVencedora(String CotacaoVencedora) {
+        this.CotacaoVencedora = CotacaoVencedora;
+    }
+    
+    
 
     public int getNumCotacao() {
         return NumCotacao;
