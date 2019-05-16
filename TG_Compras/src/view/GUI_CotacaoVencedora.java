@@ -61,6 +61,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
 
         jScrollPane3 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         txtIDRequisicao = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -92,6 +93,9 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         btnCopiarCodigo = new javax.swing.JButton();
         btnConsultarCotacoes = new javax.swing.JButton();
         btnSalvarCotacaoVencedora = new javax.swing.JButton();
+        rbNotaHistorico = new javax.swing.JRadioButton();
+        rbNotaPreco = new javax.swing.JRadioButton();
+        btnCalcularNotaPreco = new javax.swing.JButton();
 
         jScrollPane3.setViewportView(jEditorPane1);
 
@@ -132,6 +136,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTableCompararValor);
 
+        cmbCodigoMaterial.setEnabled(false);
         cmbCodigoMaterial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbCodigoMaterialActionPerformed(evt);
@@ -193,6 +198,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                 {"Pos Venda"},
                 {"Media Total"},
                 {"Media Ponderada"},
+                {"Preco Unitario"},
                 {"Vencedor"}
             },
             new String [] {
@@ -216,13 +222,15 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         txtFornecedorVencedor.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
         btnCriarPedidodeCompra.setText("Criar Pedido de Compra do Material ");
+        btnCriarPedidodeCompra.setEnabled(false);
         btnCriarPedidodeCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCriarPedidodeCompraActionPerformed(evt);
             }
         });
 
-        btnCalcularNota.setText("Calcular Nota dos Fornecedores");
+        btnCalcularNota.setText("Calcular Nota dos Fornecedores (Historico)");
+        btnCalcularNota.setEnabled(false);
         btnCalcularNota.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCalcularNotaActionPerformed(evt);
@@ -244,6 +252,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         txtCotacaoVencedora.setEnabled(false);
 
         btnCopiarCodigo.setText("Copiar Codigo da Cotação vencedora");
+        btnCopiarCodigo.setEnabled(false);
         btnCopiarCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCopiarCodigoActionPerformed(evt);
@@ -251,6 +260,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         });
 
         btnConsultarCotacoes.setText("Consultar Cotacoes do Material");
+        btnConsultarCotacoes.setEnabled(false);
         btnConsultarCotacoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConsultarCotacoesActionPerformed(evt);
@@ -258,52 +268,87 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         });
 
         btnSalvarCotacaoVencedora.setText("Salvar Cotacao Vencedora");
+        btnSalvarCotacaoVencedora.setEnabled(false);
+        btnSalvarCotacaoVencedora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarCotacaoVencedoraActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(rbNotaHistorico);
+        rbNotaHistorico.setSelected(true);
+        rbNotaHistorico.setText("Calcular a Nota Baseado no Historico do Fornecedor");
+        rbNotaHistorico.setEnabled(false);
+        rbNotaHistorico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbNotaHistoricoActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(rbNotaPreco);
+        rbNotaPreco.setText("Calcular a Nota Baseada somente no Preco Unitario");
+        rbNotaPreco.setEnabled(false);
+        rbNotaPreco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbNotaPrecoActionPerformed(evt);
+            }
+        });
+
+        btnCalcularNotaPreco.setText("Calcular Nota Baseada no Preco");
+        btnCalcularNotaPreco.setEnabled(false);
+        btnCalcularNotaPreco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCalcularNotaPrecoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtIDRequisicao, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnPesquisar)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtIDCotacao, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(cmbCodigoMaterial, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnConsultarCotacoes))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel6))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addComponent(btnSalvarCotacaoVencedora)
+                    .addGap(131, 131, 131)
+                    .addComponent(btnCriarPedidodeCompra)
+                    .addGap(218, 218, 218))
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(btnCalcularNota, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGap(12, 12, 12)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel1)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(txtIDRequisicao, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnPesquisar)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jLabel2)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(txtIDCotacao, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(cmbCodigoMaterial, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnConsultarCotacoes))))
+                        .addComponent(jLabel6))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(rbNotaHistorico)
+                        .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addGap(12, 12, 12)
+                                    .addGap(4, 4, 4)
                                     .addComponent(jLabel4))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(chkMaiorQualidade)
-                                        .addComponent(chkMenorPreco)
-                                        .addComponent(chkPossuiGarantia)
-                                        .addComponent(chkEntregaRapida))))
+                                .addComponent(chkMaiorQualidade)
+                                .addComponent(chkMenorPreco)
+                                .addComponent(chkPossuiGarantia)
+                                .addComponent(chkEntregaRapida))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(18, 18, 18)
@@ -315,30 +360,31 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(31, 31, 31)
                                     .addComponent(jLabel5)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                    .addGap(18, 18, 18)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnCalcularNotaPreco)
+                        .addComponent(rbNotaPreco))
+                    .addGap(111, 111, 111))
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtFornecedorVencedor, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(txtFornecedorVencedor, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnSalvarCotacaoVencedora)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnCriarPedidodeCompra))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtCotacaoVencedora, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnCopiarCodigo)))
-                                .addGap(206, 206, 206)))))
-                .addContainerGap())
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtCotacaoVencedora, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCopiarCodigo)
+                                .addGap(46, 46, 46))))
+                    .addContainerGap()))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnCalcularNota)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {chkEntregaRapida, chkMaiorQualidade, chkMenorPreco, chkPossuiGarantia});
@@ -361,11 +407,16 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                     .addComponent(btnConsultarCotacoes))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rbNotaHistorico)
+                    .addComponent(rbNotaPreco))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addGap(22, 22, 22)
+                    .addComponent(jLabel5)
+                    .addComponent(btnCalcularNotaPreco))
+                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkMenorPreco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbImportanciaMenorPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -381,13 +432,13 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkPossuiGarantia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbImportanciaPossuiGarantia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
-                .addComponent(btnCalcularNota)
                 .addGap(18, 18, 18)
+                .addComponent(btnCalcularNota)
+                .addGap(23, 23, 23)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtFornecedorVencedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -396,11 +447,10 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(txtCotacaoVencedora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCopiarCodigo))
-                .addGap(39, 39, 39)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCriarPedidodeCompra)
-                    .addComponent(btnSalvarCotacaoVencedora))
-                .addContainerGap())
+                    .addComponent(btnSalvarCotacaoVencedora)))
         );
 
         pack();
@@ -472,8 +522,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                 if (requisicao == null) {
                     throw new Exception("Id Requisicao de Compra informado não existe.\n ");
                 } else {
-                    //System.out.println(daoMateriaisSolicitados.listarMateriaisSolicitadosDeUmaRequisicao(txtIDRequisicao.getText().trim()));
-
+                    
                     listaComboMaterial = daoMateriaisSolicitados.listarMateriaisSolicitadosDeUmaRequisicao(txtIDRequisicao.getText().trim());
                     
                     try {
@@ -488,39 +537,11 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                     
                     material = listaComboMaterial.get(cmbCodigoMaterial.getSelectedIndex());
                     
-                    /*
-                    Pegar o Nome do Fornecedor e o Valor atraves do Material
-                    
-                    Pesquisar na tabela Cotacao usando a Requisicao de Compra 
-                    o campo CNPJ e Valor pelo Codigo do material
-                 
+                    cmbCodigoMaterial.setEnabled(true);
+                    btnConsultarCotacoes.setEnabled(true);
                     
                     
-                    
-                   
-                    
-                     String sqlquery;
-                     
-                             sqlquery = "select tbl_fornecedor.nomefornecedor, PRECOUNITARIO from tbl_cotacao " 
-                            + "inner join tbl_fornecedor on tbl_fornecedor.cnpj = tbl_cotacao.cnpj "
-                            +"where codmaterial = " + material.getCodMaterial()
-                                     + "and numsolicitacao = " + txtIDRequisicao.getText();
-                    
-                    Statement stmt;
-        ResultSet rs;
-
-        try {
-            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery(sqlquery);
-            jTableCompararValor.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException ex) {
-            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                    
-                    
-                    
-                    
-                */}
+                    }
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Falha ao pesquisar Requisicao: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -576,13 +597,20 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
        model.setRowCount(0);
        model.setColumnCount(1);
        //jTableComparacaoFornecedores = table;
+       
+       rbNotaHistorico.setEnabled(true);
+                    rbNotaPreco.setEnabled(true);
+       
+       btnCopiarCodigo.setEnabled(false);
+       btnSalvarCotacaoVencedora.setEnabled(false);
+       btnCriarPedidodeCompra.setEnabled(false);
     }//GEN-LAST:event_btnConsultarCotacoesActionPerformed
 
     private void btnCalcularNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularNotaActionPerformed
         DefaultTableModel model = (DefaultTableModel) jTableComparacaoFornecedores.getModel();
         model.setRowCount(0);
         model.setColumnCount(1);
-        model.setRowCount(8);
+        model.setRowCount(9);
         jTableComparacaoFornecedores.setValueAt("Nome Fornecedor", 0, 0);
         jTableComparacaoFornecedores.setValueAt("Menor Preco", 1, 0);
         jTableComparacaoFornecedores.setValueAt("Maior Qualidade", 2, 0);
@@ -590,7 +618,8 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         jTableComparacaoFornecedores.setValueAt("Pos Venda", 4, 0);
         jTableComparacaoFornecedores.setValueAt("Media Total", 5, 0);
         jTableComparacaoFornecedores.setValueAt("Media Ponderada", 6, 0);
-        jTableComparacaoFornecedores.setValueAt("Vencedor", 7, 0);
+        jTableComparacaoFornecedores.setValueAt("Preco Unitario", 7, 0);
+        jTableComparacaoFornecedores.setValueAt("Vencedor", 8, 0);
        
         
         int qntdFornecedores = jTableCompararValor.getRowCount();
@@ -606,14 +635,14 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         
         CNPJ = jTableCompararValor.getValueAt(cont , 0).toString();
         fornecedor = daoFornecedor.consultar(CNPJ);
-            System.out.println(CNPJ);
-            System.out.println(cont);
+
         jTableComparacaoFornecedores.setValueAt(fornecedor.getNomeFornecedor(), 0, cont + 1);
         jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPreco(), 1, cont + 1);
         jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaQualidade(), 2, cont + 1);
         jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaVelocidadeEntrega(), 3, cont + 1);
         jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPosVenda(), 4, cont + 1);
         jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 5, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(jTableCompararValor.getValueAt(cont, 2), 7, cont + 1);
         
         
         //Implementar a Media Ponderada aqui
@@ -709,15 +738,47 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
            }
        
        }
-       jTableComparacaoFornecedores.setValueAt("VENCEDOR!!!", 7 , ColumnFornecedorVencedor);
+       jTableComparacaoFornecedores.setValueAt("VENCEDOR!!!", 8 , ColumnFornecedorVencedor);
        
        txtFornecedorVencedor.setText(jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString());
         
-       Random rand = new Random();
-        int numcotacao = rand.nextInt(5000);
-        numcotacao += 1;
+       //Carregar O numero da Cotacao Vencedora
+        int numcotacao = 0;
+       
+        String sqlquery;
+        String CNPJbd = null,aux;
+        aux = jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString();
+        
+        for(cont=0;cont<qntdFornecedores;cont++){
+        if(aux.equals(jTableCompararValor.getValueAt(cont, 1).toString()))
+            CNPJbd = jTableCompararValor.getValueAt(cont, 0).toString();        
+        }
+                             sqlquery = "select NUMCOTACAO from tbl_cotacao where CNPJ = " 
+                                     + CNPJbd + "and PRECOUNITARIO = " + 
+                                     jTableComparacaoFornecedores.getValueAt(7, ColumnFornecedorVencedor) + 
+                                     "and NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
+// Talvez Colocar ' ' 
+                             
+                    Statement stmt;
+        ResultSet rs;
+
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            if(rs.next() == true){
+            numcotacao = rs.getInt("NumCotacao");
+            System.out.println(numcotacao);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
        txtCotacaoVencedora.setText(Integer.toString(numcotacao));
        CotacaoVencedora = txtCotacaoVencedora.getText();
+       
+       btnCopiarCodigo.setEnabled(true);
+       btnSalvarCotacaoVencedora.setEnabled(true);
+       btnCriarPedidodeCompra.setEnabled(true);
     }//GEN-LAST:event_btnCalcularNotaActionPerformed
 
     private void btnCopiarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarCodigoActionPerformed
@@ -731,6 +792,155 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     private void btnCriarPedidodeCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarPedidodeCompraActionPerformed
        new GUI_GerenciarPedidoCompra().setVisible(true);
     }//GEN-LAST:event_btnCriarPedidodeCompraActionPerformed
+
+    private void rbNotaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbNotaHistoricoActionPerformed
+        if(rbNotaHistorico.isSelected()){
+        chkEntregaRapida.setEnabled(true);
+        chkMaiorQualidade.setEnabled(true);
+        chkMenorPreco.setEnabled(true);
+        chkPossuiGarantia.setEnabled(true);
+        btnCalcularNota.setEnabled(true);
+        btnCalcularNotaPreco.setEnabled(false);
+        }else{
+            chkEntregaRapida.setEnabled(false);
+            chkMaiorQualidade.setEnabled(false);
+            chkMenorPreco.setEnabled(false);
+            chkPossuiGarantia.setEnabled(false);
+            btnCalcularNota.setEnabled(false);
+        }
+    }//GEN-LAST:event_rbNotaHistoricoActionPerformed
+
+    private void rbNotaPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbNotaPrecoActionPerformed
+       if(rbNotaPreco.isSelected()){
+           btnCalcularNotaPreco.setEnabled(true);
+           chkEntregaRapida.setEnabled(false);
+            chkMaiorQualidade.setEnabled(false);
+            chkMenorPreco.setEnabled(false);
+            chkPossuiGarantia.setEnabled(false);
+            btnCalcularNota.setEnabled(false);
+       }else{
+        chkEntregaRapida.setEnabled(true);
+        chkMaiorQualidade.setEnabled(true);
+        chkMenorPreco.setEnabled(true);
+        chkPossuiGarantia.setEnabled(true);
+        btnCalcularNota.setEnabled(true);
+        btnCalcularNotaPreco.setEnabled(false);
+       }
+    }//GEN-LAST:event_rbNotaPrecoActionPerformed
+
+    private void btnCalcularNotaPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularNotaPrecoActionPerformed
+        DefaultTableModel model = (DefaultTableModel) jTableComparacaoFornecedores.getModel();
+        model.setRowCount(0);
+        model.setColumnCount(1);
+        model.setRowCount(9);
+        jTableComparacaoFornecedores.setValueAt("Nome Fornecedor", 0, 0);
+        jTableComparacaoFornecedores.setValueAt("Menor Preco", 1, 0);
+        jTableComparacaoFornecedores.setValueAt("Maior Qualidade", 2, 0);
+        jTableComparacaoFornecedores.setValueAt("Entrega mais rapida", 3, 0);
+        jTableComparacaoFornecedores.setValueAt("Pos Venda", 4, 0);
+        jTableComparacaoFornecedores.setValueAt("Media Total", 5, 0);
+        jTableComparacaoFornecedores.setValueAt("Media Ponderada", 6, 0);
+        jTableComparacaoFornecedores.setValueAt("Preco Unitario", 7, 0);
+        jTableComparacaoFornecedores.setValueAt("Vencedor", 8, 0);
+       
+        
+        int qntdFornecedores = jTableCompararValor.getRowCount();
+        int cont=0;
+        String CNPJ;       
+        
+        for(cont=0;cont<qntdFornecedores;cont++){
+            model.addColumn("Nota Fornecedor" + (cont+1));
+        }
+        
+        
+        for(cont=0;cont<qntdFornecedores;cont++){
+        
+        CNPJ = jTableCompararValor.getValueAt(cont , 0).toString();
+        fornecedor = daoFornecedor.consultar(CNPJ);
+            System.out.println(CNPJ);
+            System.out.println(cont);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.getNomeFornecedor(), 0, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPreco(), 1, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaQualidade(), 2, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaVelocidadeEntrega(), 3, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPosVenda(), 4, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 5, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 6, cont + 1);
+        jTableComparacaoFornecedores.setValueAt(jTableCompararValor.getValueAt(cont, 2), 7, cont + 1);
+        
+        
+        }
+        
+       int qtdeColuna = jTableComparacaoFornecedores.getColumnCount();
+       for(cont=qtdeColuna;cont>qntdFornecedores+1;cont--){
+       
+       jTableComparacaoFornecedores.removeColumn(jTableComparacaoFornecedores.getColumn("Nota Fornecedor" + (cont-1) ));
+       
+       }
+       float MenorPreco=99999999;
+       int ColumnFornecedorVencedor=0;
+       for (cont=1;cont<=qntdFornecedores;cont++){
+           
+           if(Float.parseFloat(jTableCompararValor.getValueAt(cont-1, 2).toString()) < MenorPreco){
+               MenorPreco = Float.parseFloat(jTableCompararValor.getValueAt(cont-1, 2).toString());
+               ColumnFornecedorVencedor = cont;
+           }
+       
+       }
+       jTableComparacaoFornecedores.setValueAt("VENCEDOR!!!", 8 , ColumnFornecedorVencedor);
+       
+       txtFornecedorVencedor.setText(jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString());
+        
+       //Carregar O numero da Cotacao Vencedora
+        int numcotacao = 0;
+       
+        String sqlquery;
+        String CNPJbd = null,aux;
+        aux = jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString();
+        
+        for(cont=0;cont<qntdFornecedores;cont++){
+        if(aux.equals(jTableCompararValor.getValueAt(cont, 1).toString()))
+            CNPJbd = jTableCompararValor.getValueAt(cont, 0).toString();        
+        }
+                             sqlquery = "select NUMCOTACAO from tbl_cotacao where CNPJ = " 
+                                     + CNPJbd + "and PRECOUNITARIO = " + 
+                                     jTableComparacaoFornecedores.getValueAt(7, ColumnFornecedorVencedor) + 
+                                     "and NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
+// Talvez Colocar ' ' 
+                             
+                    Statement stmt;
+        ResultSet rs;
+
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            if(rs.next() == true){
+            numcotacao = rs.getInt("NumCotacao");
+            System.out.println(numcotacao);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+       txtCotacaoVencedora.setText(Integer.toString(numcotacao));
+       CotacaoVencedora = txtCotacaoVencedora.getText();
+       
+       btnCopiarCodigo.setEnabled(true);
+       btnSalvarCotacaoVencedora.setEnabled(true);
+       btnCriarPedidodeCompra.setEnabled(true);
+    }//GEN-LAST:event_btnCalcularNotaPrecoActionPerformed
+
+    private void btnSalvarCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarCotacaoVencedoraActionPerformed
+        cotacao = daoCotacao.consultar(Integer.parseInt(txtCotacaoVencedora.getText()));
+        cotacao.setCotacaoVencedora("SIM");
+        daoCotacao.alterar(cotacao);
+        JOptionPane.showMessageDialog(null, "O Status da Cotacao Foi Alterada para Vencedora com Sucesso\n"
+                + "Voce Pode veificar essa Cotacao na tela de Consulta Cotacao \n "
+                + "ATENCAO!!! eh recomendado que seja feito o pedido de compra Imediatamente apos a escolha da cotacao vencedora");
+
+        
+        
+    }//GEN-LAST:event_btnSalvarCotacaoVencedoraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -769,11 +979,13 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalcularNota;
+    private javax.swing.JButton btnCalcularNotaPreco;
     private javax.swing.JButton btnConsultarCotacoes;
     private javax.swing.JButton btnCopiarCodigo;
     private javax.swing.JButton btnCriarPedidodeCompra;
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnSalvarCotacaoVencedora;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkEntregaRapida;
     private javax.swing.JCheckBox chkMaiorQualidade;
     private javax.swing.JCheckBox chkMenorPreco;
@@ -797,6 +1009,8 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableComparacaoFornecedores;
     private javax.swing.JTable jTableCompararValor;
+    private javax.swing.JRadioButton rbNotaHistorico;
+    private javax.swing.JRadioButton rbNotaPreco;
     private javax.swing.JTextField txtCotacaoVencedora;
     private javax.swing.JTextField txtFornecedorVencedor;
     private javax.swing.JTextField txtIDCotacao;

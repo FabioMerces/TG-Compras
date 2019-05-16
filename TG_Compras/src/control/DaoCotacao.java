@@ -37,6 +37,7 @@ public class DaoCotacao {
 		c.setSituacaoCotacao(rs.getString("SituacaoCotacao"));
 		c.setCNPJ(rs.getString("CNPJ"));
                 c.setCodMaterial(rs.getInt("CodMaterial"));
+                c.setCotacaoVencedora(rs.getString("Vencedora"));
 				
                 ps = conn.prepareStatement("SELECT QtdeMaterial FROM tbl_Material_Solicitado"
                         + " WHERE NumSolicitacao = ? and CodMaterial = ?");
@@ -59,8 +60,8 @@ public class DaoCotacao {
         
         try {
             ps = conn.prepareStatement("INSERT INTO tbl_Cotacao (NumCotacao, NumSolicitacao,"
-                    + " DataCotacao, CNPJ, CodMaterial, PrecoUnitario ,SituacaoCotacao)"
-                    + " VALUES(?,?,?,?,?,?,?)");
+                    + " DataCotacao, CNPJ, CodMaterial, PrecoUnitario ,SituacaoCotacao,Vencedora)"
+                    + " VALUES(?,?,?,?,?,?,?,?)");
             
             ps.setInt(1, c.getNumCotacao());
             ps.setInt(2, c.getNumSolicitacaoCompra());
@@ -69,6 +70,7 @@ public class DaoCotacao {
             ps.setInt(5, c.getCodMaterial());
             ps.setFloat(6, c.getPrecoMaterial());
             ps.setString(7, c.getSituacaoCotacao());
+            ps.setString(8, c.getCotacaoVencedora());
           
             ps.execute();
         } catch (SQLException ex) {
@@ -80,15 +82,15 @@ public class DaoCotacao {
 		PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("UPDATE tbl_Cotacao set CNPJ = ?,"
-                    + " CodMaterial = ?, DataCotacao = ?, PrecoUnitario = ?, SituacaoCotacao = ?"
+                    + " CodMaterial = ?, DataCotacao = ?, PrecoUnitario = ?, SituacaoCotacao = ?, Vencedora = ?"
                     + " WHERE NumCotacao = ?");
             ps.setString(1, c.getCNPJ());
             ps.setInt(2, c.getCodMaterial());
             ps.setString(3, c.getDataCotacao());
             ps.setFloat(4, c.getPrecoMaterial());
 			ps.setString(5, c.getSituacaoCotacao());
-			ps.setInt(6, c.getNumCotacao());
-
+                        ps.setString(6, c.getCotacaoVencedora());
+                        ps.setInt(7, c.getNumCotacao());
             ps.execute();
 
         } catch (SQLException ex) {

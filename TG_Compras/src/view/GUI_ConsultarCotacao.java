@@ -63,6 +63,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         rbIDCotacao = new javax.swing.JRadioButton();
         rbIDRequisicao = new javax.swing.JRadioButton();
         btnRecarregaTabela = new javax.swing.JButton();
+        chkCotacoesVencedoras = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar Cotacao");
@@ -109,7 +110,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTableCotacoes);
 
-        chkStatusCotacao.setText("Filtrar somente por cotações em aberto");
+        chkStatusCotacao.setText("Filtrar somente por cotações Aguardando Resposta do Fornecedor");
         chkStatusCotacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkStatusCotacaoActionPerformed(evt);
@@ -160,13 +161,21 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
             }
         });
 
+        chkCotacoesVencedoras.setText("Filtrar Somente por Cotacoes Vencedoras");
+        chkCotacoesVencedoras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkCotacoesVencedorasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkCotacoesVencedoras)
                     .addComponent(chkStatusCotacao)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,13 +196,13 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(btnBuscarCotacao))))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 828, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCopiarIDCotacao)
                         .addGap(18, 18, 18)
-                        .addComponent(btnRecarregaTabela)))
-                .addGap(94, 94, 94))
+                        .addComponent(btnRecarregaTabela))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1064, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,7 +221,9 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                     .addComponent(rbIDRequisicao))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(chkStatusCotacao)
-                .addGap(13, 13, 13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(chkCotacoesVencedoras)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -220,7 +231,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCopiarIDCotacao)
                     .addComponent(btnRecarregaTabela))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
         );
 
         pack();
@@ -367,7 +378,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
     private void chkStatusCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkStatusCotacaoActionPerformed
         if(chkStatusCotacao.isSelected()){
             //Arrumar aqui dps
-            String sqlquery = "select * from tbl_cotacao where SITUACAOCOTACAO = 'Em Aberto' ";
+            String sqlquery = "select * from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' ";
         
                     Statement stmt;
                     ResultSet rs;
@@ -394,6 +405,29 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
     }//GEN-LAST:event_btnCopiarIDCotacaoActionPerformed
+
+    private void chkCotacoesVencedorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkCotacoesVencedorasActionPerformed
+    if(chkCotacoesVencedoras.isSelected()){
+            //Arrumar aqui dps
+            String sqlquery = "select * from tbl_cotacao where VENCEDORA = 'SIM' ";
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableCotacoes.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();       
+            
+        }else{
+            btnRecarregaTabelaActionPerformed(evt);
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_chkCotacoesVencedorasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -436,6 +470,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
     private javax.swing.JButton btnCopiarIDCotacao;
     private javax.swing.JButton btnRecarregaTabela;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox chkCotacoesVencedoras;
     private javax.swing.JCheckBox chkStatusCotacao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
