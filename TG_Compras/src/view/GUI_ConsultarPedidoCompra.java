@@ -5,6 +5,22 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoCotacao;
+import control.DaoPedCompra;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.Cotacao;
+import model.PedidoCompra;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author Gabriel Pilan
@@ -49,10 +65,20 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar Pedido de Compra");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("ID Pedido de Compra");
 
         btnBuscarIDPedidoCompra.setText("Buscar");
+        btnBuscarIDPedidoCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarIDPedidoCompraActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Tabela de Pedidos de Compra");
 
@@ -76,25 +102,63 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
 
         buttonGroup1.add(rbAguardandoAprovacao);
         rbAguardandoAprovacao.setText("Filtrar por pedidos Aguardando Aprovação da Gerencia");
+        rbAguardandoAprovacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbAguardandoAprovacaoActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbAguardandoContatoFornecedor);
         rbAguardandoContatoFornecedor.setText("Filtrar por pedidos Aguardando Contato com o Fornecedor");
+        rbAguardandoContatoFornecedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbAguardandoContatoFornecedorActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbPedidoConcluido);
         rbPedidoConcluido.setText("Filtrar por pedidos Concluídos");
+        rbPedidoConcluido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbPedidoConcluidoActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbPedidoNegado);
         rbPedidoNegado.setText("Filtrar por pedidos Negados");
+        rbPedidoNegado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbPedidoNegadoActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("ID Cotação Vencedora");
 
+        txtCotacaoVencedora.setEnabled(false);
+
         btnBuscarCotacaoVencedora.setText("Buscar");
+        btnBuscarCotacaoVencedora.setEnabled(false);
+        btnBuscarCotacaoVencedora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarCotacaoVencedoraActionPerformed(evt);
+            }
+        });
 
         buttonGroup2.add(rbIDPedidoCompra);
         rbIDPedidoCompra.setText("Pesquisar pelo ID do Pedido de Compra");
+        rbIDPedidoCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbIDPedidoCompraActionPerformed(evt);
+            }
+        });
 
         buttonGroup2.add(rbIDCotacaoVencedora);
         rbIDCotacaoVencedora.setText("Pesquisar pelo ID da Cotação Vencedora");
+        rbIDCotacaoVencedora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbIDCotacaoVencedoraActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -175,6 +239,216 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBuscarIDPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarIDPedidoCompraActionPerformed
+        pedido = null;
+        try {
+            if (txtPedidoCompra.getText().isEmpty()) {
+                throw new Exception("Id do Pedido não foi informado.\n"
+                        + "Por favor informar um código de Pedido para pesquisa.");
+            } else {
+                pedido = daoPedido.consultar(Integer.parseInt(txtPedidoCompra.getText().trim()));
+
+                if (pedido == null) {
+                    throw new Exception("Id do Pedido informado não existe.\n ");
+                } else {
+                    String sqlquery = "select * from tbl_Pedido_Compra where NUMPEDIDO = " + txtPedidoCompra.getText().trim();
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBuscarIDPedidoCompraActionPerformed
+
+    private void btnBuscarCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCotacaoVencedoraActionPerformed
+        cotacao = null;
+        try {
+            if (txtCotacaoVencedora.getText().isEmpty()) {
+                throw new Exception("Id Cotacao não foi informado.\n"
+                        + "Por favor informar um código de cotacao para pesquisa.");
+            } else {
+                cotacao = daoCotacao.consultar(Integer.parseInt(txtCotacaoVencedora.getText().trim()));
+
+                if (cotacao == null) {
+                    throw new Exception("Id Cotacao informado não existe.\n ");
+                } else {
+                    String sqlquery = "select * from tbl_Pedido_Compra where NUMCOTACAO = " + txtCotacaoVencedora.getText().trim();
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBuscarCotacaoVencedoraActionPerformed
+
+    private void rbAguardandoAprovacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAguardandoAprovacaoActionPerformed
+        if(rbAguardandoAprovacao.isSelected()){
+            
+            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia'";
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
+            
+        }else{
+            Refresh();
+        }
+    }//GEN-LAST:event_rbAguardandoAprovacaoActionPerformed
+
+    private void rbAguardandoContatoFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAguardandoContatoFornecedorActionPerformed
+        if(rbAguardandoContatoFornecedor.isSelected()){
+            
+            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor'";
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
+            
+        }else{
+            Refresh();
+        }
+    }//GEN-LAST:event_rbAguardandoContatoFornecedorActionPerformed
+
+    private void rbPedidoConcluidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPedidoConcluidoActionPerformed
+        if(rbPedidoConcluido.isSelected()){
+            
+            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Concluido'";
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
+            
+        }else{
+            Refresh();
+        }
+    }//GEN-LAST:event_rbPedidoConcluidoActionPerformed
+
+    private void rbPedidoNegadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPedidoNegadoActionPerformed
+        if(rbPedidoNegado.isSelected()){
+            
+            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Negado'";
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
+            
+        }else{
+            Refresh();
+        }
+    }//GEN-LAST:event_rbPedidoNegadoActionPerformed
+
+    private void rbIDCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbIDCotacaoVencedoraActionPerformed
+        if(rbIDCotacaoVencedora.isSelected()){
+            txtCotacaoVencedora.setEnabled(true);
+            btnBuscarCotacaoVencedora.setEnabled(true);
+            txtPedidoCompra.setEnabled(false);
+            btnBuscarIDPedidoCompra.setEnabled(false);
+        }
+    }//GEN-LAST:event_rbIDCotacaoVencedoraActionPerformed
+
+    private void rbIDPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbIDPedidoCompraActionPerformed
+        if(rbIDPedidoCompra.isSelected()){
+            txtCotacaoVencedora.setEnabled(false);
+            btnBuscarCotacaoVencedora.setEnabled(false);
+            txtPedidoCompra.setEnabled(true);
+            btnBuscarIDPedidoCompra.setEnabled(true);
+        }
+    }//GEN-LAST:event_rbIDPedidoCompraActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoPedido = new DaoPedCompra(conexao.conectar());
+        daoCotacao = new DaoCotacao(conexao.conectar());
+        
+        String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ";
+
+        Statement stmt;
+        ResultSet rs;
+
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();
+
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
@@ -209,6 +483,40 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void filter(String query) {
+        //TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
+        TableRowSorter<DefaultTableModel> tr = (TableRowSorter) jTablePedidosCompra.getRowSorter();
+        if (query.length() == 0) {
+            tr.setRowFilter(null);
+        } else {
+            try {
+                RowFilter<DefaultTableModel, Object> rf = RowFilter.regexFilter(query, 0, 1);
+                tr.setRowFilter(rf);
+            } catch (java.util.regex.PatternSyntaxException e) {
+                tr.setRowFilter(null);
+            }
+        }
+    }
+    
+    private void Refresh() {
+        String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ";
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();  
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarCotacaoVencedora;
@@ -229,4 +537,10 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     private javax.swing.JTextField txtCotacaoVencedora;
     private javax.swing.JTextField txtPedidoCompra;
     // End of variables declaration//GEN-END:variables
+
+    private Conexao conexao = null;
+    private Cotacao cotacao;
+    private DaoCotacao daoCotacao;
+    private PedidoCompra pedido;
+    private DaoPedCompra daoPedido;
 }

@@ -274,11 +274,11 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                                         .addComponent(btnInserirNaTabelaCotacaoMaterialCadastrado))
                                     .addComponent(chkAdicionarMaterialCadastrado)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 905, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnConsultarFornecedoresMaterial))
                             .addComponent(jLabel4))
-                        .addContainerGap(213, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnSalvar)
                         .addGap(18, 18, 18)
@@ -287,7 +287,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                         .addComponent(btnSolicitarCotacao)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCotacaoVencedora)
-                        .addGap(80, 80, 80))))
+                        .addGap(43, 43, 43))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -381,8 +381,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        try {
-            
+        try {   
             requisicaoCompra = null;
             if (txtIdRequisicao.getText().isEmpty()) {
                 
@@ -391,8 +390,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
             } else {
                 
                 requisicaoCompra = daoRequisicaoCompra.consultar(Integer.parseInt(txtIdRequisicao.getText().trim()));
-                System.out.println(requisicaoCompra.getCodRequisicao());
-                //System.out.println(txtIdRequisicao.getText().trim());
+                
                 
                 if (requisicaoCompra == null) {
                     
@@ -423,8 +421,6 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                     requisicaoCompra = daoRequisicaoCompra.consultar(Integer.parseInt(txtIdRequisicao.getText().trim()));
                     jTextAreaDescricaoMaterial.setText("");
                     jTextAreaDescricaoMaterial.setText(requisicaoCompra.getDescricaoMateriaisNaoEncontrados());
-                    System.out.println(requisicaoCompra.getCodRequisicao());
-                    System.out.println(requisicaoCompra.getDescricaoMateriaisNaoEncontrados());
                     
                     //Carregando as Cotacoes Previamente Cadastradas
                     
@@ -461,7 +457,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                 
 
                 DefaultTableModel model = (DefaultTableModel) jTableCotacaoMaterial.getModel();
-                model.addRow(new Object[]{"",txtIdRequisicao.getText(),"","",codigo, 0 ,"Em Aberto"});
+                model.addRow(new Object[]{"",txtIdRequisicao.getText(),"","",codigo, 0 ,"Aguardando Resposta do Fornecedor","NAO"});
             }
 
         } catch (Exception ex) {
@@ -478,7 +474,6 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
 
         boolean verificaFornecedor = true;
         for(cont = 0;cont < jTableCotacaoMaterial.getRowCount();cont++){
-            System.out.println("Teste");
             if(jTableCotacaoMaterial.getValueAt(cont , 3).equals("")){
                 verificaFornecedor = false;
             }
@@ -492,7 +487,6 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         
         if(jTableCotacaoMaterial.getValueAt(cont , 0).equals("")){
             novaCotacao = true;
-            System.out.println("Entrou aqui");
         }
         
         
@@ -506,6 +500,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         cotacao.setCodMaterial(Integer.parseInt(jTableCotacaoMaterial.getValueAt(cont , 4).toString()));
         cotacao.setPrecoMaterial(Float.parseFloat(jTableCotacaoMaterial.getValueAt(cont , 5).toString()));
         cotacao.setSituacaoCotacao(jTableCotacaoMaterial.getValueAt(cont , 6).toString());
+        cotacao.setCotacaoVencedora(jTableCotacaoMaterial.getValueAt(cont, 7).toString().trim());
 
         if(novaCotacao == true){
             
@@ -515,8 +510,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         cotacao.setNumCotacao(numcotacao);
         daoCotacao.inserir(cotacao);
         }else{
-            System.out.println(jTableCotacaoMaterial.getValueAt(cont , 0).toString());
-        cotacao.setNumCotacao(Integer.parseInt(jTableCotacaoMaterial.getValueAt(cont , 0).toString()));    
+        cotacao.setNumCotacao(Integer.parseInt(jTableCotacaoMaterial.getValueAt(cont , 0).toString()));  
         daoCotacao.alterar(cotacao);
         }
         
@@ -551,7 +545,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcluirItemCotacaoActionPerformed
 
     private void btnSolicitarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarCotacaoActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnSolicitarCotacaoActionPerformed
 
     private void btnCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCotacaoVencedoraActionPerformed
@@ -584,7 +578,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         codigo = material.getCodMaterial();
             
             DefaultTableModel model = (DefaultTableModel) jTableCotacaoMaterial.getModel();
-            model.addRow(new Object[]{"",txtIdRequisicao.getText(),"","",codigo, 0 ,"Em Aberto"});
+            model.addRow(new Object[]{"",txtIdRequisicao.getText(),"","",codigo, 0 ,"Aguardando Resposta do Fornecedor","NAO"});
         }
     }//GEN-LAST:event_btnInserirNaTabelaCotacaoMaterialCadastradoActionPerformed
 
