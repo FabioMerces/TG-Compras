@@ -5,7 +5,7 @@
  */
 package view;
 
-import javax.swing.JFrame;
+import javax.swing.JFrame; 
 import javax.swing.JLabel;
 
 /**
@@ -62,7 +62,6 @@ public class GUI_Menu extends javax.swing.JFrame {
         jMenuItemConsultarFornecedor = new javax.swing.JMenuItem();
         jMenuItemConsultarFornecedorMateriais = new javax.swing.JMenuItem();
         jMenuItemConsultarCotacao = new javax.swing.JMenuItem();
-        jMenuItemConsultarCotacaoVencedora = new javax.swing.JMenuItem();
         jMenuItemConsultarPedidoCompra = new javax.swing.JMenuItem();
         jMenuItemConsultarRanking = new javax.swing.JMenuItem();
 
@@ -274,15 +273,6 @@ public class GUI_Menu extends javax.swing.JFrame {
         });
         jMenuConsultar.add(jMenuItemConsultarCotacao);
 
-        jMenuItemConsultarCotacaoVencedora.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jMenuItemConsultarCotacaoVencedora.setText("Consultar Cotação Vencedora");
-        jMenuItemConsultarCotacaoVencedora.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemConsultarCotacaoVencedoraActionPerformed(evt);
-            }
-        });
-        jMenuConsultar.add(jMenuItemConsultarCotacaoVencedora);
-
         jMenuItemConsultarPedidoCompra.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jMenuItemConsultarPedidoCompra.setText("Consultar Pedido de Compra");
         jMenuItemConsultarPedidoCompra.addActionListener(new java.awt.event.ActionListener() {
@@ -397,10 +387,6 @@ public class GUI_Menu extends javax.swing.JFrame {
         new GUI_ConsultarPedidoCompra().setVisible(true);
     }//GEN-LAST:event_jMenuItemConsultarPedidoCompraActionPerformed
 
-    private void jMenuItemConsultarCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarCotacaoVencedoraActionPerformed
-        new GUI_ConsultarCotacaoVencedora().setVisible(true);
-    }//GEN-LAST:event_jMenuItemConsultarCotacaoVencedoraActionPerformed
-
     private void jMenuItemCriarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCriarPedidoCompraActionPerformed
         new GUI_GerenciarPedidoCompra().setVisible(true);
     }//GEN-LAST:event_jMenuItemCriarPedidoCompraActionPerformed
@@ -481,7 +467,6 @@ public class GUI_Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemCadastroFornecedor;
     private javax.swing.JMenuItem jMenuItemCadastroUsuario;
     private javax.swing.JMenuItem jMenuItemConsultarCotacao;
-    private javax.swing.JMenuItem jMenuItemConsultarCotacaoVencedora;
     private javax.swing.JMenuItem jMenuItemConsultarFornecedor;
     private javax.swing.JMenuItem jMenuItemConsultarFornecedorMateriais;
     private javax.swing.JMenuItem jMenuItemConsultarMaterial;
