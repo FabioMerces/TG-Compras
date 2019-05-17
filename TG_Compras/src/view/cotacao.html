@@ -10,36 +10,76 @@
             <h2 style="text-align: center">Solicitar Cotação</h2>
             <hr />
             <table width="300" align="center">
-                <caption><b>Dados Material</b></caption>
-                <tr>
-                    <td>Código Material:</td>
-                    <td><input type="text" name="codMat" size="15" readonly=""/></td>
-                </tr>
-                <tr>
-                    <td>Nome Material:</td>
-                    <td><input type="text" name="nomeMat" size="15" readonly=""/></td>
-                </tr>
-                <tr>
-                    <td>Quantidade Material:</td>
-                    <td><input type="text" name="qtdMat" size="15" readonly=""/></td>
-                </tr>              
+				<?php
+				//Include necessário p/ conectar ao BD e fazer as querys
+					include 'conexao.php'; 
+				// Select que traz a cotação a ser solicitada no banco de dados
+					$query = "SELECT numcotacao FROM tbl_EnvCot";
+					$result = oci_parse($conn,$query); //resultado do select
+					if (!$result) {
+						$e = oci_error();
+						trigger_error(htmlentities($e['Erro'], ENT_QUOTES), E_USER_ERROR);
+						die();
+					}
+					else {
+						$query = "select tbl_cotacao.numcotacao, tbl_cotacao.cnpj, tbl_fornecedor.nomefornecedor, tbl_cotacao.codmaterial, tbl_material.nomematerial, tbl_material_solicitado.qtdematerial from tbl_cotacao 
+						inner join tbl_fornecedor on tbl_cotacao.cnpj = tbl_fornecedor.cnpj
+						inner join tbl_material on tbl_cotacao.codmaterial = tbl_material.codmaterial
+						inner join tbl_material_solicitado on tbl_cotacao.codmaterial = tbl_material_solicitado.codmaterial
+						where tbl_cotacao.numcotacao = " + $result['NumCotacao'];
+						$result = oci_parse($conn,$query);
+						if (!$result) {
+							$e = oci_error();
+							trigger_error(htmlentities($e['Erro'], ENT_QUOTES), E_USER_ERROR);
+							die();
+						}
+				//Sucesso ao procurar dados cotacao, monta os dados
+						else { 
+							$numCot = $result['NumCotacao'];
+							$cnpj = $result['CNPJ'];
+							$nomeForn = $result['NomeFornecedor'];
+							$codMat = $result['CodMaterial'];
+							$nomeMat = $result['NomeMaterial'];
+							$qtdeMat = $result['QtdeMaterial'];
+							echo "Hello".$numCot;
+							//Echo construtor de frame(carrega dados)
+							echo " 	<tr>
+										<td>Num Cotação:</td>
+										<td><input type='text' name='numCotacao' size='15' readonly='' value=" $numCot "/></td>
+									</tr>
+									<caption><b>Dados Material</b></caption>
+									<tr>
+										<td>Código Material:</td>
+										<td><input type='text' name='codMat' size='15' readonly='' value=" + $codMat + "/></td>
+									</tr>
+									<tr>
+										<td>Nome Material:</td>
+										<td><input type='text' name='nomeMat' size='15' readonly='' value=" + $nomeMat + "/></td>
+									</tr>
+									<tr>
+										<td>Quantidade Material:</td>
+										<td><input type='text' name='qtdMat' size='15' readonly='' value=" + $qtdeMat + "/></td>
+									</tr>              
+									</table>
+									<hr/>
+									<table width='300' align='center'>
+										<caption><b>Dados Fornecedor</b></caption>
+										<tr>
+											<td>CNPJ Fornecedor:</td>
+											<td><input type='text' name='cnpj' size='15' readonly='' value=" + $cnpj + "/></td>
+										</tr>
+										<tr>
+											<td>Nome Fornecedor:</td>
+											<td><input type='text' name='nomeForn' size='15' readonly='' value=" + $nomeForn + "/></td>
+										</tr>
+										<tr>
+											<td colspan='2'><input class='btn' type='submit' value='Solicitar Cotação' /></td>
+										</tr>";
+						}
+					}
+				?>
             </table>
-            <hr/>
-            <table width="300" align="center">
-                <caption><b>Dados Fornecedor</b></caption>
-                <tr>
-                    <td>CNPJ Fornecedor:</td>
-                    <td><input type="text" name="cnpj" size="15" readonly=""/></td>
-                </tr>
-                <tr>
-                    <td>Nome Fornecedor:</td>
-                    <td><input type="text" name="nomeForn" size="15" readonly=""/></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><input class="btn" type="submit" value="Solicitar Cotação" /></td>
-                </tr>
-            </table>
-            <input type="hidden" name="acao" value="envioCot" />
+            <!--<input type="hidden" name="acao" value="envioCot" />-->
             <hr />
         </form>
     </body>
