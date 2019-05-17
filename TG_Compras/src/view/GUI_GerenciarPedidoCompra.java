@@ -454,6 +454,7 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
         if(daoPedCompra.consultar(cotacao.getNumCotacao()) == null){
             daoPedCompra.inserir(pedidoCompra);
             JOptionPane.showMessageDialog(null, "Pedido de Compra Cadastrado com Sucesso, Entre em Contato com o Fornecedor");
+            btnPesquisarCotacaoVencedoraActionPerformed(evt);
         
         }else{
         JOptionPane.showMessageDialog(null, "Ja existe um Pedido de Compra cadastrado com esse Codigo de Cotacao");

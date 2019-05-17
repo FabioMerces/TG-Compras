@@ -728,6 +728,20 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
        jTableComparacaoFornecedores.removeColumn(jTableComparacaoFornecedores.getColumn("Nota Fornecedor" + (cont-1) ));
        
        }
+       boolean FornecSemNota = false;
+       for(cont=0;cont<qntdFornecedores;cont++){
+            if(Integer.parseInt(jTableComparacaoFornecedores.getValueAt(5, cont + 1).toString()) == 0){
+                FornecSemNota = true;
+            }
+        }
+       
+       if(FornecSemNota == true){
+       JOptionPane.showMessageDialog(null, "Falha existe ao menos 1 Fornecedor "
+               + "que nao foi avaliado, por favor use o metodo \n"
+               + "Calcular nota somente para o Preco", "Erro", JOptionPane.ERROR_MESSAGE);
+                    
+       }else{
+       
        int MaiorNota=0;
        int ColumnFornecedorVencedor=0;
        for (cont=1;cont<=qntdFornecedores;cont++){
@@ -779,6 +793,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
        btnCopiarCodigo.setEnabled(true);
        btnSalvarCotacaoVencedora.setEnabled(true);
        btnCriarPedidodeCompra.setEnabled(true);
+       }
     }//GEN-LAST:event_btnCalcularNotaActionPerformed
 
     private void btnCopiarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarCodigoActionPerformed
