@@ -754,11 +754,11 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
             CNPJbd = jTableCompararValor.getValueAt(cont, 0).toString();        
         }
                              sqlquery = "select NUMCOTACAO from tbl_cotacao where CNPJ = " 
-                                     + CNPJbd + "and PRECOUNITARIO = " + 
+                                     + CNPJbd + " and PRECOUNITARIO = " + 
                                      jTableComparacaoFornecedores.getValueAt(7, ColumnFornecedorVencedor) + 
                                      "and NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
 // Talvez Colocar ' ' 
-                             
+                         System.out.println(sqlquery);    
                     Statement stmt;
         ResultSet rs;
 
