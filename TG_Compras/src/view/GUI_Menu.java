@@ -23,6 +23,11 @@ public class GUI_Menu extends javax.swing.JFrame {
        
     }
 
+    
+    public GUI_Menu(String login, String senha) {
+        initComponents();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

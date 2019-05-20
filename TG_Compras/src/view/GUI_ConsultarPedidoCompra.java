@@ -61,6 +61,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         btnBuscarCotacaoVencedora = new javax.swing.JButton();
         rbIDPedidoCompra = new javax.swing.JRadioButton();
         rbIDCotacaoVencedora = new javax.swing.JRadioButton();
+        btnRecarregarTabela = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar Pedido de Compra");
@@ -160,6 +161,13 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
             }
         });
 
+        btnRecarregarTabela.setText("Recarregar Tabela");
+        btnRecarregarTabela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecarregarTabelaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -167,13 +175,6 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -202,19 +203,23 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                             .addComponent(rbAguardandoAprovacao)
                             .addComponent(rbPedidoNegado)
                             .addComponent(rbAguardandoContatoFornecedor))
-                        .addGap(31, 31, 31))))
+                        .addGap(31, 31, 31))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnRecarregarTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 697, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(rbAguardandoAprovacao)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rbAguardandoContatoFornecedor)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rbPedidoConcluido))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
@@ -226,14 +231,22 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(txtCotacaoVencedora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnBuscarCotacaoVencedora)
-                            .addComponent(rbIDCotacaoVencedora))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbPedidoNegado)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 5, Short.MAX_VALUE)
+                            .addComponent(rbIDCotacaoVencedora)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(rbAguardandoAprovacao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rbAguardandoContatoFornecedor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rbPedidoConcluido)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rbPedidoNegado)))
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnRecarregarTabela)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -326,7 +339,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                     DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
             
         }else{
-            Refresh();
+            btnRecarregarTabelaActionPerformed(evt);
         }
     }//GEN-LAST:event_rbAguardandoAprovacaoActionPerformed
 
@@ -351,7 +364,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                     DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
             
         }else{
-            Refresh();
+            btnRecarregarTabelaActionPerformed(evt);
         }
     }//GEN-LAST:event_rbAguardandoContatoFornecedorActionPerformed
 
@@ -376,7 +389,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                     DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
             
         }else{
-            Refresh();
+            btnRecarregarTabelaActionPerformed(evt);
         }
     }//GEN-LAST:event_rbPedidoConcluidoActionPerformed
 
@@ -401,7 +414,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                     DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();       
             
         }else{
-            Refresh();
+            btnRecarregarTabelaActionPerformed(evt);
         }
     }//GEN-LAST:event_rbPedidoNegadoActionPerformed
 
@@ -448,6 +461,25 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();
 
     }//GEN-LAST:event_formWindowOpened
+
+    private void btnRecarregarTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregarTabelaActionPerformed
+        String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
+                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ";
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();
+    }//GEN-LAST:event_btnRecarregarTabelaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -498,29 +530,11 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
             }
         }
     }
-    
-    private void Refresh() {
-        String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
-                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
-                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ";
-        
-        Statement stmt;
-        ResultSet rs;
-        
-        try{
-            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery(sqlquery);
-            jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
-        
-        } catch(SQLException ex){
-            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();  
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarCotacaoVencedora;
     private javax.swing.JButton btnBuscarIDPedidoCompra;
+    private javax.swing.JButton btnRecarregarTabela;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JLabel jLabel1;

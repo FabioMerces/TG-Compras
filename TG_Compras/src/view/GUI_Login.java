@@ -28,6 +28,7 @@ public class GUI_Login extends javax.swing.JFrame {
         initComponents();
     }
 
+    
     String sucesso;
     private Conexao conexao = null;
     private Usuario usuario;
