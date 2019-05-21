@@ -5,6 +5,22 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoCotacao;
+import control.DaoPedCompra;
+import control.DaoRequisicaoCompra;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Cotacao;
+import model.PedidoCompra;
+import model.RequisicaoCompra;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author M
@@ -43,6 +59,11 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Finalizar Compra");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("Usuário");
 
@@ -98,8 +119,18 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jTablePedidosCompra);
 
         btnConcluirTodosItens.setText("Concluir TODOS os itens relacionados a Requisicao de Compra");
+        btnConcluirTodosItens.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConcluirTodosItensActionPerformed(evt);
+            }
+        });
 
         btnBuscarRequisicao.setText("Buscar");
+        btnBuscarRequisicao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarRequisicaoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,6 +188,64 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBuscarRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarRequisicaoActionPerformed
+        requisicao = null;
+        try {
+            if (txtNumeroRequisicao.getText().isEmpty()) {
+                throw new Exception("Id Requisicao não foi informado.\n"
+                        + "Por favor informar um código de Requisicao para pesquisa.");
+            } else {
+                requisicao = daoRequisicao.consultar(Integer.parseInt(txtNumeroRequisicao.getText().trim()));
+
+                if (requisicao == null) {
+                    throw new Exception("Id Requisicao de Compra informado não existe.\n ");
+                } else {
+                    Statement stmt;
+                    ResultSet rs;
+
+                    String sqlquery = "select * from tbl_cotacao where NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableCotacoesMaterial.setModel(DbUtils.resultSetToTableModel(rs));
+
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTableCotacoesMaterial.getModel();
+
+                    sqlquery = "select * from tbl_Pedido_Compra where NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dmp = (DefaultTableModel) jTablePedidosCompra.getModel();      
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Requisicao: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBuscarRequisicaoActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoPedido = new DaoPedCompra(conexao.conectar());
+        daoCotacao = new DaoCotacao(conexao.conectar());
+        daoRequisicao = new DaoRequisicaoCompra(conexao.conectar());
+        
+        
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnConcluirTodosItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConcluirTodosItensActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnConcluirTodosItensActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -206,4 +295,11 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
     private javax.swing.JTextField txtNumeroRequisicao;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao = null;
+    private PedidoCompra pedido;
+    private DaoPedCompra daoPedido;
+    private Cotacao cotacao;
+    private DaoCotacao daoCotacao;
+    private RequisicaoCompra requisicao;
+    private DaoRequisicaoCompra daoRequisicao;
 }

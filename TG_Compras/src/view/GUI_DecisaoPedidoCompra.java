@@ -5,6 +5,21 @@
  */
 package view;
 
+import control.Conexao;
+import control.DaoCotacao;
+import control.DaoPedCompra;
+import control.DaoRequisicaoCompra;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import model.Cotacao;
+import model.PedidoCompra;
+import model.RequisicaoCompra;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author M
@@ -31,21 +46,36 @@ public class GUI_DecisaoPedidoCompra extends javax.swing.JFrame {
         btnAprovar = new javax.swing.JButton();
         btnRejeitar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableRequisicao = new javax.swing.JTable();
+        jTablePedidos = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Aprovar ou Rejeitar Pedido de Compra");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("Tabela dos Pedidos de Compra aguardando Aprovacao da Gerencia");
 
         btnAprovar.setText("Aprovar");
+        btnAprovar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAprovarActionPerformed(evt);
+            }
+        });
 
         btnRejeitar.setText("Rejeitar");
+        btnRejeitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRejeitarActionPerformed(evt);
+            }
+        });
 
-        jTableRequisicao.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTableRequisicao.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePedidos.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTablePedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -64,8 +94,8 @@ public class GUI_DecisaoPedidoCompra extends javax.swing.JFrame {
                 "Status Pedido de Compra", "Nome do Material", "Quantidade", "Valor Unidade", "Valor Final"
             }
         ));
-        jTableRequisicao.setRowHeight(32);
-        jScrollPane1.setViewportView(jTableRequisicao);
+        jTablePedidos.setRowHeight(32);
+        jScrollPane1.setViewportView(jTablePedidos);
 
         jLabel2.setText("Selecione um Item da Tabela para Aprovar ou Rejeitar o Pedido de Compra");
 
@@ -114,6 +144,35 @@ public class GUI_DecisaoPedidoCompra extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAprovarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAprovarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAprovarActionPerformed
+
+    private void btnRejeitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejeitarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRejeitarActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("GABRIEL", "GABRIEL");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+        daoPedido = new DaoPedCompra(conexao.conectar());
+        String sqlquery = "Select * from tbl_Pedido_Compra where SITUACAO = 'Aguardando Aprovacao da Gerencia'";
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTablePedidos.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultTableModel dm = (DefaultTableModel) jTablePedidos.getModel();
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
@@ -155,6 +214,9 @@ public class GUI_DecisaoPedidoCompra extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableRequisicao;
+    private javax.swing.JTable jTablePedidos;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao = null;
+    private PedidoCompra pedido;
+    private DaoPedCompra daoPedido;
 }
