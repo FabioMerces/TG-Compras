@@ -482,42 +482,42 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         
         cont = 0;
         if(verificaFornecedor == true){
-        for(cont = 0;cont < jTableCotacaoMaterial.getRowCount();cont++){
-        boolean novaCotacao = false;
-        
-        if(jTableCotacaoMaterial.getValueAt(cont , 0).equals("")){
-            novaCotacao = true;
-        }
-        
-        
-                
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-	LocalDate localDate = LocalDate.now();
-        
-        cotacao.setNumSolicitacaoCompra(Integer.parseInt(txtIdRequisicao.getText()));
-        cotacao.setDataCotacao(dtf.format(localDate));
-        cotacao.setCNPJ(jTableCotacaoMaterial.getValueAt(cont , 3).toString());        
-        cotacao.setCodMaterial(Integer.parseInt(jTableCotacaoMaterial.getValueAt(cont , 4).toString()));
-        cotacao.setPrecoMaterial(Float.parseFloat(jTableCotacaoMaterial.getValueAt(cont , 5).toString()));
-        cotacao.setSituacaoCotacao(jTableCotacaoMaterial.getValueAt(cont , 6).toString());
-        cotacao.setCotacaoVencedora(jTableCotacaoMaterial.getValueAt(cont, 7).toString().trim());
+            for(cont = 0;cont < jTableCotacaoMaterial.getRowCount();cont++){
+            boolean novaCotacao = false;
 
-        if(novaCotacao == true){
-            
-        Random rand = new Random();
-        int numcotacao = rand.nextInt(5000);
-        numcotacao += 1;
-        cotacao.setNumCotacao(numcotacao);
-        daoCotacao.inserir(cotacao);
+            if(jTableCotacaoMaterial.getValueAt(cont , 0).equals("")){
+                novaCotacao = true;
+            }
+
+
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            LocalDate localDate = LocalDate.now();
+
+            cotacao.setNumSolicitacaoCompra(Integer.parseInt(txtIdRequisicao.getText()));
+            cotacao.setDataCotacao(dtf.format(localDate));
+            cotacao.setCNPJ(jTableCotacaoMaterial.getValueAt(cont , 3).toString());        
+            cotacao.setCodMaterial(Integer.parseInt(jTableCotacaoMaterial.getValueAt(cont , 4).toString()));
+            cotacao.setPrecoMaterial(Float.parseFloat(jTableCotacaoMaterial.getValueAt(cont , 5).toString()));
+            cotacao.setSituacaoCotacao(jTableCotacaoMaterial.getValueAt(cont , 6).toString());
+            cotacao.setCotacaoVencedora(jTableCotacaoMaterial.getValueAt(cont, 7).toString().trim());
+
+            if(novaCotacao == true){
+
+                Random rand = new Random();
+                int numcotacao = rand.nextInt(5000);
+                numcotacao += 1;
+                cotacao.setNumCotacao(numcotacao);
+                daoCotacao.inserir(cotacao);
+            }else{
+                cotacao.setNumCotacao(Integer.parseInt(jTableCotacaoMaterial.getValueAt(cont , 0).toString()));  
+                daoCotacao.alterar(cotacao);
+            }
+
+            }
+            btnBuscarActionPerformed(evt);
+            JOptionPane.showMessageDialog(null, "Cadastro da(s) Cotacao(oes) " +  " concluido com Sucesso");
         }else{
-        cotacao.setNumCotacao(Integer.parseInt(jTableCotacaoMaterial.getValueAt(cont , 0).toString()));  
-        daoCotacao.alterar(cotacao);
-        }
-        
-        }
-        btnBuscarActionPerformed(evt);
-        JOptionPane.showMessageDialog(null, "Cadastro da(s) Cotacao(oes) " +  " concluido com Sucesso");
-       }else{
             JOptionPane.showMessageDialog(null, "Atencao eh necessario preencher o CNPJ do Fornecedor Antes "
                     + "de Gravar sua Cotacao " , "Erro", JOptionPane.ERROR_MESSAGE);
         

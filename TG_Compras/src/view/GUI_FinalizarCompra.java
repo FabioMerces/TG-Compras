@@ -7,16 +7,21 @@ package view;
 
 import control.Conexao;
 import control.DaoCotacao;
+import control.DaoMaterial;
 import control.DaoPedCompra;
 import control.DaoRequisicaoCompra;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Cotacao;
+import model.Material;
 import model.PedidoCompra;
 import model.RequisicaoCompra;
 import net.proteanit.sql.DbUtils;
@@ -73,16 +78,16 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
 
         jTableCotacoesMaterial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID Requisição de Compra", "Código Material", "Nome Material", "CNPJ Fornecedor", "Status"
+                "ID Requisição de Compra", "Número Cotação", "Código Material", "Nome Material", "CNPJ Fornecedor", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true
+                false, true, true, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -90,9 +95,6 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTableCotacoesMaterial);
-        if (jTableCotacoesMaterial.getColumnModel().getColumnCount() > 0) {
-            jTableCotacoesMaterial.getColumnModel().getColumn(3).setHeaderValue("CNPJ Fornecedor");
-        }
 
         jLabel3.setText("Tabela de Cotações do Material");
 
@@ -194,27 +196,30 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
             if (txtNumeroRequisicao.getText().isEmpty()) {
                 throw new Exception("Id Requisicao não foi informado.\n"
                         + "Por favor informar um código de Requisicao para pesquisa.");
+                
             } else {
                 requisicao = daoRequisicao.consultar(Integer.parseInt(txtNumeroRequisicao.getText().trim()));
 
                 if (requisicao == null) {
                     throw new Exception("Id Requisicao de Compra informado não existe.\n ");
+                    
                 } else {
                     Statement stmt;
                     ResultSet rs;
 
-                    String sqlquery = "select * from tbl_cotacao where NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
+                    String sqlquery = "select NumSolicitacao, NumCotacao, c.CodMaterial, NomeMaterial, CNPJ, SituacaoCotacao from tbl_Cotacao c, tbl_Material m "
+                            + "where c.CodMaterial = m.CodMaterial AND NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
                     try{
                         stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
                         rs = stmt.executeQuery(sqlquery);
                         jTableCotacoesMaterial.setModel(DbUtils.resultSetToTableModel(rs));
-
                     } catch(SQLException ex){
                         Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    
                     DefaultTableModel dm = (DefaultTableModel) jTableCotacoesMaterial.getModel();
 
-                    sqlquery = "select * from tbl_Pedido_Compra where NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
+                    sqlquery = "select NumSolicitacao, NumPedido, NumCotacao, Situacao from tbl_Pedido_Compra where NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
                     try{
                         stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
                         rs = stmt.executeQuery(sqlquery);
@@ -222,10 +227,13 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
 
                     } catch(SQLException ex){
                         Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                        
                     }
+                    
                     DefaultTableModel dmp = (DefaultTableModel) jTablePedidosCompra.getModel();      
                 }
             }
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Falha ao pesquisar Requisicao: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -236,6 +244,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoPedido = new DaoPedCompra(conexao.conectar());
+        daoMaterial = new DaoMaterial(conexao.conectar());
         daoCotacao = new DaoCotacao(conexao.conectar());
         daoRequisicao = new DaoRequisicaoCompra(conexao.conectar());
         
@@ -243,7 +252,70 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnConcluirTodosItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConcluirTodosItensActionPerformed
-        // TODO add your handling code here:
+        try {
+            if (jTableCotacoesMaterial.getRowCount() == 0) {
+                throw new Exception("Nao existe nenhuma Cotacao vinculada a essa Requisicao.");
+                
+            } else if (jTablePedidosCompra.getRowCount() == 0) {
+                throw new Exception("Nao existe nenhum Pedido de compra vinculado a essa Requisicao.");
+                
+            } else {
+                cotacao = new Cotacao();
+                pedido = new PedidoCompra();
+                requisicao = new RequisicaoCompra();
+                
+                int cont = 0;
+                boolean verificaPedido = true;/*
+                for(cont = 0; cont < jTablePedidosCompra.getRowCount(); cont++){
+                    if( jTablePedidosCompra.getValueAt(cont , 3).equals("Aguardando Contato com Fornecedor") || jTablePedidosCompra.getValueAt(cont , 3).equals("Aguardando Aprovacao da Gerencia")){
+                        verificaPedido = false;
+                    }
+                }
+                */
+                cont = 0;
+                boolean verificaCotacao = true;/*
+                for(cont = 0; cont < jTableCotacoesMaterial.getRowCount(); cont++){
+                    //Arrumar: Outra condicao de cotacao que nao poderia deixar a requisicao fechar
+                    if( jTableCotacoesMaterial.getValueAt(cont , 3).equals("Aguardando Resposta do Fornecedor") || jTableCotacoesMaterial.getValueAt(cont , 3).equals("Aguardando Aprovacao da Gerencia")){
+                        verificaCotacao = false;
+                    }
+                }*/
+                   
+                cont = 0;
+                if(verificaCotacao == true){
+                    if(verificaPedido == true){
+                        System.out.println("1");
+                        for(cont = 0; cont < jTablePedidosCompra.getRowCount(); cont++){
+                            System.out.println("2");
+                            pedido = daoPedido.consultar(Integer.parseInt(jTableCotacoesMaterial.getValueAt(cont , 1).toString()));
+                            System.out.println("3");
+                            pedido.setSituacaoPedido("Finalizado");  
+                            System.out.println("4");
+                            daoPedido.alterar(pedido);
+                            System.out.println("5");
+                        }
+                        System.out.println("3");
+                        for(cont = 0; cont < jTableCotacoesMaterial.getRowCount(); cont++){
+                            cotacao = daoCotacao.consultar(Integer.parseInt(jTableCotacoesMaterial.getValueAt(cont , 1).toString()));
+                            cotacao.setSituacaoCotacao("Finalizado");  
+                            daoCotacao.alterar(cotacao);
+                        }
+                        System.out.println("4");
+                        JOptionPane.showMessageDialog(null, "Requisicao e itens relacionados finalizados com Sucesso");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Atencao, ha pedidos nao processados. Verifique"
+                            + " esses pedidos antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Atencao, ha cotacoes nao processadas. Verifique"
+                            + " essas cotacoes antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
+
+                }
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao adicionar Material: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnConcluirTodosItensActionPerformed
 
     /**
@@ -298,6 +370,8 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
     private Conexao conexao = null;
     private PedidoCompra pedido;
     private DaoPedCompra daoPedido;
+    private Material material;
+    private DaoMaterial daoMaterial;
     private Cotacao cotacao;
     private DaoCotacao daoCotacao;
     private RequisicaoCompra requisicao;
