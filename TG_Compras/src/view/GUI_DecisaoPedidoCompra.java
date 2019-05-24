@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Cotacao;
 import model.PedidoCompra;
@@ -145,11 +146,48 @@ public class GUI_DecisaoPedidoCompra extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAprovarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAprovarActionPerformed
-        // TODO add your handling code here:
+        pedido = new PedidoCompra();
+        try {
+            if (jTablePedidos.getSelectedRow() == -1) {
+                throw new Exception("Nao existe nenhum Pedido selecionado na Tabela");
+            }else {
+                int linha;
+                linha = jTablePedidos.getSelectedRow();
+                
+                pedido = daoPedido.consultar(Integer.parseInt(jTablePedidos.getValueAt(linha , 0).toString()));
+                
+                DefaultTableModel model = (DefaultTableModel) jTablePedidos.getModel();
+                pedido.setSituacaoPedido("Aprovado");
+            }
+            
+            daoPedido.alterar(pedido);
+            atualizaTabela();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnAprovarActionPerformed
 
     private void btnRejeitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejeitarActionPerformed
-        // TODO add your handling code here:
+        pedido = new PedidoCompra();
+        try {
+            if (jTablePedidos.getSelectedRow() == -1) {
+                throw new Exception("Nao existe nenhum Pedido selecionado na Tabela");
+            }else {
+                int linha;
+                linha = jTablePedidos.getSelectedRow();
+                
+                pedido = daoPedido.consultar(Integer.parseInt(jTablePedidos.getValueAt(linha , 0).toString()));
+                DefaultTableModel model = (DefaultTableModel) jTablePedidos.getModel();
+                pedido.setSituacaoPedido("Negado");
+                }
+            
+            daoPedido.alterar(pedido);
+            atualizaTabela();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnRejeitarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -207,7 +245,24 @@ public class GUI_DecisaoPedidoCompra extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    public void atualizaTabela() {
+        String sqlquery = "Select * from tbl_Pedido_Compra where SITUACAO = 'Aguardando Aprovacao da Gerencia'";
+        
+        Statement stmt;
+        ResultSet rs;
+        
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTablePedidos.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultTableModel dm = (DefaultTableModel) jTablePedidos.getModel();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAprovar;
     private javax.swing.JButton btnRejeitar;

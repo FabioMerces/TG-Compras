@@ -265,56 +265,58 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                 requisicao = new RequisicaoCompra();
                 
                 int cont = 0;
-                boolean verificaPedido = true;/*
+                boolean verificaPedido = true;
                 for(cont = 0; cont < jTablePedidosCompra.getRowCount(); cont++){
                     if( jTablePedidosCompra.getValueAt(cont , 3).equals("Aguardando Contato com Fornecedor") || jTablePedidosCompra.getValueAt(cont , 3).equals("Aguardando Aprovacao da Gerencia")){
                         verificaPedido = false;
                     }
                 }
-                */
+                
                 cont = 0;
-                boolean verificaCotacao = true;/*
+                boolean verificaCotacao = true;
                 for(cont = 0; cont < jTableCotacoesMaterial.getRowCount(); cont++){
                     //Arrumar: Outra condicao de cotacao que nao poderia deixar a requisicao fechar
-                    if( jTableCotacoesMaterial.getValueAt(cont , 3).equals("Aguardando Resposta do Fornecedor") || jTableCotacoesMaterial.getValueAt(cont , 3).equals("Aguardando Aprovacao da Gerencia")){
+                    if( jTableCotacoesMaterial.getValueAt(cont , 5).equals("Aguardando Resposta do Fornecedor") || jTableCotacoesMaterial.getValueAt(cont , 3).equals("Aguardando Aprovacao da Gerencia")){
                         verificaCotacao = false;
                     }
-                }*/
-                   
+                }
+                    
                 cont = 0;
                 if(verificaCotacao == true){
                     if(verificaPedido == true){
-                        System.out.println("1");
                         for(cont = 0; cont < jTablePedidosCompra.getRowCount(); cont++){
-                            System.out.println("2");
-                            pedido = daoPedido.consultar(Integer.parseInt(jTableCotacoesMaterial.getValueAt(cont , 1).toString()));
-                            System.out.println("3");
-                            pedido.setSituacaoPedido("Finalizado");  
-                            System.out.println("4");
+                            pedido = daoPedido.consultar(Integer.parseInt(jTablePedidosCompra.getValueAt(cont , 1).toString()));
+                            pedido.setSituacaoPedido("Finalizado");
                             daoPedido.alterar(pedido);
-                            System.out.println("5");
                         }
-                        System.out.println("3");
+                        
                         for(cont = 0; cont < jTableCotacoesMaterial.getRowCount(); cont++){
                             cotacao = daoCotacao.consultar(Integer.parseInt(jTableCotacoesMaterial.getValueAt(cont , 1).toString()));
-                            cotacao.setSituacaoCotacao("Finalizado");  
+                            cotacao.setSituacaoCotacao("Finalizado");
                             daoCotacao.alterar(cotacao);
                         }
-                        System.out.println("4");
+                        /* === DaoPedido o metodo de alterar esta comentado e escrito "Verificar ~~ Incompleto" ====
+                        requisicao = daoRequisicao.consultar(Integer.parseInt(txtNumeroRequisicao.getText()));
+                        requisicao.setSituacaoSolicitacao("Finalizado");
+                        daoRequisicao.alterar(requisicao);*/ 
                         JOptionPane.showMessageDialog(null, "Requisicao e itens relacionados finalizados com Sucesso");
+                    
                     } else {
                         JOptionPane.showMessageDialog(null, "Atencao, ha pedidos nao processados. Verifique"
                             + " esses pedidos antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
+                    
                     }
+                
                 } else {
                     JOptionPane.showMessageDialog(null, "Atencao, ha cotacoes nao processadas. Verifique"
                             + " essas cotacoes antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
 
                 }
             }
-
+            atualizaTabela();
+            
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Material: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao finalizar Requisicao " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnConcluirTodosItensActionPerformed
 
@@ -351,6 +353,36 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                 new GUI_FinalizarCompra().setVisible(true);
             }
         });
+    }
+    
+    public void atualizaTabela() {
+        Statement stmt;
+                    ResultSet rs;
+
+                    String sqlquery = "select NumSolicitacao, NumCotacao, c.CodMaterial, NomeMaterial, CNPJ, SituacaoCotacao from tbl_Cotacao c, tbl_Material m "
+                            + "where c.CodMaterial = m.CodMaterial AND NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableCotacoesMaterial.setModel(DbUtils.resultSetToTableModel(rs));
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    DefaultTableModel dm = (DefaultTableModel) jTableCotacoesMaterial.getModel();
+
+                    sqlquery = "select NumSolicitacao, NumPedido, NumCotacao, Situacao from tbl_Pedido_Compra where NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
+
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                        
+                    }
+                    
+                    DefaultTableModel dmp = (DefaultTableModel) jTablePedidosCompra.getModel();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
