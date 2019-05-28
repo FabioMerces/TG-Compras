@@ -195,7 +195,7 @@ public class GUI_DecisaoPedidoCompra extends javax.swing.JFrame {
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoPedido = new DaoPedCompra(conexao.conectar());
-        String sqlquery = "Select * from tbl_Pedido_Compra where SITUACAO = 'Aguardando Aprovacao da Gerencia'";
+        String sqlquery = "Select * from tbl_Pedido_Compra where SITUACAO = 'Aguardando Aprovação da Gerencia'";
         
         Statement stmt;
         ResultSet rs;

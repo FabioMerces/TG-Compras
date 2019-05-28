@@ -423,7 +423,7 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
                 cmbStatusPedidoCompra.setSelectedIndex(0);
             }else if(compara.equals("Aguardando Contato com Fornecedor")){
                 cmbStatusPedidoCompra.setSelectedIndex(1);
-            }else if(compara.equals("Concluído")){
+            }else if(compara.equals("Aprovado")){
                 cmbStatusPedidoCompra.setSelectedIndex(2);
             }else{
                 cmbStatusPedidoCompra.setSelectedIndex(3);
