@@ -24,6 +24,8 @@ public class GUI_Login extends javax.swing.JFrame {
     /**
      * Creates new form GUI_Login
      */
+    
+    
     public GUI_Login() {
         initComponents();
     }
@@ -193,6 +195,10 @@ public class GUI_Login extends javax.swing.JFrame {
                     rs = stmt.executeQuery(sqlquery);
                     if(rs.next()){
                         JOptionPane.showMessageDialog(null, "Login concluido com Sucesso");
+                        GUI_Menu nome = new GUI_Menu();
+                        nome.setUser("teste");
+                        nome.setVisible(true);
+                        this.setVisible(false);
 
                     }else{
                         JOptionPane.showMessageDialog(null, "Login nao esta correto verifique a senha e o usuario");

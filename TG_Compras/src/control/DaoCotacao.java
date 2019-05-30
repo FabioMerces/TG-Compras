@@ -88,9 +88,9 @@ public class DaoCotacao {
             ps.setInt(2, c.getCodMaterial());
             ps.setString(3, c.getDataCotacao());
             ps.setFloat(4, c.getPrecoMaterial());
-			ps.setString(5, c.getSituacaoCotacao());
-                        ps.setString(6, c.getCotacaoVencedora());
-                        ps.setInt(7, c.getNumCotacao());
+            ps.setString(5, c.getSituacaoCotacao());
+            ps.setString(6, c.getCotacaoVencedora());
+            ps.setInt(7, c.getNumCotacao());
             ps.execute();
 
         } catch (SQLException ex) {

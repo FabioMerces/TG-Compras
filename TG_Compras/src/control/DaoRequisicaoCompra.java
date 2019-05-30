@@ -64,11 +64,7 @@ public class DaoRequisicaoCompra {
             ps.setString(4, rq.getDataSolicitacao());
             ps.setString(5, rq.getDescricaoMateriaisNaoEncontrados());
             ps.setString(6, rq.getSituacaoSolicitacao());
-            /*Verificar otimização, enviar dados "MateriaisSolicitados" via chamada desta classe(consistencia de dados)*/
-            //System.out.println("Erro aqui");
-            //O erro esta na hora de executar pois ele da um Invalid Number nao sei pq?
-            //Deve ser algo a ver ou com o Codigo de requisicao pois ele eh do tipo imt
-            //O SETOR EHDO TIPO INTEIRO NAO STRING
+            
             ps.execute();
             
             DaoMateriaisSolicitados daoMS = new DaoMateriaisSolicitados(this.conn);
@@ -80,19 +76,19 @@ public class DaoRequisicaoCompra {
         }
     }
 
-    /*Verificar método de alteração de requisição de compra DEPOIS*/
- /*                 INCOMPLETO
     public void alterar(RequisicaoCompra rq) {
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("UPDATE tbl_Solicitacao_Compra set CPF = ?,"
-                    + " Setor  = ?, DescMaterial = ?"
+                    + " Setor  = ?, DataSolicitacao = ?, DescMatNotFound = ?, SituacaoSolicitacao = ?"
                     + " WHERE CodRequisicao = ?");
             ps.setString(1, rq.getIdFuncionarioRequisitante());
-            ps.setString(2, rq.getSetorFuncionarioRequisitante());
-            ps.setString(3, rq.getDescricaoMateriaisNaoEncontrados());
-            ps.setInt(4, rq.getCodRequisicao());
-
+            ps.setInt(2, rq.getSetorFuncionarioRequisitante());
+            ps.setString(3, rq.getSituacaoSolicitacao());           
+            ps.setString(4, rq.getDataSolicitacao());
+            ps.setString(5, rq.getDescricaoMateriaisNaoEncontrados());
+            ps.setInt(6, rq.getCodRequisicao());
+            
             ps.execute();
 
         } catch (SQLException ex) {
@@ -111,7 +107,7 @@ public class DaoRequisicaoCompra {
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
-    }*/
+    }
     
     public List listarRequisicao() {
         PreparedStatement ps = null;

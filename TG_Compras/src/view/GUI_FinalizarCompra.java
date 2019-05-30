@@ -281,37 +281,33 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                     }
                 }
                     
-                cont = 0;
-                if(verificaCotacao == true){
+                for(cont = 0; cont < jTablePedidosCompra.getRowCount(); cont++){
+                    pedido = daoPedido.consultar(Integer.parseInt(jTablePedidosCompra.getValueAt(cont , 1).toString()));
+                    pedido.setSituacaoPedido("Finalizado");
+                    daoPedido.alterar(pedido);
+                }
+
+                for(cont = 0; cont < jTableCotacoesMaterial.getRowCount(); cont++){
+                    cotacao = daoCotacao.consultar(Integer.parseInt(jTableCotacoesMaterial.getValueAt(cont , 1).toString()));
+                    cotacao.setSituacaoCotacao("Finalizado");
+                    daoCotacao.alterar(cotacao);
+                }
+
+                requisicao = daoRequisicao.consultar(Integer.parseInt(txtNumeroRequisicao.getText()));
+                requisicao.setSituacaoSolicitacao("Finalizado");
+                daoRequisicao.alterar(requisicao); 
+                JOptionPane.showMessageDialog(null, "Requisicao e itens relacionados finalizados com Sucesso");
+                /*if(verificaCotacao == true){
                     if(verificaPedido == true){
-                        for(cont = 0; cont < jTablePedidosCompra.getRowCount(); cont++){
-                            pedido = daoPedido.consultar(Integer.parseInt(jTablePedidosCompra.getValueAt(cont , 1).toString()));
-                            pedido.setSituacaoPedido("Finalizado");
-                            daoPedido.alterar(pedido);
-                        }
-                        
-                        for(cont = 0; cont < jTableCotacoesMaterial.getRowCount(); cont++){
-                            cotacao = daoCotacao.consultar(Integer.parseInt(jTableCotacoesMaterial.getValueAt(cont , 1).toString()));
-                            cotacao.setSituacaoCotacao("Finalizado");
-                            daoCotacao.alterar(cotacao);
-                        }
-                        /* === DaoPedido o metodo de alterar esta comentado e escrito "Verificar ~~ Incompleto" ====
-                        requisicao = daoRequisicao.consultar(Integer.parseInt(txtNumeroRequisicao.getText()));
-                        requisicao.setSituacaoSolicitacao("Finalizado");
-                        daoRequisicao.alterar(requisicao);*/ 
-                        JOptionPane.showMessageDialog(null, "Requisicao e itens relacionados finalizados com Sucesso");
-                    
+                    //Codigo quando ta tudo ok
                     } else {
                         JOptionPane.showMessageDialog(null, "Atencao, ha pedidos nao processados. Verifique"
                             + " esses pedidos antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
-                    
                     }
-                
                 } else {
                     JOptionPane.showMessageDialog(null, "Atencao, ha cotacoes nao processadas. Verifique"
                             + " essas cotacoes antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
-
-                }
+                }*/
             }
             atualizaTabela();
             

@@ -30,7 +30,10 @@ public class GUI_Menu extends javax.swing.JFrame {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
-
+    
+    private String user;
+    
+    
     public GUI_Menu(String login, String senha) {
         initComponents();
         if (!login.isEmpty()) {
@@ -481,11 +484,13 @@ public class GUI_Menu extends javax.swing.JFrame {
         System.out.println(LocalDateTime.now().getHour());       // 7
         System.out.println(LocalDateTime.now().getMinute());     // 45
         System.out.println(LocalDateTime.now().getSecond());     // 32
-
+        
+        
+        
         class Demo extends TimerTask {
 
             public void run() {
-                txtHora.setText(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond());
+                txtHora.setText( String.format("%02d", LocalDateTime.now().getHour()) + ":" + String.format("%02d", LocalDateTime.now().getMinute()) + ":" + String.format("%02d", LocalDateTime.now().getSecond()));
 
             }
         }
@@ -571,4 +576,8 @@ public class GUI_Menu extends javax.swing.JFrame {
     private javax.swing.JTextField txtNomeFuncionario;
     // End of variables declaration//GEN-END:variables
     private Conexao conexao = null;
+
+    public void setUser(String user) {
+        txtNomeFuncionario.setText(user);
+    }
 }
