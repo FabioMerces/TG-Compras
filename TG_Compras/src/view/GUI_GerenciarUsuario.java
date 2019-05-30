@@ -38,6 +38,7 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         txtSenha = new javax.swing.JPasswordField();
+        jLabel4 = new javax.swing.JLabel();
         pnlPermissao = new javax.swing.JPanel();
         rdbFuncRegular = new javax.swing.JRadioButton();
         rdbFuncCompras = new javax.swing.JRadioButton();
@@ -60,11 +61,14 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
 
         pnlDadosUsuario.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)), "Dados do Usuário"));
 
-        jLabel1.setText("Usuário");
+        jLabel1.setText("Usuário (CPF)");
 
         jLabel2.setText("Senha");
 
         txtSenha.setEnabled(false);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel4.setText("Sua senha deve conter no maximo 12 Caracteres");
 
         javax.swing.GroupLayout pnlDadosUsuarioLayout = new javax.swing.GroupLayout(pnlDadosUsuario);
         pnlDadosUsuario.setLayout(pnlDadosUsuarioLayout);
@@ -73,12 +77,17 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
             .addGroup(pnlDadosUsuarioLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlDadosUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlDadosUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                    .addComponent(txtUsuario))
+                    .addGroup(pnlDadosUsuarioLayout.createSequentialGroup()
+                        .addGroup(pnlDadosUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnlDadosUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSenha)
+                            .addComponent(txtUsuario)))
+                    .addGroup(pnlDadosUsuarioLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlDadosUsuarioLayout.setVerticalGroup(
@@ -92,7 +101,9 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
                 .addGroup(pnlDadosUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(23, 23, 23))
         );
 
         pnlPermissao.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)), "Tipo de Funcionario"));
@@ -204,19 +215,19 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(pnlDadosUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(pnlDadosUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(pnlPermissao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCadastrar)
-                    .addComponent(btnAlterar)
-                    .addComponent(btnExcluir)
-                    .addComponent(btnPesquisar))
-                .addContainerGap(18, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnCadastrar)
+                            .addComponent(btnAlterar)
+                            .addComponent(btnExcluir)
+                            .addComponent(btnPesquisar)))
+                    .addComponent(pnlPermissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -308,7 +319,8 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
                                 flagVerificaTudo = false;
                             }
         
-        if(txtUsuario.getText().isEmpty()|| txtSenha.getText().isEmpty()){
+        if(txtUsuario.getText().isEmpty()|| txtSenha.getText().isEmpty() || txtSenha.getPassword().length >= 13 
+                || txtUsuario.getText().length() > 11){
             flagVerificaTudo = false;
         }
         
@@ -338,8 +350,8 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
         rdbGerente.setEnabled(false);
         
         }else{
-        JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente Por Favor verifique os dados");
-        }
+        JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente verifique os dados\n"
+        + "Verifique se o CPF foi digitado Corretamente, Se a Senha tem 12 ou menos caracteres e se foi escolhido um tipo de usuario");}
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
@@ -362,7 +374,8 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
                                 flagVerificaTudo = false;
                             }
         
-        if(txtUsuario.getText().isEmpty()|| txtSenha.getText().isEmpty()){
+        if(txtUsuario.getText().isEmpty()|| txtSenha.getText().isEmpty() || txtSenha.getPassword().length >= 13
+                || txtUsuario.getText().length() > 11){
             flagVerificaTudo = false;
         }
         
@@ -392,7 +405,8 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
         rdbGerente.setEnabled(false);
         
         }else{
-        JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente verifique os dados");
+        JOptionPane.showMessageDialog(null, "Existe um ou mais campos não preenchidos Corretamente verifique os dados\n"
+        + "Verifique se o CPF foi digitado Corretamente, Se a Senha tem 12 ou menos caracteres e se foi escolhido um tipo de usuario");
         }
        
 
@@ -475,6 +489,7 @@ public class GUI_GerenciarUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel pnlDadosUsuario;
     private javax.swing.JPanel pnlPermissao;
     private javax.swing.JRadioButton rdbAdministradorSistema;

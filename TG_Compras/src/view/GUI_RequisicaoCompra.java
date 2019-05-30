@@ -168,7 +168,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         jLabel7.setText("Setor do Funcionario Requisitante");
 
         txtSetor.setEditable(false);
-        txtSetor.setText("15");
+        txtSetor.setText("1");
         txtSetor.setEnabled(false);
 
         jLabel8.setText("Tabela de Materiais");
@@ -368,7 +368,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
                 int codigo;
                 codigo = requisicaoCompra.GeraCodReq();
                 requisicaoCompra.setCodRequisicao(codigo);
-                requisicaoCompra.setIdFuncionarioRequisitante(txtIdFuncionario.getText());
+                requisicaoCompra.setIdFuncionarioRequisitante(txtIdFuncionario.getText().trim());
                 requisicaoCompra.setSetorFuncionarioRequisitante(Integer.parseInt(txtSetor.getText()));
                 
                 

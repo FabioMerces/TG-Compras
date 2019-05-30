@@ -157,7 +157,7 @@ public class GUI_DecisaoPedidoCompra extends javax.swing.JFrame {
                 pedido = daoPedido.consultar(Integer.parseInt(jTablePedidos.getValueAt(linha , 0).toString()));
                 
                 DefaultTableModel model = (DefaultTableModel) jTablePedidos.getModel();
-                pedido.setSituacaoPedido("Aprovado");
+                pedido.setSituacaoPedido("Aguardando Contato com Fornecedor");
             }
             
             daoPedido.alterar(pedido);

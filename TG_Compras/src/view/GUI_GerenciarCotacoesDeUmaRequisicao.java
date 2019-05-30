@@ -351,7 +351,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                 throw new Exception("Nao existe nenhum Material selecionado na Tabela");
             }else {
                 
-                codigoMaterialSelecionado = jTableCotacaoMaterial.getValueAt(jTableCotacaoMaterial.getSelectedRow(), 4).toString();
+                codigoMaterialSelecionado = jTableCotacaoMaterial.getValueAt(jTableCotacaoMaterial.getSelectedRow(), 5).toString();
                 new GUI_ConsultarFornecedorMaterial().setVisible(true);
             }
 
@@ -457,7 +457,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                 
 
                 DefaultTableModel model = (DefaultTableModel) jTableCotacaoMaterial.getModel();
-                model.addRow(new Object[]{"",txtIdRequisicao.getText(),"","",codigo, 0 ,"Aguardando Resposta do Fornecedor","NAO"});
+                model.addRow(new Object[]{"",txtIdRequisicao.getText(),"","","",codigo, 0 ,"Aguardando Resposta do Fornecedor","NAO"});
             }
 
         } catch (Exception ex) {
@@ -474,7 +474,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
 
         boolean verificaFornecedor = true;
         for(cont = 0;cont < jTableCotacaoMaterial.getRowCount();cont++){
-            if(jTableCotacaoMaterial.getValueAt(cont , 3).equals("")){
+            if(jTableCotacaoMaterial.getValueAt(cont , 4).equals("")){
                 verificaFornecedor = false;
             }
         }
@@ -496,11 +496,11 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
 
             cotacao.setNumSolicitacaoCompra(Integer.parseInt(txtIdRequisicao.getText()));
             cotacao.setDataCotacao(dtf.format(localDate));
-            cotacao.setCNPJ(jTableCotacaoMaterial.getValueAt(cont , 3).toString());        
-            cotacao.setCodMaterial(Integer.parseInt(jTableCotacaoMaterial.getValueAt(cont , 4).toString()));
-            cotacao.setPrecoMaterial(Float.parseFloat(jTableCotacaoMaterial.getValueAt(cont , 5).toString()));
-            cotacao.setSituacaoCotacao(jTableCotacaoMaterial.getValueAt(cont , 6).toString());
-            cotacao.setCotacaoVencedora(jTableCotacaoMaterial.getValueAt(cont, 7).toString().trim());
+            cotacao.setCNPJ(jTableCotacaoMaterial.getValueAt(cont , 4).toString());        
+            cotacao.setCodMaterial(Integer.parseInt(jTableCotacaoMaterial.getValueAt(cont , 5).toString()));
+            cotacao.setPrecoMaterial(Float.parseFloat(jTableCotacaoMaterial.getValueAt(cont , 6).toString()));
+            cotacao.setSituacaoCotacao(jTableCotacaoMaterial.getValueAt(cont , 7).toString());
+            cotacao.setCotacaoVencedora(jTableCotacaoMaterial.getValueAt(cont, 8).toString().trim());
 
             if(novaCotacao == true){
 

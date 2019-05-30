@@ -17,6 +17,7 @@ import javax.swing.table.TableRowSorter;
 import net.proteanit.sql.DbUtils;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -76,6 +77,7 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
         ftxtCNPJ = new javax.swing.JFormattedTextField();
         txtNomeFornecedor = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        btnRecarregarTabela = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisar Fornecedor");
@@ -155,7 +157,14 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
         });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel5.setText("*Atencao a pesquisa feita eh Case Sensitive ou seja, maiusculas e minusculas serao diferenciadas na pesquisa");
+        jLabel5.setText("*Atencao a pesquisa feita é Case Sensitive ou seja, maiusculas e minusculas Serão diferenciadas na pesquisa");
+
+        btnRecarregarTabela.setText("Recarregar Tabela");
+        btnRecarregarTabela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecarregarTabelaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -187,7 +196,10 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCopiarCNPJ)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnCopiarCNPJ)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnRecarregarTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1127, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
@@ -214,8 +226,10 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 16, Short.MAX_VALUE)
-                .addComponent(btnCopiarCNPJ)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCopiarCNPJ)
+                    .addComponent(btnRecarregarTabela))
                 .addContainerGap())
         );
 
@@ -276,16 +290,43 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeFornecedorKeyReleased
 
     private void btnCopiarCNPJActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarCNPJActionPerformed
+        try{
+        if (jTableFornecedores.getSelectedRow() == -1) {
+                throw new Exception("Nao existe nenhum Fornecedor selecionado na Tabela");
+            }else {
+
         //PARA COPIAR O TEXTO SELECIONADO DA TABELA PARA O BUFFER (CLIPBOARD)
         String myString = jTableFornecedores.getValueAt(jTableFornecedores.getSelectedRow(), 0).toString();
         StringSelection stringSelection = new StringSelection(myString);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
+        }
+       }catch (Exception ex){
+        JOptionPane.showMessageDialog(null, "Falha ao copiar CNPJ do Fornecedor" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        
+       }
     }//GEN-LAST:event_btnCopiarCNPJActionPerformed
 
     private void txtNomeFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeFornecedorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomeFornecedorActionPerformed
+
+    private void btnRecarregarTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregarTabelaActionPerformed
+        String sqlquery = "Select CNPJ , NOMEFORNECEDOR , CEP , CIDADE , UF , TELPRINCIPAL , TELSECUNDARIO , EMAIL from tbl_fornecedor";
+
+        Statement stmt;
+        ResultSet rs;
+
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableFornecedores.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultTableModel dm = (DefaultTableModel) jTableFornecedores.getModel();
+    }//GEN-LAST:event_btnRecarregarTabelaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -324,6 +365,7 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCopiarCNPJ;
+    private javax.swing.JButton btnRecarregarTabela;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JFormattedTextField ftxtCNPJ;
     private javax.swing.JLabel jLabel1;

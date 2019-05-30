@@ -56,6 +56,7 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
         jTableMateriais = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         btnCopiarCodMat = new javax.swing.JButton();
+        btnRecarregarTabela = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisa Material");
@@ -137,6 +138,13 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
             }
         });
 
+        btnRecarregarTabela.setText("Recarregar Tabela");
+        btnRecarregarTabela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecarregarTabelaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -171,6 +179,8 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
                         .addGap(27, 27, 27))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCopiarCodMat)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRecarregarTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -198,7 +208,9 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(btnCopiarCodMat)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCopiarCodMat)
+                    .addComponent(btnRecarregarTabela))
                 .addContainerGap())
         );
 
@@ -210,6 +222,7 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
             txtCodigoMaterial.setEnabled(true);
             btnPesquisarMaterial.setEnabled(true);
             cmbNomeMaterial.setEnabled(false);
+            btnRecarregarTabelaActionPerformed(evt);
         } else {
             txtCodigoMaterial.setEnabled(false);
             btnPesquisarMaterial.setEnabled(false);
@@ -221,6 +234,7 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
             cmbNomeMaterial.setEnabled(true);
             txtCodigoMaterial.setEnabled(false);
             btnPesquisarMaterial.setEnabled(false);
+            btnRecarregarTabelaActionPerformed(evt);
 
         } else {
             cmbNomeMaterial.setEnabled(false);
@@ -228,10 +242,20 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
     }//GEN-LAST:event_rbPesquisarPorNomeActionPerformed
 
     private void btnCopiarCodMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarCodMatActionPerformed
+try{
+        if (jTableMateriais.getSelectedRow() == -1) {
+                throw new Exception("Nao existe nenhum Material selecionado na Tabela ");
+            }else {
+
         String myString = jTableMateriais.getValueAt(jTableMateriais.getSelectedRow(), 0).toString();
         StringSelection stringSelection = new StringSelection(myString);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
+        }
+       }catch (Exception ex){
+        JOptionPane.showMessageDialog(null, "Falha ao copiar Codigo do Material" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        
+       }
     }//GEN-LAST:event_btnCopiarCodMatActionPerformed
 
     private void btnPesquisarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarMaterialActionPerformed
@@ -253,6 +277,28 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
                             break;
                         }
                     }
+                    
+                    material = daoMaterial.consultar(Integer.parseInt(txtCodigoMaterial.getText().trim()));
+
+                if (material == null) {
+                    throw new Exception("Id do Pedido informado não existe.\n ");
+                } else {
+                    String sqlquery = "select * from tbl_material where CODMATERIAL = " + txtCodigoMaterial.getText().trim();
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableMateriais.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTableMateriais.getModel();       
+                }
+                    
                 }
             }
         } catch (Exception ex) {
@@ -332,6 +378,23 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoMaterialActionPerformed
 
+    private void btnRecarregarTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregarTabelaActionPerformed
+        String sqlquery = "SELECT CodMaterial , NomeMaterial , UnidMedida , DescriptMaterial FROM tbl_material";
+
+        Statement stmt;
+        ResultSet rs;
+
+        try{
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+            jTableMateriais.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch(SQLException ex){
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultTableModel dm = (DefaultTableModel) jTableMateriais.getModel();
+    }//GEN-LAST:event_btnRecarregarTabelaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -370,6 +433,7 @@ public class GUI_PesquisarMaterial extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCopiarCodMat;
     private javax.swing.JButton btnPesquisarMaterial;
+    private javax.swing.JButton btnRecarregarTabela;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cmbNomeMaterial;
     private javax.swing.JLabel jLabel1;
