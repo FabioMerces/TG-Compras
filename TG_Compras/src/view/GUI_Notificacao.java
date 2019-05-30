@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -139,9 +140,13 @@ public class GUI_Notificacao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVerificaCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificaCotacaoActionPerformed
+        if(jTableNotificacao.getSelectedRow() != -1){
         NumReq = jTableNotificacao.getValueAt(jTableNotificacao.getSelectedRow(), 0).toString();
 
         new GUI_GerenciarCotacoesDeUmaRequisicao().setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null, "Nao existe nenhuma cotacao selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnVerificaCotacaoActionPerformed
 
     /**
