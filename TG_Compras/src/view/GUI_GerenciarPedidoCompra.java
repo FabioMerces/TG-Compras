@@ -423,7 +423,7 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
                 cmbStatusPedidoCompra.setSelectedIndex(0);
             }else if(compara.equals("Aguardando Contato com Fornecedor")){
                 cmbStatusPedidoCompra.setSelectedIndex(1);
-            }else if(compara.equals("Aprovado")){
+            }else if(compara.equals("Concluído")){
                 cmbStatusPedidoCompra.setSelectedIndex(2);
             }else{
                 cmbStatusPedidoCompra.setSelectedIndex(3);
@@ -465,6 +465,7 @@ public class GUI_GerenciarPedidoCompra extends javax.swing.JFrame {
     private void btnAlterarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarPedidoCompraActionPerformed
         pedidoCompra = daoPedCompra.consultar(cotacao.getNumCotacao());
         pedidoCompra.setSituacaoPedido(cmbStatusPedidoCompra.getSelectedItem().toString());
+        System.out.println(cmbStatusPedidoCompra.getSelectedItem().toString());
         daoPedCompra.alterar(pedidoCompra);
         JOptionPane.showMessageDialog(null, "Status do Pedido de Compra alterado com sucesso");
         

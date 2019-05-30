@@ -324,8 +324,8 @@ try{
 
 
     private void txtCodigoMaterialKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoMaterialKeyReleased
-        String query = txtCodigoMaterial.getText().trim();
-        filter(query);
+/*        String query = txtCodigoMaterial.getText().trim();
+        filter(query);*/
     }//GEN-LAST:event_txtCodigoMaterialKeyReleased
 
     private void cmbNomeMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNomeMaterialActionPerformed
@@ -345,7 +345,7 @@ try{
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
 
-        String sqlquery = "SELECT CodMaterial , NomeMaterial , UnidMedida , DescriptMaterial FROM tbl_material";
+        String sqlquery = "SELECT * FROM tbl_material";
 
         Statement stmt;
         ResultSet rs;
@@ -379,7 +379,7 @@ try{
     }//GEN-LAST:event_txtCodigoMaterialActionPerformed
 
     private void btnRecarregarTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregarTabelaActionPerformed
-        String sqlquery = "SELECT CodMaterial , NomeMaterial , UnidMedida , DescriptMaterial FROM tbl_material";
+        String sqlquery = "SELECT * FROM tbl_material";
 
         Statement stmt;
         ResultSet rs;

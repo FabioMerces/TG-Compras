@@ -478,10 +478,6 @@ public class GUI_Menu extends javax.swing.JFrame {
         LocalDate localDate = LocalDate.now();
         txtData.setText(dtf.format(localDate));
 
-        System.out.println(LocalDateTime.now().getHour());       // 7
-        System.out.println(LocalDateTime.now().getMinute());     // 45
-        System.out.println(LocalDateTime.now().getSecond());     // 32
-
         class Demo extends TimerTask {
 
             public void run() {
