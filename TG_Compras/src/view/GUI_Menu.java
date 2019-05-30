@@ -5,12 +5,16 @@
  */
 package view;
 
+import control.Conexao;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.swing.JFrame; 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
@@ -25,14 +29,37 @@ public class GUI_Menu extends javax.swing.JFrame {
     public GUI_Menu() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-       
     }
 
-    
     public GUI_Menu(String login, String senha) {
         initComponents();
+        if (!login.isEmpty()) {
+            conexao = new Conexao("GABRIEL", "GABRIEL");
+            conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+            conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+
+            /*Carrega cotações recebidas dos fornecedores e redireciona para o Gerenciamento de Cotações de uma Requisição*/
+            String sqlquery = "SELECT NumSolicitacao, NumCotacao, CNPJ, CodMaterial FROM tbl_Cotacao WHERE SituacaoCotacao = 'Recebida' ORDER BY DataCotacao DESC";
+            Statement stmt;
+            ResultSet rs;
+
+            try {
+                stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                rs = stmt.executeQuery(sqlquery);
+                /*Verificando se há notificações(Cotações pendentes)*/
+                if (!rs.next()) {
+                    btnNotifica.setVisible(false);
+                    btnNotifica.setEnabled(false);
+                } else {
+                    btnNotifica.setVisible(true);
+                    btnNotifica.setEnabled(true);
+                }
+            } catch (SQLException ex) {
+
+            }
+        }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,6 +77,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         txtNomeFuncionario = new javax.swing.JTextField();
         txtData = new javax.swing.JTextField();
         txtHora = new javax.swing.JTextField();
+        btnNotifica = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuLogin = new javax.swing.JMenu();
         jMenuItemLogin = new javax.swing.JMenuItem();
@@ -110,6 +138,14 @@ public class GUI_Menu extends javax.swing.JFrame {
         txtHora.setEditable(false);
         txtHora.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         txtHora.setEnabled(false);
+
+        btnNotifica.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        btnNotifica.setText("Notificações Pendentes");
+        btnNotifica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNotificaActionPerformed(evt);
+            }
+        });
 
         jMenuBar1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
 
@@ -332,11 +368,17 @@ public class GUI_Menu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnNotifica)
+                .addGap(226, 226, 226))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(681, Short.MAX_VALUE)
+                .addContainerGap(577, Short.MAX_VALUE)
+                .addComponent(btnNotifica, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
@@ -355,7 +397,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemCadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastroUsuarioActionPerformed
-        new GUI_GerenciarUsuario().setVisible(true); 
+        new GUI_GerenciarUsuario().setVisible(true);
     }//GEN-LAST:event_jMenuItemCadastroUsuarioActionPerformed
 
     private void jMenuItemCadastroFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastroFornecedorActionPerformed
@@ -391,7 +433,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemCadastrarCotacoesActionPerformed
 
     private void jMenuItemSelecionarCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelecionarCotacaoVencedoraActionPerformed
-        new GUI_CotacaoVencedora().setVisible(true); 
+        new GUI_CotacaoVencedora().setVisible(true);
     }//GEN-LAST:event_jMenuItemSelecionarCotacaoVencedoraActionPerformed
 
     private void jMenuItemConsultarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarCotacaoActionPerformed
@@ -423,7 +465,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemFinalizarCompraActionPerformed
 
     private void jMenuItemConsultarFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarFornecedorActionPerformed
-       new GUI_PesquisarFornecedor().setVisible(true);
+        new GUI_PesquisarFornecedor().setVisible(true);
     }//GEN-LAST:event_jMenuItemConsultarFornecedorActionPerformed
 
     private void jMenuItemConsultarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarMaterialActionPerformed
@@ -431,29 +473,31 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemConsultarMaterialActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
-        
+
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.now();
         txtData.setText(dtf.format(localDate));
-        
-    System.out.println(LocalDateTime.now().getHour());       // 7
-    System.out.println(LocalDateTime.now().getMinute());     // 45
-    System.out.println(LocalDateTime.now().getSecond());     // 32
-    
-    
-    
-    class Demo extends TimerTask {
-      public void run() {
-            txtHora.setText(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond());
-            
-       }
-  }
-		//main method
-    Timer t1 = new Timer();
-    t1.schedule(new Demo(), 0,1000);
-        
+
+        System.out.println(LocalDateTime.now().getHour());       // 7
+        System.out.println(LocalDateTime.now().getMinute());     // 45
+        System.out.println(LocalDateTime.now().getSecond());     // 32
+
+        class Demo extends TimerTask {
+
+            public void run() {
+                txtHora.setText(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond());
+
+            }
+        }
+        //main method
+        Timer t1 = new Timer();
+        t1.schedule(new Demo(), 0, 1000);
+
     }//GEN-LAST:event_formWindowOpened
+
+    private void btnNotificaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificaActionPerformed
+        new GUI_Notificacao().setVisible(true);
+    }//GEN-LAST:event_btnNotificaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -492,6 +536,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnNotifica;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -525,4 +570,5 @@ public class GUI_Menu extends javax.swing.JFrame {
     private javax.swing.JTextField txtHora;
     private javax.swing.JTextField txtNomeFuncionario;
     // End of variables declaration//GEN-END:variables
+    private Conexao conexao = null;
 }

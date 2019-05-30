@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import control.Conexao;
@@ -15,7 +10,7 @@ import net.proteanit.sql.DbUtils;
 
 /**
  *
- * @author Thais
+ * @author Matheus Jorge
  */
 public class GUI_Notificacao extends javax.swing.JFrame {
 
@@ -192,5 +187,4 @@ public class GUI_Notificacao extends javax.swing.JFrame {
     private javax.swing.JTable jTableNotificacao;
     // End of variables declaration//GEN-END:variables
     private Conexao conexao = null;
-
 }
