@@ -62,6 +62,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         rbIDPedidoCompra = new javax.swing.JRadioButton();
         rbIDCotacaoVencedora = new javax.swing.JRadioButton();
         btnRecarregarTabela = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar Pedido de Compra");
@@ -168,6 +169,8 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Gerar Relatorio");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -212,7 +215,9 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnRecarregarTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 697, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -245,7 +250,9 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnRecarregarTabela)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRecarregarTabela)
+                    .addComponent(jButton1))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -537,6 +544,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     private javax.swing.JButton btnRecarregarTabela;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
