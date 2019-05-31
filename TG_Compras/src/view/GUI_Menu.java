@@ -6,6 +6,8 @@
 package view;
 
 import control.Conexao;
+import control.DaoRequisicaoCompra;
+import control.DaoUsuario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,8 +16,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import model.RequisicaoCompra;
+import model.Usuario;
 
 /**
  *
@@ -32,7 +39,10 @@ public class GUI_Menu extends javax.swing.JFrame {
     }
     
     private String user;
+    private String nivel;
+    private String nome;
     
+    private boolean loginHabilita = true;
     
     public GUI_Menu(String login, String senha) {
         initComponents();
@@ -400,83 +410,339 @@ public class GUI_Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemCadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastroUsuarioActionPerformed
-        new GUI_GerenciarUsuario().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") || nivel.equals("B") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_GerenciarUsuario().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_GerenciarUsuario().setVisible(true);
+        }
     }//GEN-LAST:event_jMenuItemCadastroUsuarioActionPerformed
 
     private void jMenuItemCadastroFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastroFornecedorActionPerformed
-        new GUI_GerenciarFornecedor().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_GerenciarFornecedor().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_GerenciarFornecedor().setVisible(true);
+        }
     }//GEN-LAST:event_jMenuItemCadastroFornecedorActionPerformed
 
     private void jMenuItemAvaliarFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAvaliarFornecedorActionPerformed
-        new GUI_AvaliarFornecedor().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_AvaliarFornecedor().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_AvaliarFornecedor().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemAvaliarFornecedorActionPerformed
 
     private void jMenuItemLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLoginActionPerformed
         new GUI_Login().setVisible(true);
+        
     }//GEN-LAST:event_jMenuItemLoginActionPerformed
 
     private void jMenuItemRequisicaoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRequisicaoCompraActionPerformed
         new GUI_RequisicaoCompra().setVisible(true);
+  
     }//GEN-LAST:event_jMenuItemRequisicaoCompraActionPerformed
 
     private void jMenuItemAssociarMaterialFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAssociarMaterialFornecedorActionPerformed
-        new GUI_AssociarMaterialFornecedor().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_AssociarMaterialFornecedor().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_AssociarMaterialFornecedor().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemAssociarMaterialFornecedorActionPerformed
 
     private void jMenuItemConsultarFornecedorMateriaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarFornecedorMateriaisActionPerformed
-        new GUI_ConsultarFornecedorMaterial().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_ConsultarFornecedorMaterial().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_ConsultarFornecedorMaterial().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemConsultarFornecedorMateriaisActionPerformed
 
     private void jMenuItemConsultarRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarRequisicaoActionPerformed
-        new GUI_ConsultarRequisicao().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_ConsultarRequisicao().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_ConsultarRequisicao().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemConsultarRequisicaoActionPerformed
 
     private void jMenuItemCadastrarCotacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarCotacoesActionPerformed
-        new GUI_GerenciarCotacoesDeUmaRequisicao().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_GerenciarCotacoesDeUmaRequisicao().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_GerenciarCotacoesDeUmaRequisicao().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemCadastrarCotacoesActionPerformed
 
     private void jMenuItemSelecionarCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelecionarCotacaoVencedoraActionPerformed
-        new GUI_CotacaoVencedora().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_CotacaoVencedora().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_CotacaoVencedora().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemSelecionarCotacaoVencedoraActionPerformed
 
     private void jMenuItemConsultarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarCotacaoActionPerformed
-        new GUI_ConsultarCotacao().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_ConsultarCotacao().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_ConsultarCotacao().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemConsultarCotacaoActionPerformed
 
     private void jMenuItemConsultarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarPedidoCompraActionPerformed
-        new GUI_ConsultarPedidoCompra().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_ConsultarPedidoCompra().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_ConsultarPedidoCompra().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemConsultarPedidoCompraActionPerformed
 
     private void jMenuItemCriarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCriarPedidoCompraActionPerformed
-        new GUI_GerenciarPedidoCompra().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_GerenciarPedidoCompra().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_GerenciarPedidoCompra().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemCriarPedidoCompraActionPerformed
 
     private void jMenuItemCadastrarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarMaterialActionPerformed
-        new GUI_GerenciarMaterial().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_GerenciarMaterial().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_GerenciarMaterial().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemCadastrarMaterialActionPerformed
 
     private void jMenuItemConsultarRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarRankingActionPerformed
-        new GUI_ConsultarRankingFornecedores().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_ConsultarRankingFornecedores().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_ConsultarRankingFornecedores().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemConsultarRankingActionPerformed
 
     private void jMenuItemDecisaoPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDecisaoPedidoCompraActionPerformed
-        new GUI_DecisaoPedidoCompra().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") || nivel.equals("B") || nivel.equals("C") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_DecisaoPedidoCompra().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_DecisaoPedidoCompra().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemDecisaoPedidoCompraActionPerformed
 
     private void jMenuItemFinalizarCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFinalizarCompraActionPerformed
-        new GUI_FinalizarCompra().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_FinalizarCompra().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_FinalizarCompra().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemFinalizarCompraActionPerformed
 
     private void jMenuItemConsultarFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarFornecedorActionPerformed
-        new GUI_PesquisarFornecedor().setVisible(true);
+        if (loginHabilita = true){
+            
+            try{
+                    if( nivel.equals("A") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_PesquisarFornecedor().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_PesquisarFornecedor().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemConsultarFornecedorActionPerformed
 
     private void jMenuItemConsultarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarMaterialActionPerformed
         new GUI_PesquisarMaterial().setVisible(true);
+        
     }//GEN-LAST:event_jMenuItemConsultarMaterialActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.now();
         txtData.setText(dtf.format(localDate));
@@ -497,7 +763,9 @@ public class GUI_Menu extends javax.swing.JFrame {
         //main method
         Timer t1 = new Timer();
         t1.schedule(new Demo(), 0, 1000);
-
+        
+        txtNomeFuncionario.setText(nome);
+        
     }//GEN-LAST:event_formWindowOpened
 
     private void btnNotificaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificaActionPerformed
@@ -576,8 +844,16 @@ public class GUI_Menu extends javax.swing.JFrame {
     private javax.swing.JTextField txtNomeFuncionario;
     // End of variables declaration//GEN-END:variables
     private Conexao conexao = null;
+    private Usuario usuario;
+    private DaoUsuario daoUsuario;
 
     public void setUser(String user) {
-        txtNomeFuncionario.setText(user);
+        this.user = user;
+    }
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }

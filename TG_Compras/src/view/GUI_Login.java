@@ -6,6 +6,7 @@
 package view;
 
 import control.Conexao;
+import control.DaoFuncionario;
 import control.DaoUsuario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Funcionario;
 import model.Usuario;
 
 /**
@@ -35,6 +37,8 @@ public class GUI_Login extends javax.swing.JFrame {
     private Conexao conexao = null;
     private Usuario usuario;
     private DaoUsuario daoUsuario;
+    private Funcionario funcionario;
+    private DaoFuncionario daoFuncionario;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -172,6 +176,8 @@ public class GUI_Login extends javax.swing.JFrame {
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
         sucesso = "falso";
+        usuario = new Usuario();
+        funcionario = new Funcionario();
         try {
             if (txtUsuario.getText().isEmpty()) {
                 throw new Exception("Login não foi informado.\n"
@@ -186,22 +192,26 @@ public class GUI_Login extends javax.swing.JFrame {
                 cpf = txtUsuario.getText().trim();
                 String sqlquery = "select * from tbl_usuario where cpf = " + cpf + " and senha = '" + password + "'";
                        // + "cpf = " + txtUsuario.getText().trim() + " and senha = " + password ;
-                System.out.println(sqlquery);
                 Statement stmt;
                 ResultSet rs;
                 //txtSenha.getPassword().;
                 try{
                     stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
                     rs = stmt.executeQuery(sqlquery);
+                    usuario = daoUsuario.consultar(txtUsuario.getText());
+                    funcionario = daoFuncionario.consultar(txtUsuario.getText());
+                
                     if(rs.next()){
                         JOptionPane.showMessageDialog(null, "Login concluido com Sucesso");
-                        GUI_Menu nome = new GUI_Menu();
-                        nome.setUser("teste");
-                        nome.setVisible(true);
+                        GUI_Menu menuPrincipal = new GUI_Menu();
+                        menuPrincipal.setNivel(usuario.getTipoUsuario());
+                        menuPrincipal.setNome(funcionario.getNomeFuncionario());
+                        menuPrincipal.setUser(cpf);
+                        menuPrincipal.setVisible(true);
                         this.setVisible(false);
 
                     }else{
-                        JOptionPane.showMessageDialog(null, "Login nao esta correto verifique a senha e o usuario");
+                        throw new Exception("Login nao esta correto.\nVerifique a senha e o usuario");
                     }
 
                     
@@ -211,7 +221,7 @@ public class GUI_Login extends javax.swing.JFrame {
                 
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Login: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao efetuar Login: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEntrarActionPerformed
 
@@ -220,6 +230,7 @@ public class GUI_Login extends javax.swing.JFrame {
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoUsuario = new DaoUsuario(conexao.conectar());
+        daoFuncionario = new DaoFuncionario(conexao.conectar());
         
     }//GEN-LAST:event_formWindowOpened
 
