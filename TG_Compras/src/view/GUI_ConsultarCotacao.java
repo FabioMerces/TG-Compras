@@ -64,6 +64,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         rbIDRequisicao = new javax.swing.JRadioButton();
         btnRecarregaTabela = new javax.swing.JButton();
         chkCotacoesVencedoras = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar Cotacao");
@@ -168,6 +169,8 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Gerar Relatorio");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -200,7 +203,9 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCopiarIDCotacao)
                         .addGap(18, 18, 18)
-                        .addComponent(btnRecarregaTabela))
+                        .addComponent(btnRecarregaTabela)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1064, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -230,7 +235,8 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCopiarIDCotacao)
-                    .addComponent(btnRecarregaTabela))
+                    .addComponent(btnRecarregaTabela)
+                    .addComponent(jButton1))
                 .addGap(25, 25, 25))
         );
 
@@ -472,6 +478,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkCotacoesVencedoras;
     private javax.swing.JCheckBox chkStatusCotacao;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

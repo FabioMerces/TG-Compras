@@ -68,6 +68,8 @@
                       <Component id="btnCopiarIDCotacao" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnRecarregaTabela" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" min="-2" pref="1064" max="-2" attributes="0"/>
               </Group>
@@ -104,6 +106,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnCopiarIDCotacao" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnRecarregaTabela" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
           </Group>
@@ -267,6 +270,11 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkCotacoesVencedorasActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Gerar Relatorio"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
