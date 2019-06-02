@@ -61,7 +61,6 @@ public class GUI_Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela de Login");
-        setAlwaysOnTop(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -203,6 +202,9 @@ public class GUI_Login extends javax.swing.JFrame {
                 
                     if(rs.next()){
                         JOptionPane.showMessageDialog(null, "Login concluido com Sucesso");
+                        
+                        
+                        
                         GUI_Menu menuPrincipal = new GUI_Menu();
                         menuPrincipal.setNivel(usuario.getTipoUsuario());
                         menuPrincipal.setNome(funcionario.getNomeFuncionario());

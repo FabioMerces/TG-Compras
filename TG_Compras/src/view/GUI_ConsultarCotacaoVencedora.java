@@ -48,7 +48,6 @@ public class GUI_ConsultarCotacaoVencedora extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar Cotacao Vencedora");
-        setAlwaysOnTop(true);
 
         jLabel1.setText("ID Cotação Vencedora");
 

@@ -8,6 +8,7 @@ package view;
 import control.Conexao;
 import control.DaoRequisicaoCompra;
 import control.DaoUsuario;
+import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -36,6 +37,10 @@ public class GUI_Menu extends javax.swing.JFrame {
     public GUI_Menu() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        /*Esse to Back tambem esta implementado
+        mais para frente para deixar o Menu sempre
+        Como um BackGround*/
+        toBack();
     }
     
     private String user;
@@ -47,8 +52,12 @@ public class GUI_Menu extends javax.swing.JFrame {
         Enquanto estivermos em estado de teste LoginHabilita mantem false*/
     private boolean loginHabilita = false;
     
+    private boolean ExisteCotacoesRecebidas = false;
+    
     public GUI_Menu(String login, String senha) {
         initComponents();
+        
+        
         if (!login.isEmpty()) {
             conexao = new Conexao("GABRIEL", "GABRIEL");
             conexao.setDriver("oracle.jdbc.driver.OracleDriver");
@@ -64,14 +73,21 @@ public class GUI_Menu extends javax.swing.JFrame {
                 rs = stmt.executeQuery(sqlquery);
                 /*Verificando se há notificações(Cotações pendentes)*/
                 if (!rs.next()) {
+                    System.out.println("1");
                     btnNotifica.setVisible(false);
                     btnNotifica.setEnabled(false);
+                    ExisteCotacoesRecebidas = false;
+                    
                 } else {
                     btnNotifica.setVisible(true);
                     btnNotifica.setEnabled(true);
+                    ExisteCotacoesRecebidas = true;
+                    System.out.println("2");
+                    
+                    
                 }
             } catch (SQLException ex) {
-
+                System.out.println("Erro");
             }
         }
     }
@@ -118,10 +134,17 @@ public class GUI_Menu extends javax.swing.JFrame {
         jMenuItemConsultarCotacao = new javax.swing.JMenuItem();
         jMenuItemConsultarPedidoCompra = new javax.swing.JMenuItem();
         jMenuItemConsultarRanking = new javax.swing.JMenuItem();
+        jMenuNotificacoes = new javax.swing.JMenu();
+        jMenuItemNotificacoesPendentes = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu");
         setPreferredSize(new java.awt.Dimension(1600, 900));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -360,41 +383,56 @@ public class GUI_Menu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuConsultar);
 
+        jMenuNotificacoes.setText("Notificações");
+        jMenuNotificacoes.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+
+        jMenuItemNotificacoesPendentes.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jMenuItemNotificacoesPendentes.setText("Notificações Pendentes de Cotações de Fornecedores");
+        jMenuItemNotificacoesPendentes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemNotificacoesPendentesActionPerformed(evt);
+            }
+        });
+        jMenuNotificacoes.add(jMenuItemNotificacoesPendentes);
+
+        jMenuBar1.add(jMenuNotificacoes);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtNomeFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNomeFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnNotifica)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnNotifica)
-                .addGap(226, 226, 226))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(577, Short.MAX_VALUE)
+                .addContainerGap(491, Short.MAX_VALUE)
                 .addComponent(btnNotifica, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67)
+                .addGap(153, 153, 153)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
@@ -750,10 +788,11 @@ public class GUI_Menu extends javax.swing.JFrame {
         LocalDate localDate = LocalDate.now();
         txtData.setText(dtf.format(localDate));
 
-        System.out.println(LocalDateTime.now().getHour());       // 7
-        System.out.println(LocalDateTime.now().getMinute());     // 45
-        System.out.println(LocalDateTime.now().getSecond());     // 32
         
+        
+        if(ExisteCotacoesRecebidas == true){
+        jMenuNotificacoes.setForeground(Color.red);
+        }
         
         
         class Demo extends TimerTask {
@@ -770,6 +809,17 @@ public class GUI_Menu extends javax.swing.JFrame {
         txtNomeFuncionario.setText(nome);
         
     }//GEN-LAST:event_formWindowOpened
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        /*Atraves desse comando o menu fica sempre no fundo permitindo
+        que as outras GUIs nao precisem estar com a propriedade Always on Top
+        ativa o que permite que os Pop Ups aparecam na tela*/
+        toBack();
+    }//GEN-LAST:event_formMouseClicked
+
+    private void jMenuItemNotificacoesPendentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNotificacoesPendentesActionPerformed
+        new GUI_Notificacao().setVisible(true);
+    }//GEN-LAST:event_jMenuItemNotificacoesPendentesActionPerformed
 
     private void btnNotificaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificaActionPerformed
         new GUI_Notificacao().setVisible(true);
@@ -838,9 +888,11 @@ public class GUI_Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemDecisaoPedidoCompra;
     private javax.swing.JMenuItem jMenuItemFinalizarCompra;
     private javax.swing.JMenuItem jMenuItemLogin;
+    private javax.swing.JMenuItem jMenuItemNotificacoesPendentes;
     private javax.swing.JMenuItem jMenuItemRequisicaoCompra;
     private javax.swing.JMenuItem jMenuItemSelecionarCotacaoVencedora;
     private javax.swing.JMenu jMenuLogin;
+    private javax.swing.JMenu jMenuNotificacoes;
     private javax.swing.JMenu jMenuOperacoes;
     private javax.swing.JTextField txtData;
     private javax.swing.JTextField txtHora;
