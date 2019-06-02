@@ -57,39 +57,12 @@ public class GUI_Menu extends javax.swing.JFrame {
     public GUI_Menu(String login, String senha) {
         initComponents();
         
+        /*
+        Aqui tinha antes a Verificacao do Login coloquei no Form Window Opened
+        Caso de algum erro verificar se nao eh necessario voltar o item aqui
+        mas pelo q testei nao adiante ter aquela verificacao nesse lugar
+        */
         
-        if (!login.isEmpty()) {
-            conexao = new Conexao("GABRIEL", "GABRIEL");
-            conexao.setDriver("oracle.jdbc.driver.OracleDriver");
-            conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
-
-            /*Carrega cotações recebidas dos fornecedores e redireciona para o Gerenciamento de Cotações de uma Requisição*/
-            String sqlquery = "SELECT NumSolicitacao, NumCotacao, CNPJ, CodMaterial FROM tbl_Cotacao WHERE SituacaoCotacao = 'Recebida' ORDER BY DataCotacao DESC";
-            Statement stmt;
-            ResultSet rs;
-
-            try {
-                stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                rs = stmt.executeQuery(sqlquery);
-                /*Verificando se há notificações(Cotações pendentes)*/
-                if (!rs.next()) {
-                    System.out.println("1");
-                    btnNotifica.setVisible(false);
-                    btnNotifica.setEnabled(false);
-                    ExisteCotacoesRecebidas = false;
-                    
-                } else {
-                    btnNotifica.setVisible(true);
-                    btnNotifica.setEnabled(true);
-                    ExisteCotacoesRecebidas = true;
-                    System.out.println("2");
-                    
-                    
-                }
-            } catch (SQLException ex) {
-                System.out.println("Erro");
-            }
-        }
     }
 
     /**
@@ -109,7 +82,6 @@ public class GUI_Menu extends javax.swing.JFrame {
         txtNomeFuncionario = new javax.swing.JTextField();
         txtData = new javax.swing.JTextField();
         txtHora = new javax.swing.JTextField();
-        btnNotifica = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuLogin = new javax.swing.JMenu();
         jMenuItemLogin = new javax.swing.JMenuItem();
@@ -177,14 +149,6 @@ public class GUI_Menu extends javax.swing.JFrame {
         txtHora.setEditable(false);
         txtHora.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         txtHora.setEnabled(false);
-
-        btnNotifica.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        btnNotifica.setText("Notificações Pendentes");
-        btnNotifica.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNotificaActionPerformed(evt);
-            }
-        });
 
         jMenuBar1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
 
@@ -405,34 +369,27 @@ public class GUI_Menu extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNomeFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnNotifica)))
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtNomeFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(491, Short.MAX_VALUE)
-                .addComponent(btnNotifica, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(153, 153, 153)
+                .addContainerGap(681, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
@@ -787,11 +744,53 @@ public class GUI_Menu extends javax.swing.JFrame {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.now();
         txtData.setText(dtf.format(localDate));
+        txtNomeFuncionario.setText(nome);
+        
+        if (!txtNomeFuncionario.getText().isEmpty()) {
+            conexao = new Conexao("GABRIEL", "GABRIEL");
+            conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+            conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
+            
+            try {
+            /*Carrega cotações recebidas dos fornecedores e redireciona para o Gerenciamento de Cotações de uma Requisição*/
+            String sqlquery = "SELECT NumSolicitacao, NumCotacao, CNPJ, CodMaterial FROM tbl_Cotacao WHERE SituacaoCotacao = 'Recebida' ORDER BY DataCotacao DESC";
+            Statement stmt;
+            ResultSet rs;
+
+           
+                
+                //stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                //rs = stmt.executeQuery(sqlquery);
+                rs = stmt.executeQuery(sqlquery);
+                
+                /*Verificando se há notificações(Cotações pendentes)*/
+                if (!rs.next()) {
+                    
+                    //btnNotifica.setVisible(false);
+                    //btnNotifica.setEnabled(false);
+                    ExisteCotacoesRecebidas = false;
+                    
+                } else {
+                    //btnNotifica.setVisible(true);
+                    //btnNotifica.setEnabled(true);
+                    ExisteCotacoesRecebidas = true;
+                    
+                    
+                    
+                }
+            } catch (SQLException ex) {
+                System.out.println("Erro");
+            }
+        }
 
         
         
         if(ExisteCotacoesRecebidas == true){
-        jMenuNotificacoes.setForeground(Color.red);
+        jMenuNotificacoes.setForeground(Color.red);        
+        JOptionPane.showMessageDialog(null, "Foram recebidas novas Cotacoes dos Fornecedores \n"
+                + "Verifique na Aba de Notificacoes");
+        
         }
         
         
@@ -806,7 +805,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         Timer t1 = new Timer();
         t1.schedule(new Demo(), 0, 1000);
         
-        txtNomeFuncionario.setText(nome);
+        
         
     }//GEN-LAST:event_formWindowOpened
 
@@ -820,10 +819,6 @@ public class GUI_Menu extends javax.swing.JFrame {
     private void jMenuItemNotificacoesPendentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNotificacoesPendentesActionPerformed
         new GUI_Notificacao().setVisible(true);
     }//GEN-LAST:event_jMenuItemNotificacoesPendentesActionPerformed
-
-    private void btnNotificaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificaActionPerformed
-        new GUI_Notificacao().setVisible(true);
-    }//GEN-LAST:event_btnNotificaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -862,7 +857,6 @@ public class GUI_Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnNotifica;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
