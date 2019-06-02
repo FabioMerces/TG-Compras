@@ -42,7 +42,10 @@ public class GUI_Menu extends javax.swing.JFrame {
     private String nivel;
     private String nome;
     
-    private boolean loginHabilita = true;
+    
+    /*Colocar aqui Verdadeiro quando for Habilitar as Funcoes de Login
+        Enquanto estivermos em estado de teste LoginHabilita mantem false*/
+    private boolean loginHabilita = false;
     
     public GUI_Menu(String login, String senha) {
         initComponents();
@@ -410,7 +413,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemCadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastroUsuarioActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") || nivel.equals("B") ){
@@ -429,7 +432,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemCadastroUsuarioActionPerformed
 
     private void jMenuItemCadastroFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastroFornecedorActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -448,7 +451,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemCadastroFornecedorActionPerformed
 
     private void jMenuItemAvaliarFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAvaliarFornecedorActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -478,7 +481,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemRequisicaoCompraActionPerformed
 
     private void jMenuItemAssociarMaterialFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAssociarMaterialFornecedorActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -498,7 +501,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemAssociarMaterialFornecedorActionPerformed
 
     private void jMenuItemConsultarFornecedorMateriaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarFornecedorMateriaisActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -518,7 +521,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemConsultarFornecedorMateriaisActionPerformed
 
     private void jMenuItemConsultarRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarRequisicaoActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -538,7 +541,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemConsultarRequisicaoActionPerformed
 
     private void jMenuItemCadastrarCotacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarCotacoesActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -558,7 +561,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemCadastrarCotacoesActionPerformed
 
     private void jMenuItemSelecionarCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelecionarCotacaoVencedoraActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -578,7 +581,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemSelecionarCotacaoVencedoraActionPerformed
 
     private void jMenuItemConsultarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarCotacaoActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -598,7 +601,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemConsultarCotacaoActionPerformed
 
     private void jMenuItemConsultarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarPedidoCompraActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -618,7 +621,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemConsultarPedidoCompraActionPerformed
 
     private void jMenuItemCriarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCriarPedidoCompraActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -638,7 +641,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemCriarPedidoCompraActionPerformed
 
     private void jMenuItemCadastrarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarMaterialActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -658,7 +661,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemCadastrarMaterialActionPerformed
 
     private void jMenuItemConsultarRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarRankingActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -678,7 +681,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemConsultarRankingActionPerformed
 
     private void jMenuItemDecisaoPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDecisaoPedidoCompraActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") || nivel.equals("B") || nivel.equals("C") ){
@@ -698,7 +701,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemDecisaoPedidoCompraActionPerformed
 
     private void jMenuItemFinalizarCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFinalizarCompraActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
@@ -718,7 +721,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemFinalizarCompraActionPerformed
 
     private void jMenuItemConsultarFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarFornecedorActionPerformed
-        if (loginHabilita = true){
+        if (loginHabilita == true){
             
             try{
                     if( nivel.equals("A") ){
