@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import control.Conexao;
@@ -17,7 +12,11 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import model.Utilitarios;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -380,7 +382,6 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
             }
         }
 
-
     }//GEN-LAST:event_formWindowOpened
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -539,7 +540,60 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcluirItemCotacaoActionPerformed
 
     private void btnSolicitarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarCotacaoActionPerformed
+        URL url;
+        String numCot = null;
+        try {
+            if (jTableCotacaoMaterial.getSelectedRow() == -1) {
+                throw new Exception("Não foi encontrado cotação selecionada");
+            } else {
+                if (!jTableCotacaoMaterial.getValueAt(jTableCotacaoMaterial.getSelectedRow(), 0).toString().equals("")) {
+                    numCot = jTableCotacaoMaterial.getValueAt(jTableCotacaoMaterial.getSelectedRow(), 0).toString();
+                } else {
+                    throw new Exception("Não foi encontrado cotação selecionada error:2");
+                }
+            }
 
+            url = new URL("http://localhost/WebIn_InsertCot.php");
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("numCot", numCot);
+
+            con.setDoOutput(true);
+            DataOutputStream out = new DataOutputStream(con.getOutputStream());
+            out.writeBytes(Utilitarios.getParamsString(parameters));
+            out.flush();
+            out.close();
+        } catch (MalformedURLException ex) {
+            //Logger.getLogger(GUI_GerenciarCotacoesDeUmaRequisicao.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error MalformedURLException: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            //Logger.getLogger(GUI_GerenciarCotacoesDeUmaRequisicao.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error IOException: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            //Logger.getLogger(GUI_GerenciarCotacoesDeUmaRequisicao.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro Solicitar Cotação: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        /*HttpClient httpclient = HttpClients.createDefault();
+        HttpPost httppost = new HttpPost("http://localhost/WebIn_InsertCot.php");
+
+        // Request parameters and other properties.
+        List<NameValuePair> params = new ArrayList<NameValuePair>(2);
+        params.add(new BasicNameValuePair("param-1", "12345"));
+        params.add(new BasicNameValuePair("param-2", "Hello!"));
+        httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
+        //Execute and get the response.
+        HttpResponse response = httpclient.execute(httppost);
+        HttpEntity entity = response.getEntity();
+
+        if (entity != null) {
+            try (InputStream instream = entity.getContent()) {
+                System.out.println("Deu certo!");
+            }
+        }*/
     }//GEN-LAST:event_btnSolicitarCotacaoActionPerformed
 
     private void btnCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCotacaoVencedoraActionPerformed
