@@ -286,6 +286,7 @@
     <Component class="javax.swing.JButton" name="btnAdicionarMaterialTabelaCotacao">
       <Properties>
         <Property name="text" type="java.lang.String" value="Adicionar Material Selecionado a Tabela de Cota&#xe7;&#xe3;o"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdicionarMaterialTabelaCotacaoActionPerformed"/>
@@ -294,6 +295,7 @@
     <Component class="javax.swing.JButton" name="btnSolicitarCotacao">
       <Properties>
         <Property name="text" type="java.lang.String" value="Solicitar cota&#xe7;&#xe3;o do item selecionado"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSolicitarCotacaoActionPerformed"/>
@@ -302,6 +304,7 @@
     <Component class="javax.swing.JButton" name="btnSalvar">
       <Properties>
         <Property name="text" type="java.lang.String" value="Salvar Cota&#xe7;&#xf5;es"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSalvarActionPerformed"/>
@@ -310,6 +313,7 @@
     <Component class="javax.swing.JButton" name="btnCotacaoVencedora">
       <Properties>
         <Property name="text" type="java.lang.String" value="Selecionar uma cota&#xe7;&#xe3;o Vencedora"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCotacaoVencedoraActionPerformed"/>
@@ -331,6 +335,7 @@
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -338,6 +343,7 @@
     <Component class="javax.swing.JButton" name="btnCadastrarMateriais">
       <Properties>
         <Property name="text" type="java.lang.String" value="Ir para Cadastro de Materiais"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCadastrarMateriaisActionPerformed"/>
@@ -351,6 +357,7 @@
     <Component class="javax.swing.JButton" name="btnExcluirItemCotacao">
       <Properties>
         <Property name="text" type="java.lang.String" value="Excluir Item Selecionado"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExcluirItemCotacaoActionPerformed"/>
@@ -359,6 +366,7 @@
     <Component class="javax.swing.JButton" name="btnConsultarFornecedoresMaterial">
       <Properties>
         <Property name="text" type="java.lang.String" value="Consultar Fornecedores do Material Selecionado"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConsultarFornecedoresMaterialActionPerformed"/>
@@ -367,6 +375,7 @@
     <Component class="javax.swing.JCheckBox" name="chkAdicionarMaterialCadastrado">
       <Properties>
         <Property name="text" type="java.lang.String" value="Inserir na Tabela um Material Ja Cadastrado"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="chkAdicionarMaterialCadastradoMouseClicked"/>

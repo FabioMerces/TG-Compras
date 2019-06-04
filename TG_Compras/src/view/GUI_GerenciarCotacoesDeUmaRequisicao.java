@@ -164,6 +164,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jTableCotacaoMaterial);
 
         btnAdicionarMaterialTabelaCotacao.setText("Adicionar Material Selecionado a Tabela de Cotação");
+        btnAdicionarMaterialTabelaCotacao.setEnabled(false);
         btnAdicionarMaterialTabelaCotacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdicionarMaterialTabelaCotacaoActionPerformed(evt);
@@ -171,6 +172,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         });
 
         btnSolicitarCotacao.setText("Solicitar cotação do item selecionado");
+        btnSolicitarCotacao.setEnabled(false);
         btnSolicitarCotacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSolicitarCotacaoActionPerformed(evt);
@@ -178,6 +180,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         });
 
         btnSalvar.setText("Salvar Cotações");
+        btnSalvar.setEnabled(false);
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalvarActionPerformed(evt);
@@ -185,6 +188,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         });
 
         btnCotacaoVencedora.setText("Selecionar uma cotação Vencedora");
+        btnCotacaoVencedora.setEnabled(false);
         btnCotacaoVencedora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCotacaoVencedoraActionPerformed(evt);
@@ -195,9 +199,11 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
 
         jTextAreaDescricaoMaterial.setColumns(20);
         jTextAreaDescricaoMaterial.setRows(5);
+        jTextAreaDescricaoMaterial.setEnabled(false);
         jScrollPane4.setViewportView(jTextAreaDescricaoMaterial);
 
         btnCadastrarMateriais.setText("Ir para Cadastro de Materiais");
+        btnCadastrarMateriais.setEnabled(false);
         btnCadastrarMateriais.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadastrarMateriaisActionPerformed(evt);
@@ -207,6 +213,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         jLabel5.setText("OU");
 
         btnExcluirItemCotacao.setText("Excluir Item Selecionado");
+        btnExcluirItemCotacao.setEnabled(false);
         btnExcluirItemCotacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExcluirItemCotacaoActionPerformed(evt);
@@ -214,6 +221,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         });
 
         btnConsultarFornecedoresMaterial.setText("Consultar Fornecedores do Material Selecionado");
+        btnConsultarFornecedoresMaterial.setEnabled(false);
         btnConsultarFornecedoresMaterial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConsultarFornecedoresMaterialActionPerformed(evt);
@@ -221,6 +229,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         });
 
         chkAdicionarMaterialCadastrado.setText("Inserir na Tabela um Material Ja Cadastrado");
+        chkAdicionarMaterialCadastrado.setEnabled(false);
         chkAdicionarMaterialCadastrado.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 chkAdicionarMaterialCadastradoMouseClicked(evt);
@@ -441,6 +450,16 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                     }
                     dm = (DefaultTableModel) jTableCotacaoMaterial.getModel();
 
+                    btnAdicionarMaterialTabelaCotacao.setEnabled(true);
+                    btnCadastrarMateriais.setEnabled(true);
+                    btnConsultarFornecedoresMaterial.setEnabled(true);
+                    btnCotacaoVencedora.setEnabled(true);
+                    btnExcluirItemCotacao.setEnabled(true);
+                    btnSalvar.setEnabled(true);
+                    btnSolicitarCotacao.setEnabled(true);
+                    chkAdicionarMaterialCadastrado.setEnabled(true);
+                    jTextAreaDescricaoMaterial.setEnabled(true);
+                    
                 }
             }
         } catch (Exception ex) {
@@ -479,6 +498,11 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                 verificaFornecedor = false;
             }
         }
+        
+        System.out.println(jTableCotacaoMaterial.getRowCount());
+        if(jTableCotacaoMaterial.getRowCount() == 0){
+            verificaFornecedor = false;            
+        }
 
         cont = 0;
         if (verificaFornecedor == true) {
@@ -516,8 +540,10 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
             btnBuscarActionPerformed(evt);
             JOptionPane.showMessageDialog(null, "Cadastro da(s) Cotacao(oes) " + " concluido com Sucesso");
         } else {
-            JOptionPane.showMessageDialog(null, "Atencao eh necessario preencher o CNPJ do Fornecedor Antes "
-                    + "de Gravar sua Cotacao ", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Verifique se todos os dados estao preenchidos corretamente\n"
+                    + "Atencao é necessario preencher o CNPJ do Fornecedor Antes "
+                    + "de Gravar sua Cotacao \n"
+                    , "Erro", JOptionPane.ERROR_MESSAGE);
 
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
@@ -629,7 +655,11 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
     }//GEN-LAST:event_chkAdicionarMaterialCadastradoMouseClicked
 
     private void btnInserirNaTabelaCotacaoMaterialCadastradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirNaTabelaCotacaoMaterialCadastradoActionPerformed
-        material = new Material();
+        
+        if(txtCodigoMaterialCadastrado.getText().isEmpty() == true){
+        JOptionPane.showMessageDialog(null, "Digite um Codigo no campo 'Codigo do Material' ", "Erro", JOptionPane.ERROR_MESSAGE);        
+        }else{
+            material = new Material();
         material = daoMaterial.consultar(Integer.parseInt(txtCodigoMaterialCadastrado.getText()));
         if (material == null) {
             JOptionPane.showMessageDialog(null, "Material Nao Encontrado no Sistema", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -639,7 +669,8 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
             codigo = material.getCodMaterial();
 
             DefaultTableModel model = (DefaultTableModel) jTableCotacaoMaterial.getModel();
-            model.addRow(new Object[]{"", txtIdRequisicao.getText(), "", "", codigo, 0, "Aguardando Resposta do Fornecedor", "NAO"});
+            model.addRow(new Object[]{"", txtIdRequisicao.getText(), "", "", "", codigo, 0, "Aguardando Resposta do Fornecedor", "NAO"});
+        }
         }
     }//GEN-LAST:event_btnInserirNaTabelaCotacaoMaterialCadastradoActionPerformed
 
