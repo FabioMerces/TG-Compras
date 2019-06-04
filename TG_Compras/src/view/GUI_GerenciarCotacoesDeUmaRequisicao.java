@@ -12,11 +12,14 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -540,7 +543,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcluirItemCotacaoActionPerformed
 
     private void btnSolicitarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarCotacaoActionPerformed
-        URL url;
+        URL url = null;
         String numCot = null;
         try {
             if (jTableCotacaoMaterial.getSelectedRow() == -1) {
@@ -552,20 +555,30 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                     throw new Exception("Não foi encontrado cotação selecionada error:2");
                 }
             }
+            java.awt.Desktop.getDesktop().browse( new java.net.URI( "http://localhost/php/WebIn_InsertCot.php?numCot=" + numCot ) );
 
-            url = new URL("http://localhost/WebIn_InsertCot.php");
+            /*url = new URL("http://localhost/WebIn_InsertCot.php?numCot" + numCot);
 
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-
-            Map<String, String> parameters = new HashMap<>();
-            parameters.put("numCot", numCot);
-
-            con.setDoOutput(true);
+            URLConnection con = url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            int responseCode = con.getResponseCode();
+            System.out.println("\nEnviando 'GET' request p/ URL : " + url);
+            System.out.println("Response Code : " + responseCode);
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while((inputLine = in.readLine()) != null){
+                response.append(inputLine);
+            }
+            in.close();
+            
+            /*con.setDoOutput(true);
             DataOutputStream out = new DataOutputStream(con.getOutputStream());
             out.writeBytes(Utilitarios.getParamsString(parameters));
             out.flush();
             out.close();
+            System.out.println("Operação finalizada");*/
         } catch (MalformedURLException ex) {
             //Logger.getLogger(GUI_GerenciarCotacoesDeUmaRequisicao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error MalformedURLException: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
