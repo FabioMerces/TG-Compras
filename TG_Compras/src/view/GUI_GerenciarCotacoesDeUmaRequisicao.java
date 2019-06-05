@@ -1,5 +1,6 @@
 package view;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import control.Conexao;
 import control.DaoCotacao;
 import control.DaoMaterial;
@@ -140,7 +141,15 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Nome", "Quantidade"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTableMaterialRequisitado);
 
         jLabel3.setText("Tabela dos Itens da Requisicao de Compra e o Valor de suas Respectivas Cotações");
@@ -424,6 +433,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                         stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                         rs = stmt.executeQuery(sqlquery);
                         jTableMaterialRequisitado.setModel(DbUtils.resultSetToTableModel(rs));
+                        
 
                     } catch (SQLException ex) {
 
@@ -461,6 +471,24 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                     jTextAreaDescricaoMaterial.setEnabled(true);
                     
                 }
+                int row;
+                int column;
+                int i=0;
+                int j=0;
+                row =  jTableMaterialRequisitado.getRowCount();
+                column = jTableMaterialRequisitado.getColumnCount();
+                      
+                for (i=0;i<column;i++){ 
+                    for (j=0;j<row;j++) { 
+                        //jTableMaterialRequisitado.getCellEditor().
+                    } 
+                } 
+                 
+                
+                
+                
+                
+                        
             }
         } catch (Exception ex) {
 
@@ -478,7 +506,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                 codigo = jTableMaterialRequisitado.getValueAt(jTableMaterialRequisitado.getSelectedRow(), 1).toString();
 
                 DefaultTableModel model = (DefaultTableModel) jTableCotacaoMaterial.getModel();
-                model.addRow(new Object[]{"", txtIdRequisicao.getText(), "", "", "", codigo, 0, "Aguardando Resposta do Fornecedor", "NAO"});
+                model.addRow(new Object[]{"", txtIdRequisicao.getText(), "", "", "", codigo, 0, "Em Aberto", "NAO"});
             }
 
         } catch (Exception ex) {
@@ -578,7 +606,8 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                 if (!jTableCotacaoMaterial.getValueAt(jTableCotacaoMaterial.getSelectedRow(), 0).toString().equals("")) {
                     numCot = jTableCotacaoMaterial.getValueAt(jTableCotacaoMaterial.getSelectedRow(), 0).toString();
                 } else {
-                    throw new Exception("Não foi encontrado cotação selecionada error:2");
+                    throw new Exception("Não foi encontrado cotação selecionada \n"
+                            + "Salve as Cotacoes no sistema antes de solicitar uma cotacao");
                 }
             }
             java.awt.Desktop.getDesktop().browse( new java.net.URI( "http://localhost/php/WebIn_InsertCot.php?numCot=" + numCot ) );
@@ -654,13 +683,24 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_chkAdicionarMaterialCadastradoMouseClicked
 
+    public static boolean isNumeric(String strNum) {
+    try {
+        double d = Double.parseDouble(strNum);
+    } catch (NumberFormatException | NullPointerException nfe) {
+        return false;
+    }
+    return true;
+}
+    
     private void btnInserirNaTabelaCotacaoMaterialCadastradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirNaTabelaCotacaoMaterialCadastradoActionPerformed
-        
-        if(txtCodigoMaterialCadastrado.getText().isEmpty() == true){
-        JOptionPane.showMessageDialog(null, "Digite um Codigo no campo 'Codigo do Material' ", "Erro", JOptionPane.ERROR_MESSAGE);        
+        boolean isNumber;
+        isNumber = isNumeric(txtCodigoMaterialCadastrado.getText());
+        System.out.println(isNumber);
+        if(txtCodigoMaterialCadastrado.getText().isEmpty() == true || isNumber == false){
+        JOptionPane.showMessageDialog(null, "Digite um Codigo Numerico no campo 'Codigo do Material' ", "Erro", JOptionPane.ERROR_MESSAGE);        
         }else{
             material = new Material();
-        material = daoMaterial.consultar(Integer.parseInt(txtCodigoMaterialCadastrado.getText()));
+        material = daoMaterial.consultar(Integer.parseInt(txtCodigoMaterialCadastrado.getText().trim()));
         if (material == null) {
             JOptionPane.showMessageDialog(null, "Material Nao Encontrado no Sistema", "Erro", JOptionPane.ERROR_MESSAGE);
         } else {
@@ -669,7 +709,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
             codigo = material.getCodMaterial();
 
             DefaultTableModel model = (DefaultTableModel) jTableCotacaoMaterial.getModel();
-            model.addRow(new Object[]{"", txtIdRequisicao.getText(), "", "", "", codigo, 0, "Aguardando Resposta do Fornecedor", "NAO"});
+            model.addRow(new Object[]{"", txtIdRequisicao.getText(), "", "", "", codigo, 0, "Em Aberto", "NAO"});
         }
         }
     }//GEN-LAST:event_btnInserirNaTabelaCotacaoMaterialCadastradoActionPerformed
