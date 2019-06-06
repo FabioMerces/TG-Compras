@@ -432,7 +432,8 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
             daoReq.inserir(requisicaoCompra, materiaisSolicitados);
             //System.out.println("Entrou aqui");
             
-            
+            JOptionPane.showMessageDialog(null, "Requisicao de Compras criada e Enviada com Sucesso ", "Sucesso", JOptionPane.DEFAULT_OPTION);
+       
             
             } else {
                 throw new Exception("A Requisicao de Compra não foi Enviada.");
