@@ -290,6 +290,8 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
         daoReq = new DaoRequisicaoCompra(conexao.conectar());
+        //Empreeendedorismo e Inovacao
+        txtIdFuncionario.setText(GUI_Menu.userCPF); 
 
         String sqlquery = "SELECT CodMaterial , NomeMaterial , UnidMedida , DescriptMaterial FROM tbl_material";
 

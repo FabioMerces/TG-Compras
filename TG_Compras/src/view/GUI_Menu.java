@@ -46,6 +46,7 @@ public class GUI_Menu extends javax.swing.JFrame {
     private String user;
     private String nivel;
     private String nome;
+    public static String userCPF;
     
     
     /*Colocar aqui Verdadeiro quando for Habilitar as Funcoes de Login
@@ -909,6 +910,7 @@ public class GUI_Menu extends javax.swing.JFrame {
 
     public void setUser(String user) {
         this.user = user;
+        userCPF = user;
     }
     public void setNivel(String nivel) {
         this.nivel = nivel;
