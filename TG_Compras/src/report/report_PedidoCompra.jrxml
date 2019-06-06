@@ -3,7 +3,32 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#8FAFCC">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CFDBE6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F3F6F8"/>
+		</conditionalStyle>
+	</style>
 	<subDataset name="dataset1" uuid="d46f8d72-aacf-47ba-b64f-ef176edeeb42"/>
+	<subDataset name="Table Dataset 1" uuid="a084b608-0249-4cf9-8826-a6720d073777"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT
      TBL_PEDIDO_COMPRA."NUMPEDIDO" AS TBL_PEDIDO_COMPRA_NUMPEDIDO,
@@ -25,7 +50,15 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch"/>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="12" y="15" width="330" height="32" uuid="3849d069-c511-412b-9a97-66dfdf82711b"/>
+				<textElement>
+					<font fontName="Arial" size="20" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de Pedidos de Compra]]></text>
+			</staticText>
+		</band>
 	</title>
 	<pageHeader>
 		<band height="35" splitType="Stretch"/>
@@ -33,35 +66,75 @@ FROM
 	<columnHeader>
 		<band height="61" splitType="Stretch">
 			<staticText>
-				<reportElement x="12" y="41" width="100" height="20" uuid="0403a4b7-b189-4e0e-b63c-edab2266358f"/>
+				<reportElement x="12" y="41" width="102" height="20" uuid="0403a4b7-b189-4e0e-b63c-edab2266358f"/>
 				<textElement>
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nro. Pedido]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="112" y="41" width="100" height="20" uuid="371ec4d2-feff-4355-aaa4-2cef890f0d08"/>
+				<reportElement x="114" y="41" width="102" height="20" uuid="371ec4d2-feff-4355-aaa4-2cef890f0d08"/>
 				<textElement>
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nro. Cotação]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="216" y="41" width="102" height="20" uuid="ba49ba13-2d93-4572-82bf-0ca2f794dc2c"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nro. Solicitação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="318" y="41" width="117" height="20" uuid="d0bea7db-2ace-45d5-9a0a-7d34e9590339"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="41" width="117" height="20" uuid="2e8c6c1b-860f-4337-84a5-7f72c4984b9b"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPF]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="2" width="555" height="1" uuid="9022373a-2a14-4331-b94d-0bdc1e84bf31"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="21" splitType="Stretch">
 			<textField>
-				<reportElement x="12" y="0" width="100" height="20" uuid="c29eb9e0-51de-4fb2-ab19-a829087c5830"/>
+				<reportElement x="12" y="0" width="102" height="20" uuid="c29eb9e0-51de-4fb2-ab19-a829087c5830"/>
 				<textFieldExpression><![CDATA[$F{TBL_PEDIDO_COMPRA_NUMPEDIDO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="112" y="0" width="100" height="20" uuid="4a44a71f-33e6-45f9-a1a7-567602a30030"/>
+				<reportElement x="114" y="1" width="102" height="20" uuid="4a44a71f-33e6-45f9-a1a7-567602a30030"/>
 				<textFieldExpression><![CDATA[$F{TBL_PEDIDO_COMPRA_NUMCOTACAO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="216" y="1" width="102" height="20" uuid="178a3ca8-9937-40f9-9565-596dd58f2283"/>
+				<textFieldExpression><![CDATA[$F{TBL_PEDIDO_COMPRA_NUMSOLICITAC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="318" y="0" width="117" height="20" uuid="2123b134-018b-4b1d-998d-576e9daed3a2"/>
+				<textFieldExpression><![CDATA[$F{TBL_PEDIDO_COMPRA_DATAPEDIDO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="435" y="1" width="117" height="20" uuid="09b177c8-9aee-4a02-8250-3cf59afef3a7"/>
+				<textFieldExpression><![CDATA[$F{TBL_PEDIDO_COMPRA_CPFGERENTE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="45" splitType="Stretch"/>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="44" width="555" height="1" uuid="4006f7ed-0b35-46eb-b271-b19d57efb798"/>
+			</line>
+		</band>
 	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch">
