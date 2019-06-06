@@ -41,7 +41,7 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
 
         //PARA CARREGAR DADOS DO BANCO DE DADOS NA TABELA
-        String sqlquery = "Select CNPJ , NOMEFORNECEDOR , CEP , CIDADE , UF , TELPRINCIPAL , TELSECUNDARIO , EMAIL from tbl_fornecedor";
+        String sqlquery = "Select CNPJ , NOMEFORNECEDOR as NOME, CEP , CIDADE , UF , TELPRINCIPAL as TELEFONEPRINCIPAL, TELSECUNDARIO as TELEFONESECUNDARIO , EMAIL from tbl_fornecedor";
         Statement stmt;
         ResultSet rs;
         try {
@@ -311,8 +311,7 @@ public class GUI_PesquisarFornecedor extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeFornecedorActionPerformed
 
     private void btnRecarregarTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregarTabelaActionPerformed
-        String sqlquery = "Select CNPJ , NOMEFORNECEDOR , CEP , CIDADE , UF , TELPRINCIPAL , TELSECUNDARIO , EMAIL from tbl_fornecedor";
-
+        String sqlquery = "Select CNPJ , NOMEFORNECEDOR as NOME, CEP , CIDADE , UF , TELPRINCIPAL as TELEFONEPRINCIPAL, TELSECUNDARIO as TELEFONESECUNDARIO , EMAIL from tbl_fornecedor";
         Statement stmt;
         ResultSet rs;
 

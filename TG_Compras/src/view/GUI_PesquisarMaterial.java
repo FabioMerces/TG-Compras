@@ -282,7 +282,9 @@ try{
                 if (material == null) {
                     throw new Exception("Id do Pedido informado não existe.\n ");
                 } else {
-                    String sqlquery = "select * from tbl_material where CODMATERIAL = " + txtCodigoMaterial.getText().trim();
+                    
+                    String sqlquery = "SELECT CODMATERIAL as Codigo, UNIDMEDIDA as UnidadeMedida,"
+                + " NOMEMATERIAL as Nome, DESCRIPTMATERIAL as Descricao FROM tbl_material where CODMATERIAL =" + txtCodigoMaterial.getText().trim();
         
                     Statement stmt;
                     ResultSet rs;
@@ -344,7 +346,8 @@ try{
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
 
-        String sqlquery = "SELECT * FROM tbl_material";
+        String sqlquery = "SELECT CODMATERIAL as Codigo, UNIDMEDIDA as UnidadeMedida,"
+                + " NOMEMATERIAL as Nome, DESCRIPTMATERIAL as Descricao FROM tbl_material";
 
         Statement stmt;
         ResultSet rs;
@@ -378,7 +381,8 @@ try{
     }//GEN-LAST:event_txtCodigoMaterialActionPerformed
 
     private void btnRecarregarTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregarTabelaActionPerformed
-        String sqlquery = "SELECT * FROM tbl_material";
+        String sqlquery = "SELECT CODMATERIAL as Codigo, UNIDMEDIDA as UnidadeMedida,"
+                + " NOMEMATERIAL as Nome, DESCRIPTMATERIAL as Descricao FROM tbl_material";
 
         Statement stmt;
         ResultSet rs;

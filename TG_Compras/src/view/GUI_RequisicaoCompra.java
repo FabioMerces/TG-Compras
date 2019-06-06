@@ -4,6 +4,7 @@ import control.Conexao;
 import control.DaoMateriaisSolicitados;
 import control.DaoMaterial;
 import control.DaoRequisicaoCompra;
+import control.DaoUsuario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,8 +21,10 @@ import javax.swing.table.TableRowSorter;
 import model.Material;
 import net.proteanit.sql.DbUtils;
 import javax.swing.JOptionPane;
+import model.Funcionario;
 import model.MateriaisSolicitados;
 import model.RequisicaoCompra;
+import model.Usuario;
 
 /**
  *
@@ -167,7 +170,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         jLabel7.setText("Setor do Funcionario Requisitante");
 
         txtSetor.setEditable(false);
-        txtSetor.setText("1");
+        txtSetor.setText("0");
         txtSetor.setEnabled(false);
 
         jLabel8.setText("Tabela de Materiais");
@@ -292,8 +295,10 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         daoReq = new DaoRequisicaoCompra(conexao.conectar());
         //Empreeendedorismo e Inovacao
         txtIdFuncionario.setText(GUI_Menu.userCPF); 
-
-        String sqlquery = "SELECT CodMaterial , NomeMaterial , UnidMedida , DescriptMaterial FROM tbl_material";
+        int setor = 0;
+        
+        String sqlquery = "SELECT CODMATERIAL as Codigo, UNIDMEDIDA as UnidadeMedida,"
+                + " NOMEMATERIAL as Nome, DESCRIPTMATERIAL as Descricao FROM tbl_material";
 
         Statement stmt;
         ResultSet rs;
@@ -307,6 +312,21 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
         }
         //PARA FAZER FUNCIONAR A PESQUISA DINAMICA PRECISA DISSO
         dm = (DefaultTableModel) jTablePesquisaMaterial.getModel();
+        
+        String query = "SELECT CODSETOR FROM tbl_funcionario where CPF = " + txtIdFuncionario.getText();
+
+        rs = null;
+        stmt = null;
+        try {
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(query);
+            while(rs.next()){
+            setor = rs.getInt("CODSETOR");
+            } 
+            txtSetor.setText(Integer.toString(setor));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void txtNomeMaterialKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeMaterialKeyReleased
@@ -326,7 +346,7 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
                 int qtde;
 
                 codigo = jTablePesquisaMaterial.getValueAt(jTablePesquisaMaterial.getSelectedRow(), 0).toString();
-                nome = jTablePesquisaMaterial.getValueAt(jTablePesquisaMaterial.getSelectedRow(), 1).toString();
+                nome = jTablePesquisaMaterial.getValueAt(jTablePesquisaMaterial.getSelectedRow(), 2).toString();
                 qtde = Integer.parseInt(txtQuantidade.getText().trim());
 
                 DefaultTableModel model = (DefaultTableModel) jTableRequisicaodeCompra.getModel();
@@ -379,7 +399,9 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
                 requisicaoCompra.setDataSolicitacao(dateFormat.format(date));
                 System.out.println(dateFormat.format(date));
                 
-                requisicaoCompra.setDescricaoMateriaisNaoEncontrados(txtDescricaoMaterial.getText());
+                if(chkMaterialNaoCadastrado.isSelected() == true){
+                    requisicaoCompra.setDescricaoMateriaisNaoEncontrados(txtDescricaoMaterial.getText());
+                }
                 requisicaoCompra.setSituacaoSolicitacao("Em Aberto");
                 
                 materiaisSolicitados.setCodRequisicaoCompra(codigo);
@@ -486,4 +508,6 @@ public class GUI_RequisicaoCompra extends javax.swing.JFrame {
     private RequisicaoCompra requisicaoCompra;
     private MateriaisSolicitados materiaisSolicitados;
     private DaoMateriaisSolicitados daoMateriaisSolicitados;
+    private Usuario usuario;
+    private DaoUsuario daoUsuario;
 }
