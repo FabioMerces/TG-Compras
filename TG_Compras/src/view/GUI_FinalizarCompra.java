@@ -293,9 +293,13 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                 }
 
                 requisicao = daoRequisicao.consultar(Integer.parseInt(txtNumeroRequisicao.getText()));
+                System.out.println(requisicao.getSituacaoSolicitacao());
                 requisicao.setSituacaoSolicitacao("Finalizado");
+                System.out.println(requisicao.getSituacaoSolicitacao());
                 daoRequisicao.alterar(requisicao); 
+                System.out.println("teste");
                 JOptionPane.showMessageDialog(null, "Requisicao e itens relacionados finalizados com Sucesso");
+                //Ele esta errado pq foi salvo errado pela primeira vez
                 /*if(verificaCotacao == true){
                     if(verificaPedido == true){
                     //Codigo quando ta tudo ok

@@ -81,12 +81,12 @@ public class DaoRequisicaoCompra {
         try {
             ps = conn.prepareStatement("UPDATE tbl_Solicitacao_Compra set CPF = ?,"
                     + " Setor  = ?, DataSolicitacao = ?, DescMatNotFound = ?, SituacaoSolicitacao = ?"
-                    + " WHERE CodRequisicao = ?");
+                    + " WHERE NUMSOLICITACAO = ?");
             ps.setString(1, rq.getIdFuncionarioRequisitante());
             ps.setInt(2, rq.getSetorFuncionarioRequisitante());
-            ps.setString(3, rq.getSituacaoSolicitacao());           
-            ps.setString(4, rq.getDataSolicitacao());
-            ps.setString(5, rq.getDescricaoMateriaisNaoEncontrados());
+            ps.setString(3, rq.getDataSolicitacao());           
+            ps.setString(4, rq.getDescricaoMateriaisNaoEncontrados());
+            ps.setString(5, rq.getSituacaoSolicitacao());
             ps.setInt(6, rq.getCodRequisicao());
             
             ps.execute();
