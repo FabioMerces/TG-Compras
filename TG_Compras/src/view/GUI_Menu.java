@@ -422,7 +422,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") || nivel.equals("B") ){
+                    if( nivel.equals("O")){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -441,7 +441,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -460,7 +460,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -490,7 +490,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -510,7 +510,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -530,7 +530,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -550,7 +550,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -570,7 +570,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -590,7 +590,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -610,7 +610,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -630,7 +630,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -650,7 +650,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -670,7 +670,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -690,7 +690,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") || nivel.equals("B") || nivel.equals("C") ){
+                    if( nivel.equals("O") || nivel.equals("A") || nivel.equals("C") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -710,7 +710,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -730,7 +730,7 @@ public class GUI_Menu extends javax.swing.JFrame {
         if (loginHabilita == true){
             
             try{
-                    if( nivel.equals("A") ){
+                    if( nivel.equals("O") ){
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
@@ -828,7 +828,23 @@ public class GUI_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_formMouseClicked
 
     private void jMenuItemNotificacoesPendentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNotificacoesPendentesActionPerformed
-        new GUI_Notificacao().setVisible(true);
+        if (loginHabilita == true){
+            
+            try{
+                    if( nivel.equals("O") ){
+                        throw new Exception("Nivel de acesso insuficiente.");
+                        
+                    }else{
+                        new GUI_Notificacao().setVisible(true);
+                    }
+
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            new GUI_Notificacao().setVisible(true);
+        }
+        
     }//GEN-LAST:event_jMenuItemNotificacoesPendentesActionPerformed
 
     /**
