@@ -104,7 +104,7 @@
                       <Component id="btnExcluirItemCotacao" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnSolicitarCotacao" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="512" max="32767" attributes="0"/>
+                      <EmptySpace pref="895" max="32767" attributes="0"/>
                       <Component id="btnCotacaoVencedora" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                   </Group>

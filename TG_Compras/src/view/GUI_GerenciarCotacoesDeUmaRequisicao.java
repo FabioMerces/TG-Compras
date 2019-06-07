@@ -310,7 +310,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                         .addComponent(btnExcluirItemCotacao)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSolicitarCotacao)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 512, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 895, Short.MAX_VALUE)
                         .addComponent(btnCotacaoVencedora)
                         .addGap(43, 43, 43))))
         );
@@ -451,7 +451,10 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                     jTextAreaDescricaoMaterial.setText(requisicaoCompra.getDescricaoMateriaisNaoEncontrados());
 
                     //Carregando as Cotacoes Previamente Cadastradas
-                    sqlquery = "Select * from tbl_cotacao where NUMSOLICITACAO = " + txtIdRequisicao.getText().trim();
+                    sqlquery = "Select NUMCOTACAO as Numero_Cotacao, NUMSOLICITACAO as Codigo_Requisicao, "
+                            + "DATACOTACAO as Data_Cotacao, DATAENTREGA as Data_Entrega,"
+                            + "CNPJ, CODMATERIAL as Codigo_Material, PRECOUNITARIO,"
+                            + "SITUACAOCOTACAO as Situacao_Cotacao, VENCEDORA from tbl_cotacao where NUMSOLICITACAO = " + txtIdRequisicao.getText().trim();
 
                     try {
                         stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -584,7 +587,13 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         try {
             if (jTableCotacaoMaterial.getSelectedRow() == -1) {
                 JOptionPane.showMessageDialog(null, "Nao existe nenhum material Selecionado na Tabela", "Erro", JOptionPane.ERROR_MESSAGE);
-            } else {
+            } else if(jTableCotacaoMaterial.getValueAt(jTableCotacaoMaterial.getSelectedRow(), 7).equals("Finalizado")
+                    ||jTableCotacaoMaterial.getValueAt(jTableCotacaoMaterial.getSelectedRow(), 7).equals("Recebida") ){
+                
+                JOptionPane.showMessageDialog(null, "Nao é possivel Excluir uma Cotacao ja Recebida ou Finalizada ", "Erro", JOptionPane.ERROR_MESSAGE);
+                
+            }
+                else{
 
                 if (!jTableCotacaoMaterial.getValueAt(jTableCotacaoMaterial.getSelectedRow(), 0).toString().equals("")) {
                     daoCotacao.excluir(Integer.parseInt(jTableCotacaoMaterial.getValueAt(jTableCotacaoMaterial.getSelectedRow(), 0).toString()));
