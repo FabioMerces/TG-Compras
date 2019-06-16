@@ -92,7 +92,7 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "CNPJ", "Nome Fornecedor", "Nota Velocidade", "Nota Preço", "Nota Pos Venda", "Nota Qualidade"
+                "CNPJ", "NOME_FORNECEDOR", "NOTA_VELOCIDADE", "NOTA_PRECO", "NOTA_POSVENDA", "NOTA_QUALIDADE"
             }
         ));
         jScrollPane1.setViewportView(jTableFornecedoresDisponiveis);
@@ -157,9 +157,9 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jLabel3)
                     .addComponent(btnPesquisarFornecedores)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCopiarCNPJ))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addComponent(btnCopiarCNPJ)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 846, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +185,7 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCopiarCNPJ)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
@@ -216,26 +216,79 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
     }//GEN-LAST:event_rbPesquisarPorNomeActionPerformed
 
     private void btnPesquisarFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarFornecedoresActionPerformed
-        String sqlquery = "SELECT tbl_fornecedor.cnpj , tbl_fornecedor.nomefornecedor, tbl_fornecedor.notavelocidade, tbl_fornecedor.notapreco, tbl_fornecedor.notaposvenda, tbl_fornecedor.notaqualidade FROM tbl_fornecedor "
-                + " INNER JOIN tbl_fornecedor_material ON tbl_fornecedor_material.cnpj = tbl_fornecedor.cnpj WHERE tbl_fornecedor_material.codmaterial = " + Integer.parseInt(txtCodigoMaterial.getText().trim());
+        material = null;
+        try{
+            if (rbPesquisaPorCodigo.isSelected()) {
+                if (txtCodigoMaterial.getText().isEmpty()) {
+                    throw new Exception("Campo de pesquisa vazio. Favor insira um Codigo de Material para pesquisa.");
+                    
+                } else {
+                    String sqlquery = "SELECT tbl_fornecedor.cnpj , tbl_fornecedor.nomefornecedor as Nome_Fornecedor, tbl_fornecedor.notavelocidade as Nota_Velocidade, "
+                            + "tbl_fornecedor.notapreco as Nota_Preco, tbl_fornecedor.notaposvenda as Nota_PosVenda, tbl_fornecedor.notaqualidade as Nota_Qualidade FROM tbl_fornecedor "
+                            + " INNER JOIN tbl_fornecedor_material ON tbl_fornecedor_material.cnpj = tbl_fornecedor.cnpj WHERE tbl_fornecedor_material.codmaterial = " + Integer.parseInt(txtCodigoMaterial.getText().trim());
+                    Statement stmt;
+                    ResultSet rs;
+                    
+                    material = daoMaterial.consultar(Integer.parseInt(txtCodigoMaterial.getText().trim()));
+                    if (material == null) {
+                    throw new Exception("Codigo do material informado não existe.\n "
+                            + "Use a lista de materiais p/ procura-lo pelo seu nome caso não lembre seu código.");
+                    } else {
+                        for (int i = 0; i < listaComboMaterial.size(); i++) {
+                            if (material.getCodMaterial() == listaComboMaterial.get(i).getCodMaterial()) {
+                                cmbNomeMaterial.setSelectedItem(material.getNomeMaterial());
+                                break;
+                            }
+                        }
+                    }
+                    
+                    
+                    try {
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableFornecedoresDisponiveis.setModel(DbUtils.resultSetToTableModel(rs));
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                        
+                    }
+                }
+            } else if (rbPesquisarPorNome.isSelected()) {
+                String sqlquery = "SELECT tf.cnpj , tf.nomefornecedor as Nome_Fornecedor, tf.notavelocidade as Nota_Velocidade, tf.notapreco as Nota_Preco, tf.notaposvenda as Nota_PosVenda, tf.notaqualidade as Nota_Qualidade" +
+                            " FROM tbl_fornecedor tf INNER JOIN tbl_fornecedor_material tfm ON tfm.cnpj = tf.cnpj" +
+                            " INNER JOIN tbl_material tm ON tfm.CodMaterial = tm.CodMaterial" +
+                            " WHERE tm.nomematerial = '" + cmbNomeMaterial.getSelectedItem() + "'";
+                Statement stmt;
+                ResultSet rs;
 
-        Statement stmt;
-        ResultSet rs;
+                try {
+                    stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                    rs = stmt.executeQuery(sqlquery);
+                    jTableFornecedoresDisponiveis.setModel(DbUtils.resultSetToTableModel(rs));
 
-        try {
-            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery(sqlquery);
-            jTableFornecedoresDisponiveis.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException ex) {
-            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha na pesquisa: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnPesquisarFornecedoresActionPerformed
 
     private void btnCopiarCNPJActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarCNPJActionPerformed
-        String myString = jTableFornecedoresDisponiveis.getValueAt(jTableFornecedoresDisponiveis.getSelectedRow(), 0).toString();
-        StringSelection stringSelection = new StringSelection(myString);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(stringSelection, null);
+        try{
+            if (jTableFornecedoresDisponiveis.getSelectedRow() != -1){
+                String myString = jTableFornecedoresDisponiveis.getValueAt(jTableFornecedoresDisponiveis.getSelectedRow(), 0).toString();
+                StringSelection stringSelection = new StringSelection(myString);
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(stringSelection, null);
+            } else {
+                throw new Exception("Nenhum resultado selecionado.");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnCopiarCNPJActionPerformed
 
     private void btnPesquisarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarMaterialActionPerformed
@@ -244,17 +297,20 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
             if (txtCodigoMaterial.getText().isEmpty()) {
                 throw new Exception("Codigo do Material não foi informado.\n"
                         + "Por favor informar um código de material p/ pesquisa.");
+                
             } else {
                 material = daoMaterial.consultar(Integer.parseInt(txtCodigoMaterial.getText().trim()));
 
                 if (material == null) {
                     throw new Exception("Codigo do material informado não existe.\n "
                             + "Use a lista de materiais p/ procura-lo pelo seu nome caso não lembre seu código.");
+                    
                 } else {
                     for (int i = 0; i < listaComboMaterial.size(); i++) {
                         if (material.getCodMaterial() == listaComboMaterial.get(i).getCodMaterial()) {
                             cmbNomeMaterial.setSelectedItem(material.getNomeMaterial());
                             break;
+                            
                         }
                     }
                 }
@@ -270,24 +326,28 @@ public class GUI_ConsultarFornecedorMaterial extends javax.swing.JFrame {
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
         listaComboMaterial = daoMaterial.listarMaterial();
+        
         try {
             for (int i = 0; i < listaComboMaterial.size(); i++) {
                 cmbNomeMaterial.addItem(listaComboMaterial.get(i).getNomeMaterial());
             }
             txtCodigoMaterial.setText("");
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            
         }
         String Codigo;
         Codigo = GUI_GerenciarCotacoesDeUmaRequisicao.codigoMaterialSelecionado;
         
         if(Codigo != null){
-        txtCodigoMaterial.setText(Codigo);
-        }
+            txtCodigoMaterial.setText(Codigo);
         
+        }
         txtCodigoMaterial.setEnabled(true);
         btnPesquisarMaterial.setEnabled(true);
         btnPesquisarFornecedores.setEnabled(true);
+        
     }//GEN-LAST:event_formWindowOpened
 
     private void cmbNomeMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNomeMaterialActionPerformed

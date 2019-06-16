@@ -139,11 +139,11 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo", "Nome", "Quantidade"
+                "REQUISICAO", "CODIGO_MATERIAL", "NOME", "QUANTIDADE"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -159,11 +159,11 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo Material", "CNPJ do Fornecedor", "Status da Cotacao", "Valor Final"
+                "NUMERO_COTACAO", "CODIGO_REQUISICAO", "DATA_COTACAO", "DATA_ENTREGA", "CNPJ", "CODIGO_MATERIAL", "PRECO_UNITARIO", "SITUACAO_COTACAO", "VENCEDORA"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, false, true
+                false, false, false, false, false, false, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -413,20 +413,19 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         try {
             requisicaoCompra = null;
             if (txtIdRequisicao.getText().isEmpty()) {
-
                 throw new Exception("Codigo de Requisicao não foi informado.\n"
                         + "Por favor informar um código de requisicao p/ pesquisa.");
+                
             } else {
-
                 requisicaoCompra = daoRequisicaoCompra.consultar(Integer.parseInt(txtIdRequisicao.getText().trim()));
-
+                
                 if (requisicaoCompra == null) {
-
-                    throw new Exception("Codigo de requisicao informado não existe.\n ");
+                    throw new Exception("Codigo de requisicao informado não existe. ");
+                    
                 } else {
                     //String sqlquery = "SELECT tms.numsolicitacao, tms.codmaterial, tm.nomematerial, tms.qtdematerial from tbl_material tm, tbl_material_solicitado tms where tm.codmaterial = tms.codmaterial";
                     //String sqlquery = "SELECT tbl_material_solicitado.numsolicitacao, tbl_material_solicitado.codmaterial, tbl_material.nomematerial, tbl_material_solicitado.qtdematerial from tbl_material inner join tbl_material_solicitado on tbl_material.codmaterial = tbl_material_solicitado.codmaterial";
-                    String sqlquery = "SELECT tms.numsolicitacao as REQUISICAO, tms.codmaterial as CODIGOMATERIAL, tm.nomematerial as NOME, tms.qtdematerial as QUANTIDADE "
+                    String sqlquery = "SELECT tms.numsolicitacao as REQUISICAO, tms.codmaterial as CODIGO_MATERIAL, tm.nomematerial as NOME, tms.qtdematerial as QUANTIDADE "
                             + "from tbl_material tm, tbl_material_solicitado tms "
                             + "where tms.codmaterial = tm.codmaterial AND tms.numsolicitacao = " + txtIdRequisicao.getText().trim();
                     Statement stmt;
@@ -437,14 +436,13 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                         stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                         rs = stmt.executeQuery(sqlquery);
                         jTableMaterialRequisitado.setModel(DbUtils.resultSetToTableModel(rs));
-                        
 
                     } catch (SQLException ex) {
-
                         Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                        
                     }
+                    
                     dm = (DefaultTableModel) jTableMaterialRequisitado.getModel();
-
                     //Carregando a Descricao do Material nao Encontrado
                     requisicaoCompra = daoRequisicaoCompra.consultar(Integer.parseInt(txtIdRequisicao.getText().trim()));
                     jTextAreaDescricaoMaterial.setText("");
@@ -453,7 +451,7 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                     //Carregando as Cotacoes Previamente Cadastradas
                     sqlquery = "Select NUMCOTACAO as Numero_Cotacao, NUMSOLICITACAO as Codigo_Requisicao, "
                             + "DATACOTACAO as Data_Cotacao, DATAENTREGA as Data_Entrega,"
-                            + "CNPJ, CODMATERIAL as Codigo_Material, PRECOUNITARIO,"
+                            + "CNPJ, CODMATERIAL as Codigo_Material, PRECOUNITARIO as Preco_Unitario,"
                             + "SITUACAOCOTACAO as Situacao_Cotacao, VENCEDORA from tbl_cotacao where NUMSOLICITACAO = " + txtIdRequisicao.getText().trim();
 
                     try {
@@ -462,11 +460,10 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                         jTableCotacaoMaterial.setModel(DbUtils.resultSetToTableModel(rs));
 
                     } catch (SQLException ex) {
-
                         Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                        
                     }
                     dm = (DefaultTableModel) jTableCotacaoMaterial.getModel();
-
                     btnAdicionarMaterialTabelaCotacao.setEnabled(true);
                     btnCadastrarMateriais.setEnabled(true);
                     btnConsultarFornecedoresMaterial.setEnabled(true);
@@ -490,16 +487,10 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
                         //jTableMaterialRequisitado.getCellEditor().
                     } 
                 } 
-                 
-                
-                
-                
-                
-                        
             }
         } catch (Exception ex) {
-
             JOptionPane.showMessageDialog(null, "Falha ao pesquisar requisicao: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -709,21 +700,23 @@ public class GUI_GerenciarCotacoesDeUmaRequisicao extends javax.swing.JFrame {
         boolean isNumber;
         isNumber = isNumeric(txtCodigoMaterialCadastrado.getText());
         System.out.println(isNumber);
+        
         if(txtCodigoMaterialCadastrado.getText().isEmpty() == true || isNumber == false){
-        JOptionPane.showMessageDialog(null, "Digite um Codigo Numerico no campo 'Codigo do Material' ", "Erro", JOptionPane.ERROR_MESSAGE);        
-        }else{
-            material = new Material();
-        material = daoMaterial.consultar(Integer.parseInt(txtCodigoMaterialCadastrado.getText().trim()));
-        if (material == null) {
-            JOptionPane.showMessageDialog(null, "Material Nao Encontrado no Sistema", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Digite um Codigo Numerico no campo 'Codigo do Material' ", "Erro", JOptionPane.ERROR_MESSAGE);
+            
         } else {
-            int codigo = 0;
-
-            codigo = material.getCodMaterial();
-
-            DefaultTableModel model = (DefaultTableModel) jTableCotacaoMaterial.getModel();
-            model.addRow(new Object[]{"", txtIdRequisicao.getText(), "", "", "", codigo, 0, "Em Aberto", "NAO"});
-        }
+            material = new Material();
+            material = daoMaterial.consultar(Integer.parseInt(txtCodigoMaterialCadastrado.getText().trim()));
+            if (material == null) {
+                JOptionPane.showMessageDialog(null, "Material Nao Encontrado no Sistema", "Erro", JOptionPane.ERROR_MESSAGE);
+                
+            } else {
+                int codigo = 0;
+                codigo = material.getCodMaterial();
+                DefaultTableModel model = (DefaultTableModel) jTableCotacaoMaterial.getModel();
+                model.addRow(new Object[]{"", txtIdRequisicao.getText(), "", "", "", codigo, 0, "Em Aberto", "NAO"});
+                
+            }
         }
     }//GEN-LAST:event_btnInserirNaTabelaCotacaoMaterialCadastradoActionPerformed
 

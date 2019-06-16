@@ -88,24 +88,24 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
 
         jTableCotacoes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id Requisição", "Id Cotação", "Nome do Material", "Valor Cotação", "Data da Cotação", "Satus da Cotação"
+                "NUMERO_COTACAO", "CODIGO_REQUISICAO", "DATA_COTACAO", "DATA_ENTREGA", "CNPJ", "CODIGO_MATERIAL", "PRECO_UNITARIO", "SITUACAO_COTACAO", "VENCEDORA"
             }
         ));
         jScrollPane1.setViewportView(jTableCotacoes);
@@ -174,9 +174,10 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1295, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chkCotacoesVencedoras)
                     .addComponent(chkStatusCotacao)
                     .addGroup(layout.createSequentialGroup()
@@ -204,9 +205,8 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnRecarregaTabela)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1064, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addComponent(jButton1)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -254,7 +254,15 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                 if (cotacao == null) {
                     throw new Exception("Id Cotacao informado não existe.\n ");
                 } else {
-                    String sqlquery = "select * from tbl_cotacao where NUMCOTACAO = " + txtIDCotacao.getText().trim();
+                    String sqlquery = "select NumCotacao as Numero_Cotacao," +
+                                    "  NumSolicitacao as Codigo_Requisicao," +
+                                    "  DataCotacao as Data_Cotacao," +
+                                    "  DataEntrega as Data_Entrega," +
+                                    "  CNPJ," +
+                                    "  CodMaterial as Codigo_Material," +
+                                    "  PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao," +
+                                    "  Vencedora from tbl_cotacao where NUMCOTACAO = " + txtIDCotacao.getText().trim();
         
                     Statement stmt;
                     ResultSet rs;
@@ -295,6 +303,7 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
             txtIDCotacao.setEnabled(true);
             btnBuscarCotacao.setEnabled(true);
             txtIDRequisicao.setEnabled(false);
+            txtIDRequisicao.setText("");
             btnBuscarRequisicao.setEnabled(false);
         }
     }//GEN-LAST:event_rbIDCotacaoActionPerformed
@@ -304,12 +313,21 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
             txtIDCotacao.setEnabled(false);
             btnBuscarCotacao.setEnabled(false);
             txtIDRequisicao.setEnabled(true);
+            txtIDCotacao.setText("");
             btnBuscarRequisicao.setEnabled(true);
         }
     }//GEN-LAST:event_rbIDRequisicaoActionPerformed
 
     private void btnRecarregaTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregaTabelaActionPerformed
-        String sqlquery = "select * from tbl_cotacao";
+        String sqlquery = "select NumCotacao as Numero_Cotacao," +
+                                    "  NumSolicitacao as Codigo_Requisicao," +
+                                    "  DataCotacao as Data_Cotacao," +
+                                    "  DataEntrega as Data_Entrega," +
+                                    "  CNPJ," +
+                                    "  CodMaterial as Codigo_Material," +
+                                    "  PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao," +
+                                    "  Vencedora  from tbl_cotacao";
         
         Statement stmt;
         ResultSet rs;
@@ -322,7 +340,11 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         } catch(SQLException ex){
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();       
+        DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();  
+        
+        chkCotacoesVencedoras.setSelected(false);
+        chkStatusCotacao.setSelected(false);
+        
     }//GEN-LAST:event_btnRecarregaTabelaActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -331,7 +353,15 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoCotacao = new DaoCotacao(conexao.conectar());
         daoRequisicao = new DaoRequisicaoCompra(conexao.conectar());
-        String sqlquery = "select * from tbl_cotacao";
+        String sqlquery = "select NumCotacao as Numero_Cotacao," +
+                                "  NumSolicitacao as Codigo_Requisicao," +
+                                "  DataCotacao as Data_Cotacao," +
+                                "  DataEntrega as Data_Entrega," +
+                                "  CNPJ," +
+                                "  CodMaterial as Codigo_Material," +
+                                "  PrecoUnitario as Preco_Unitario, " +
+                                "  SituacaoCotacao as Situacao_Cotacao," +
+                                "  Vencedora  from tbl_cotacao";
         
         Statement stmt;
         ResultSet rs;
@@ -359,7 +389,15 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                 if (requisicao == null) {
                     throw new Exception("Id Requisicao de Compra informado não existe.\n ");
                 } else {
-                    String sqlquery = "select * from tbl_cotacao where NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
+                    String sqlquery = "select NumCotacao as Numero_Cotacao," +
+                                    "  NumSolicitacao as Codigo_Requisicao," +
+                                    "  DataCotacao as Data_Cotacao," +
+                                    "  DataEntrega as Data_Entrega," +
+                                    "  CNPJ," +
+                                    "  CodMaterial as Codigo_Material," +
+                                    "  PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao," +
+                                    "  Vencedora from tbl_cotacao where NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
         
                     Statement stmt;
                     ResultSet rs;
@@ -382,8 +420,16 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
 
     private void chkStatusCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkStatusCotacaoActionPerformed
         if(chkStatusCotacao.isSelected()){
-            //Arrumar aqui dps
-            String sqlquery = "select * from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' ";
+            chkCotacoesVencedoras.setSelected(false);
+            String sqlquery = "select NumCotacao as Numero_Cotacao," +
+                                    "  NumSolicitacao as Codigo_Requisicao," +
+                                    "  DataCotacao as Data_Cotacao," +
+                                    "  DataEntrega as Data_Entrega," +
+                                    "  CNPJ," +
+                                    "  CodMaterial as Codigo_Material," +
+                                    "  PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao," +
+                                    "  Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' ";
         
                     Statement stmt;
                     ResultSet rs;
@@ -404,17 +450,32 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
     }//GEN-LAST:event_chkStatusCotacaoActionPerformed
 
     private void btnCopiarIDCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarIDCotacaoActionPerformed
-        //PARA COPIAR O TEXTO SELECIONADO DA TABELA PARA O BUFFER (CLIPBOARD)
-        String myString = jTableCotacoes.getValueAt(jTableCotacoes.getSelectedRow(), 0).toString();
-        StringSelection stringSelection = new StringSelection(myString);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(stringSelection, null);
+        try{
+            if (jTableCotacoes.getSelectedRow() != -1){
+                String myString = jTableCotacoes.getValueAt(jTableCotacoes.getSelectedRow(), 0).toString();
+                StringSelection stringSelection = new StringSelection(myString);
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(stringSelection, null);
+            } else {
+                throw new Exception("Nenhum resultado selecionado.");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnCopiarIDCotacaoActionPerformed
 
     private void chkCotacoesVencedorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkCotacoesVencedorasActionPerformed
     if(chkCotacoesVencedoras.isSelected()){
-            //Arrumar aqui dps
-            String sqlquery = "select * from tbl_cotacao where VENCEDORA = 'SIM' ";
+            chkStatusCotacao.setSelected(false);
+            String sqlquery = "select NumCotacao as Numero_Cotacao," +
+                                    "  NumSolicitacao as Codigo_Requisicao," +
+                                    "  DataCotacao as Data_Cotacao," +
+                                    "  DataEntrega as Data_Entrega," +
+                                    "  CNPJ," +
+                                    "  CodMaterial as Codigo_Material," +
+                                    "  PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao," +
+                                    "  Vencedora from tbl_cotacao where VENCEDORA = 'SIM' ";
         
                     Statement stmt;
                     ResultSet rs;
