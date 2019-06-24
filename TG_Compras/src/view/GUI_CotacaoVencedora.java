@@ -657,6 +657,9 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         String importancia;
         //Baixa * 2, Intermediaria * 3, Alta * 4
         
+        /*
+        Precisa Arranjar uma maneira de Implementar o Calculo das Datas da Entrega Rapida!!
+        */
         if(chkEntregaRapida.isSelected()){
             importancia = cmbImportanciaEntregaRapida.getSelectedItem().toString();
             if(importancia.trim().equals("Baixa")){
