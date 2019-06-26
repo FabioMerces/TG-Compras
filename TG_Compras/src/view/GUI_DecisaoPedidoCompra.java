@@ -30,6 +30,9 @@ public class GUI_DecisaoPedidoCompra extends javax.swing.JFrame {
     /**
      * Creates new form GUI_DecisaoPedidoCompra
      */
+    private String user = "12345678900";
+    private String nome = "Jose";
+    
     public GUI_DecisaoPedidoCompra() {
         initComponents();
     }
@@ -273,4 +276,11 @@ public class GUI_DecisaoPedidoCompra extends javax.swing.JFrame {
     private Conexao conexao = null;
     private PedidoCompra pedido;
     private DaoPedCompra daoPedido;
+    
+    public void setUser(String user) {
+        this.user = user;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 }

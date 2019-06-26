@@ -35,6 +35,10 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
     /**
      * Creates new form GUI_FinalizarCompra
      */
+    
+    private String user = "12345678900";
+    private String nome = "Jose";
+    
     public GUI_FinalizarCompra() {
         initComponents();
     }
@@ -234,7 +238,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
             }
             
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Requisicao: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Requisicao\n\n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarRequisicaoActionPerformed
 
@@ -246,22 +250,29 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
         daoMaterial = new DaoMaterial(conexao.conectar());
         daoCotacao = new DaoCotacao(conexao.conectar());
         daoRequisicao = new DaoRequisicaoCompra(conexao.conectar());
+        txtUsuario.setText(user);
         
         
     }//GEN-LAST:event_formWindowOpened
 
     private void btnConcluirTodosItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConcluirTodosItensActionPerformed
         try {
+            requisicao = new RequisicaoCompra();
+            requisicao = daoRequisicao.consultar(Integer.parseInt(txtNumeroRequisicao.getText()));
+            
             if (jTableCotacoesMaterial.getRowCount() == 0) {
                 throw new Exception("Nao existe nenhuma Cotacao vinculada a essa Requisicao.");
                 
             } else if (jTablePedidosCompra.getRowCount() == 0) {
                 throw new Exception("Nao existe nenhum Pedido de compra vinculado a essa Requisicao.");
                 
+            } else if (requisicao.getSituacaoSolicitacao().equals("Finalizado") ) {
+                throw new Exception("Essa requisicao ja foi finalizada.");
+                
             } else {
                 cotacao = new Cotacao();
                 pedido = new PedidoCompra();
-                requisicao = new RequisicaoCompra();
+                
                 
                 int cont = 0;
                 boolean verificaPedido = true;
@@ -292,10 +303,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                     daoCotacao.alterar(cotacao);
                 }
 
-                requisicao = daoRequisicao.consultar(Integer.parseInt(txtNumeroRequisicao.getText()));
-                System.out.println(requisicao.getSituacaoSolicitacao());
                 requisicao.setSituacaoSolicitacao("Finalizado");
-                System.out.println(requisicao.getSituacaoSolicitacao());
                 daoRequisicao.alterar(requisicao); 
                 System.out.println("teste");
                 JOptionPane.showMessageDialog(null, "Requisicao e itens relacionados finalizados com Sucesso");
@@ -315,7 +323,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
             atualizaTabela();
             
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao finalizar Requisicao " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao finalizar Requisicao\n\n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnConcluirTodosItensActionPerformed
 
@@ -407,4 +415,11 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
     private DaoCotacao daoCotacao;
     private RequisicaoCompra requisicao;
     private DaoRequisicaoCompra daoRequisicao;
+    
+    public void setUser(String user) {
+        this.user = user;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 }

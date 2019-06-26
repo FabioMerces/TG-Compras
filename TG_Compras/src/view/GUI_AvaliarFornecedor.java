@@ -82,15 +82,51 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
 
         cmbNotaPreco.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
         cmbNotaPreco.setEnabled(false);
+        cmbNotaPreco.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbNotaPrecoPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
 
         cmbNotaPosVenda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
         cmbNotaPosVenda.setEnabled(false);
+        cmbNotaPosVenda.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbNotaPosVendaPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
 
         cmbNotaVelocidadeEntrega.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
         cmbNotaVelocidadeEntrega.setEnabled(false);
+        cmbNotaVelocidadeEntrega.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbNotaVelocidadeEntregaPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
 
         cmbNotaQualidadeProdutos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
         cmbNotaQualidadeProdutos.setEnabled(false);
+        cmbNotaQualidadeProdutos.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbNotaQualidadeProdutosPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
 
         jLabel4.setText("Quanto maior a nota melhor é o Preco do Fornecedor");
 
@@ -206,12 +242,12 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addComponent(txtCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnPesquisar)
-                                .addGap(18, 18, 18)
+                                .addGap(56, 56, 56)
                                 .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtRazaoSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(pnlNotas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)))
@@ -249,43 +285,65 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        
         fornecedor = null;
-        
         String CNPJ = txtCNPJ.getText().replace(".", "").replace("-", "").replace("/", "");
-        fornecedor = daoFornecedor.consultar(CNPJ);
-        if(fornecedor != null){
-            
-            txtRazaoSocial.setText(fornecedor.getNomeFornecedor());
-
-            
-            cmbNotaPosVenda.setSelectedIndex((fornecedor.getNotaPosVenda() - 1));
-            cmbNotaPreco.setSelectedIndex((fornecedor.getNotaPreco()- 1));
-            cmbNotaQualidadeProdutos.setSelectedIndex((fornecedor.getNotaQualidade()- 1));
-            cmbNotaVelocidadeEntrega.setSelectedIndex((fornecedor.getNotaVelocidadeEntrega()- 1));
+        try {
+            if (CNPJ.length() == 0) {
+                throw new Exception("CNPJ não foi informado.\n" + "Por favor informar um CNPJ para pesquisa.");
+            } else {
+                fornecedor = daoFornecedor.consultar(CNPJ);
+                if (fornecedor == null) {
+                    throw new Exception("Fornecedor nao encontrado.\n ");
                     
-            
-            
-            
-            btnSalvar.setEnabled(true);
-            cmbNotaPosVenda.setEnabled(true);
-            cmbNotaPreco.setEnabled(true);
-            cmbNotaQualidadeProdutos.setEnabled(true);
-            cmbNotaVelocidadeEntrega.setEnabled(true);
-            txtCNPJ.setEnabled(false);
-            txtNtTotalRanking.setEnabled(true);
-            
-            
-                if(cmbNotaPosVenda.getSelectedItem() != null && cmbNotaPreco.getSelectedItem() != null &&
-                    cmbNotaQualidadeProdutos.getSelectedItem() != null && cmbNotaVelocidadeEntrega.getSelectedItem() != null ){
-                        
-                        txtNtTotalRanking.setText(Integer.toString(fornecedor.calculaNotaTotal()));                
+                } else {
+                    txtRazaoSocial.setText(fornecedor.getNomeFornecedor());
+                    
+                    if (fornecedor.getNotaPosVenda() == 0) {
+                        cmbNotaPosVenda.setSelectedIndex(0);
+                    } else {
+                        cmbNotaPosVenda.setSelectedIndex((fornecedor.getNotaPosVenda() - 1));
                     }
-                
-                
-            
-        }else{
-        JOptionPane.showMessageDialog(null, "Fornecedor nao encontrado");
+                    
+                    if (fornecedor.getNotaPreco() == 0) {
+                        cmbNotaPreco.setSelectedIndex(0);
+                    } else {
+                        cmbNotaPreco.setSelectedIndex((fornecedor.getNotaPreco() - 1));
+                    }
+                    
+                    if (fornecedor.getNotaQualidade() == 0) {
+                        cmbNotaQualidadeProdutos.setSelectedIndex(0);
+                    } else {
+                        cmbNotaQualidadeProdutos.setSelectedIndex((fornecedor.getNotaQualidade() - 1));
+                    }
+                    
+                    if (fornecedor.getNotaVelocidadeEntrega() == 0) {
+                        cmbNotaVelocidadeEntrega.setSelectedIndex(0);
+                    } else {
+                        cmbNotaVelocidadeEntrega.setSelectedIndex((fornecedor.getNotaVelocidadeEntrega() - 1));
+                    }
+                    /*cmbNotaPosVenda.setSelectedIndex((fornecedor.getNotaPosVenda()- 1));
+                    cmbNotaPreco.setSelectedIndex((fornecedor.getNotaPreco()- 1));
+                    cmbNotaQualidadeProdutos.setSelectedIndex((fornecedor.getNotaQualidade()- 1));
+                    cmbNotaVelocidadeEntrega.setSelectedIndex((fornecedor.getNotaVelocidadeEntrega()- 1));
+                    */
+                    
+                    btnSalvar.setEnabled(true);
+                    cmbNotaPosVenda.setEnabled(true);
+                    cmbNotaPreco.setEnabled(true);
+                    cmbNotaQualidadeProdutos.setEnabled(true);
+                    cmbNotaVelocidadeEntrega.setEnabled(true);
+                    //txtCNPJ.setEnabled(false);
+                    txtNtTotalRanking.setEnabled(true);
+
+                    if(cmbNotaPosVenda.getSelectedItem() != null && cmbNotaPreco.getSelectedItem() != null &&
+                       cmbNotaQualidadeProdutos.getSelectedItem() != null && cmbNotaVelocidadeEntrega.getSelectedItem() != null ){
+                            txtNtTotalRanking.setText(Integer.toString(fornecedor.calculaNotaTotal())); 
+
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar fornecedor\n\n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
         
     }//GEN-LAST:event_btnPesquisarActionPerformed
@@ -299,37 +357,75 @@ public class GUI_AvaliarFornecedor extends javax.swing.JFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         
-        
-        
-        
-        
         if(cmbNotaPosVenda.getSelectedItem() == null || cmbNotaPreco.getSelectedItem() == null ||
-                cmbNotaQualidadeProdutos.getSelectedItem() == null || cmbNotaVelocidadeEntrega.getSelectedItem() == null ){
-        
-            JOptionPane.showMessageDialog(null, "Selecione uma nota para cada requisito do fornecedor");
-        }else{
-        
-        fornecedor.setNotaPosVenda(Integer.parseInt(cmbNotaPosVenda.getSelectedItem().toString()));        
-        fornecedor.setNotaPreco(Integer.parseInt(cmbNotaPreco.getSelectedItem().toString()));
-        fornecedor.setNotaQualidade(Integer.parseInt(cmbNotaQualidadeProdutos.getSelectedItem().toString()));
-        fornecedor.setNotaVelocidadeEntrega(Integer.parseInt(cmbNotaVelocidadeEntrega.getSelectedItem().toString()));
-            
-        daoFornecedor.alterar(fornecedor);
-        
-        btnSalvar.setEnabled(false);
-        cmbNotaPosVenda.setEnabled(false);
-        cmbNotaPreco.setEnabled(false);
-        cmbNotaQualidadeProdutos.setEnabled(false);
-        cmbNotaVelocidadeEntrega.setEnabled(false);
-        txtNtTotalRanking.setText("");
-        txtRazaoSocial.setText("");
-        txtCNPJ.setText("");
-        txtCNPJ.setValue(null);
-        txtCNPJ.setEnabled(true);
-        txtNtTotalRanking.setEnabled(false);
-        fornecedor = null;
+           cmbNotaQualidadeProdutos.getSelectedItem() == null || cmbNotaVelocidadeEntrega.getSelectedItem() == null ) {
+                JOptionPane.showMessageDialog(null, "Selecione uma nota para cada requisito do fornecedor");
+        } else {
+            fornecedor.setNotaPosVenda(Integer.parseInt(cmbNotaPosVenda.getSelectedItem().toString()));        
+            fornecedor.setNotaPreco(Integer.parseInt(cmbNotaPreco.getSelectedItem().toString()));
+            fornecedor.setNotaQualidade(Integer.parseInt(cmbNotaQualidadeProdutos.getSelectedItem().toString()));
+            fornecedor.setNotaVelocidadeEntrega(Integer.parseInt(cmbNotaVelocidadeEntrega.getSelectedItem().toString()));
+
+            daoFornecedor.alterar(fornecedor);
+
+            btnSalvar.setEnabled(false);
+            cmbNotaPosVenda.setEnabled(false);
+            cmbNotaPreco.setEnabled(false);
+            cmbNotaQualidadeProdutos.setEnabled(false);
+            cmbNotaVelocidadeEntrega.setEnabled(false);
+            txtNtTotalRanking.setText("");
+            txtRazaoSocial.setText("");
+            txtCNPJ.setText("");
+            txtCNPJ.setValue(null);
+            txtCNPJ.setEnabled(true);
+            txtNtTotalRanking.setEnabled(false);
+            fornecedor = null;
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void cmbNotaPrecoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbNotaPrecoPopupMenuWillBecomeInvisible
+        Integer nTotal;
+        Integer n1 = Integer.parseInt(cmbNotaPosVenda.getSelectedItem().toString());        
+        Integer n2 = Integer.parseInt(cmbNotaPreco.getSelectedItem().toString());
+        Integer n3 = Integer.parseInt(cmbNotaQualidadeProdutos.getSelectedItem().toString());
+        Integer n4 = Integer.parseInt(cmbNotaVelocidadeEntrega.getSelectedItem().toString());
+        
+        nTotal = (n1 + n2 + n3 + n4)/4;
+        txtNtTotalRanking.setText(Integer.toString(nTotal) );
+    }//GEN-LAST:event_cmbNotaPrecoPopupMenuWillBecomeInvisible
+
+    private void cmbNotaPosVendaPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbNotaPosVendaPopupMenuWillBecomeInvisible
+        Integer nTotal;
+        Integer n1 = Integer.parseInt(cmbNotaPosVenda.getSelectedItem().toString());        
+        Integer n2 = Integer.parseInt(cmbNotaPreco.getSelectedItem().toString());
+        Integer n3 = Integer.parseInt(cmbNotaQualidadeProdutos.getSelectedItem().toString());
+        Integer n4 = Integer.parseInt(cmbNotaVelocidadeEntrega.getSelectedItem().toString());
+        
+        nTotal = (n1 + n2 + n3 + n4)/4;
+        txtNtTotalRanking.setText(Integer.toString(nTotal) );
+    }//GEN-LAST:event_cmbNotaPosVendaPopupMenuWillBecomeInvisible
+
+    private void cmbNotaVelocidadeEntregaPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbNotaVelocidadeEntregaPopupMenuWillBecomeInvisible
+        Integer nTotal;
+        Integer n1 = Integer.parseInt(cmbNotaPosVenda.getSelectedItem().toString());        
+        Integer n2 = Integer.parseInt(cmbNotaPreco.getSelectedItem().toString());
+        Integer n3 = Integer.parseInt(cmbNotaQualidadeProdutos.getSelectedItem().toString());
+        Integer n4 = Integer.parseInt(cmbNotaVelocidadeEntrega.getSelectedItem().toString());
+        
+        nTotal = (n1 + n2 + n3 + n4)/4;
+        txtNtTotalRanking.setText(Integer.toString(nTotal) );
+    }//GEN-LAST:event_cmbNotaVelocidadeEntregaPopupMenuWillBecomeInvisible
+
+    private void cmbNotaQualidadeProdutosPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbNotaQualidadeProdutosPopupMenuWillBecomeInvisible
+        Integer nTotal;
+        Integer n1 = Integer.parseInt(cmbNotaPosVenda.getSelectedItem().toString());        
+        Integer n2 = Integer.parseInt(cmbNotaPreco.getSelectedItem().toString());
+        Integer n3 = Integer.parseInt(cmbNotaQualidadeProdutos.getSelectedItem().toString());
+        Integer n4 = Integer.parseInt(cmbNotaVelocidadeEntrega.getSelectedItem().toString());
+        
+        nTotal = (n1 + n2 + n3 + n4)/4;
+        txtNtTotalRanking.setText(Integer.toString(nTotal) );
+    }//GEN-LAST:event_cmbNotaQualidadeProdutosPopupMenuWillBecomeInvisible
 
     /**
      * @param args the command line arguments

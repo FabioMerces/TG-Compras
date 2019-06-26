@@ -43,9 +43,9 @@ public class GUI_Menu extends javax.swing.JFrame {
         toBack();
     }
     
-    private String user;
+    private String user = "12345678900";
+    private String nome = "Jose";
     private String nivel;
-    private String nome;
     public static String userCPF;
     
     
@@ -694,14 +694,20 @@ public class GUI_Menu extends javax.swing.JFrame {
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
-                        new GUI_DecisaoPedidoCompra().setVisible(true);
+                        GUI_DecisaoPedidoCompra menuDecisao = new GUI_DecisaoPedidoCompra();
+                        menuDecisao.setNome(nome);
+                        menuDecisao.setUser(user);
+                        menuDecisao.setVisible(true);
                     }
 
             } catch(Exception ex){
                 JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            new GUI_DecisaoPedidoCompra().setVisible(true);
+            GUI_DecisaoPedidoCompra menuDecisao = new GUI_DecisaoPedidoCompra();
+            menuDecisao.setNome(nome);
+            menuDecisao.setUser(user);
+            menuDecisao.setVisible(true);
         }
         
     }//GEN-LAST:event_jMenuItemDecisaoPedidoCompraActionPerformed
@@ -714,14 +720,20 @@ public class GUI_Menu extends javax.swing.JFrame {
                         throw new Exception("Nivel de acesso insuficiente.");
                         
                     }else{
-                        new GUI_FinalizarCompra().setVisible(true);
+                        GUI_FinalizarCompra menuFinalizar = new GUI_FinalizarCompra();
+                        menuFinalizar.setNome(nome);
+                        menuFinalizar.setUser(user);
+                        menuFinalizar.setVisible(true);
                     }
 
             } catch(Exception ex){
                 JOptionPane.showMessageDialog(null, "Falha ao tentar abrir janela: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            new GUI_FinalizarCompra().setVisible(true);
+            GUI_FinalizarCompra menuFinalizar = new GUI_FinalizarCompra();
+            menuFinalizar.setNome(nome);
+            menuFinalizar.setUser(user);
+            menuFinalizar.setVisible(true);
         }
         
     }//GEN-LAST:event_jMenuItemFinalizarCompraActionPerformed
