@@ -126,6 +126,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jTablePedidosCompra);
 
         btnConcluirTodosItens.setText("Concluir TODOS os itens relacionados a Requisicao de Compra");
+        btnConcluirTodosItens.setEnabled(false);
         btnConcluirTodosItens.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConcluirTodosItensActionPerformed(evt);
@@ -165,7 +166,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                         .addGap(0, 306, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(149, 149, 149)
+                .addGap(253, 253, 253)
                 .addComponent(btnConcluirTodosItens)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -187,9 +188,9 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnConcluirTodosItens)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -235,8 +236,11 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                         Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
                         
                     }
+                    btnConcluirTodosItens.setEnabled(true);
+                    btnBuscarRequisicao.setEnabled(false);
+                    txtNumeroRequisicao.setEnabled(false);
+                    DefaultTableModel dmp = (DefaultTableModel) jTablePedidosCompra.getModel();
                     
-                    DefaultTableModel dmp = (DefaultTableModel) jTablePedidosCompra.getModel();      
                 }
             }
             
@@ -267,12 +271,21 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
             int quantMatSolic = 0;
             
             if (jTableCotacoesMaterial.getRowCount() == 0) {
+                btnBuscarRequisicao.setEnabled(true);
+                txtNumeroRequisicao.setEnabled(true);
+                btnConcluirTodosItens.setEnabled(false);
                 throw new Exception("Nao existe nenhuma Cotacao vinculada a essa Requisicao.");
                 
             } else if (jTablePedidosCompra.getRowCount() == 0) {
+                btnBuscarRequisicao.setEnabled(true);
+                txtNumeroRequisicao.setEnabled(true);
+                btnConcluirTodosItens.setEnabled(false);
                 throw new Exception("Nao existe nenhum Pedido de compra vinculado a essa Requisicao.");
                 
             } else if (requisicao.getSituacaoSolicitacao().equals("Finalizado") ) {
+                btnBuscarRequisicao.setEnabled(true);
+                txtNumeroRequisicao.setEnabled(true);
+                btnConcluirTodosItens.setEnabled(false);
                 throw new Exception("Essa requisicao ja foi finalizada.");
                 
             } else {
@@ -331,14 +344,24 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                         requisicao.setSituacaoSolicitacao("Finalizado");
                         daoRequisicao.alterar(requisicao); 
                         JOptionPane.showMessageDialog(null, "Requisicao e itens relacionados finalizados com Sucesso");
+                        btnConcluirTodosItens.setEnabled(false);
+                        btnBuscarRequisicao.setEnabled(true);
+                        txtNumeroRequisicao.setEnabled(true);
+                        btnConcluirTodosItens.setEnabled(false);
                     } else {
                         JOptionPane.showMessageDialog(null, "Atencao, ha materiais solicitados sem pedido vinculado. Verifique"
                         + " esses materiais solicitados antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
+                        btnBuscarRequisicao.setEnabled(true);
+                        txtNumeroRequisicao.setEnabled(true);
+                        btnConcluirTodosItens.setEnabled(false);
                     }
                     
                 } else {
                     JOptionPane.showMessageDialog(null, "Atencao, ha pedidos nao processados. Verifique"
                         + " esses pedidos antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
+                        btnBuscarRequisicao.setEnabled(true);
+                        txtNumeroRequisicao.setEnabled(true);
+                        btnConcluirTodosItens.setEnabled(false);
                 }
                
             }
@@ -347,6 +370,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Falha ao finalizar Requisicao\n\n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+        
     }//GEN-LAST:event_btnConcluirTodosItensActionPerformed
 
     /**
