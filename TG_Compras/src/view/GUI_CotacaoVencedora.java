@@ -779,8 +779,8 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
             stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             rs = stmt.executeQuery(sqlquery);
             if(rs.next() == true){
-            numcotacao = rs.getInt("NumCotacao");
-            System.out.println(numcotacao);
+                numcotacao = rs.getInt("NumCotacao");
+                System.out.println(numcotacao);
             }
         } catch (SQLException ex) {
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);

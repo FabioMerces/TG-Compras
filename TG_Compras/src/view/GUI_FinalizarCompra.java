@@ -8,6 +8,7 @@ package view;
 import control.Conexao;
 import control.DaoCotacao;
 import control.DaoMaterial;
+import control.DaoMateriaisSolicitados;
 import control.DaoPedCompra;
 import control.DaoRequisicaoCompra;
 import java.sql.ResultSet;
@@ -22,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Cotacao;
 import model.Material;
+import model.MateriaisSolicitados;
 import model.PedidoCompra;
 import model.RequisicaoCompra;
 import net.proteanit.sql.DbUtils;
@@ -86,7 +88,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "ID Requisição de Compra", "Número Cotação", "Código Material", "Nome Material", "CNPJ Fornecedor", "Status"
+                "NUMERO_SOLICITACAO", "NUMERO_COTACAO", "CODIGO_MATERIAL", "NOME_MATERIAL", "CNPJ", "SITUACAO_COTACAO"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -110,7 +112,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "ID Requisição de Compra", "ID Pedido de Compra", "ID Cotação Vencedora", "Status"
+                "NUMERO_SOLICITACAO", "NUMERO_PEDIDO", "NUMERO_COTACAO", "SITUACAO_PEDIDO"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -160,7 +162,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnBuscarRequisicao))
                             .addComponent(jLabel4))
-                        .addGap(0, 64, Short.MAX_VALUE)))
+                        .addGap(0, 306, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(149, 149, 149)
@@ -210,8 +212,8 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                     Statement stmt;
                     ResultSet rs;
 
-                    String sqlquery = "select NumSolicitacao, NumCotacao, c.CodMaterial, NomeMaterial, CNPJ, SituacaoCotacao from tbl_Cotacao c, tbl_Material m "
-                            + "where c.CodMaterial = m.CodMaterial AND NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
+                    String sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, NumCotacao as NUMERO_COTACAO, c.CodMaterial as CODIGO_MATERIAL, NomeMaterial as NOME_MATERIAL, CNPJ, SituacaoCotacao as SITUACAO_COTACAO "
+                            + "from tbl_Cotacao c, tbl_Material m where c.CodMaterial = m.CodMaterial AND NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
                     try{
                         stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
                         rs = stmt.executeQuery(sqlquery);
@@ -222,7 +224,8 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                     
                     DefaultTableModel dm = (DefaultTableModel) jTableCotacoesMaterial.getModel();
 
-                    sqlquery = "select NumSolicitacao, NumPedido, NumCotacao, Situacao from tbl_Pedido_Compra where NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
+                    sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, NumPedido as NUMERO_PEDIDO, NumCotacao as NUMERO_COTACAO, Situacao as SITUACAO_PEDIDO "
+                            + "from tbl_Pedido_Compra where NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
                     try{
                         stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
                         rs = stmt.executeQuery(sqlquery);
@@ -248,6 +251,7 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoPedido = new DaoPedCompra(conexao.conectar());
         daoMaterial = new DaoMaterial(conexao.conectar());
+        daoMateriaisSolicitados = new DaoMateriaisSolicitados(conexao.conectar());
         daoCotacao = new DaoCotacao(conexao.conectar());
         daoRequisicao = new DaoRequisicaoCompra(conexao.conectar());
         txtUsuario.setText(user);
@@ -259,6 +263,8 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
         try {
             requisicao = new RequisicaoCompra();
             requisicao = daoRequisicao.consultar(Integer.parseInt(txtNumeroRequisicao.getText()));
+            int quantPed = 0;
+            int quantMatSolic = 0;
             
             if (jTableCotacoesMaterial.getRowCount() == 0) {
                 throw new Exception("Nao existe nenhuma Cotacao vinculada a essa Requisicao.");
@@ -281,44 +287,60 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                         verificaPedido = false;
                     }
                 }
-                
-                cont = 0;
-                boolean verificaCotacao = true;
-                for(cont = 0; cont < jTableCotacoesMaterial.getRowCount(); cont++){
-                    //Arrumar: Outra condicao de cotacao que nao poderia deixar a requisicao fechar
-                    if( jTableCotacoesMaterial.getValueAt(cont , 5).equals("Aguardando Resposta do Fornecedor") || jTableCotacoesMaterial.getValueAt(cont , 3).equals("Aguardando Aprovacao da Gerencia")){
-                        verificaCotacao = false;
-                    }
-                }
                     
-                for(cont = 0; cont < jTablePedidosCompra.getRowCount(); cont++){
-                    pedido = daoPedido.consultar(Integer.parseInt(jTablePedidosCompra.getValueAt(cont , 1).toString()));
-                    pedido.setSituacaoPedido("Finalizado");
-                    daoPedido.alterar(pedido);
-                }
-
-                for(cont = 0; cont < jTableCotacoesMaterial.getRowCount(); cont++){
-                    cotacao = daoCotacao.consultar(Integer.parseInt(jTableCotacoesMaterial.getValueAt(cont , 1).toString()));
-                    cotacao.setSituacaoCotacao("Finalizado");
-                    daoCotacao.alterar(cotacao);
-                }
-
-                requisicao.setSituacaoSolicitacao("Finalizado");
-                daoRequisicao.alterar(requisicao); 
-                System.out.println("teste");
-                JOptionPane.showMessageDialog(null, "Requisicao e itens relacionados finalizados com Sucesso");
-                //Ele esta errado pq foi salvo errado pela primeira vez
-                /*if(verificaCotacao == true){
-                    if(verificaPedido == true){
-                    //Codigo quando ta tudo ok
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Atencao, ha pedidos nao processados. Verifique"
-                            + " esses pedidos antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
+                boolean comparaPedMatSolic = true;
+                Statement stmtPed;
+                ResultSet rsPed;
+                Statement stmtMatSol;
+                ResultSet rsMatSol;
+                String sqlqueryPed = "select count(*) from tbl_Pedido_Compra where NumSolicitacao = " + Integer.parseInt(txtNumeroRequisicao.getText());
+                String sqlqueryMatSol = "select count(*) from tbl_Material_Solicitado where NumSolicitacao = " + Integer.parseInt(txtNumeroRequisicao.getText());
+                try{
+                    stmtPed = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                    rsPed = stmtPed.executeQuery(sqlqueryPed);
+                    stmtMatSol = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                    rsMatSol = stmtMatSol.executeQuery(sqlqueryMatSol);
+                    if(rsPed.next() == true){
+                        quantPed = rsPed.getInt(1);
                     }
+                    if(rsMatSol.next() == true){
+                        quantMatSolic = rsMatSol.getInt(1);
+                    }
+                } catch(SQLException ex){
+                    Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                if (quantMatSolic != quantPed){
+                    comparaPedMatSolic = false;
+                }
+                
+                if(verificaPedido == true){
+                    if(comparaPedMatSolic == true){
+                        for(cont = 0; cont < jTablePedidosCompra.getRowCount(); cont++){
+                            pedido = daoPedido.consultar(Integer.parseInt(jTablePedidosCompra.getValueAt(cont , 1).toString()));
+                            pedido.setSituacaoPedido("Finalizado");
+                            daoPedido.alterar(pedido);
+                        }
+
+                        for(cont = 0; cont < jTableCotacoesMaterial.getRowCount(); cont++){
+                            cotacao = daoCotacao.consultar(Integer.parseInt(jTableCotacoesMaterial.getValueAt(cont , 1).toString()));
+                            cotacao.setSituacaoCotacao("Finalizado");
+                            daoCotacao.alterar(cotacao);
+                        }
+
+                        requisicao.setSituacaoSolicitacao("Finalizado");
+                        daoRequisicao.alterar(requisicao); 
+                        JOptionPane.showMessageDialog(null, "Requisicao e itens relacionados finalizados com Sucesso");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Atencao, ha materiais solicitados sem pedido vinculado. Verifique"
+                        + " esses materiais solicitados antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
                 } else {
-                    JOptionPane.showMessageDialog(null, "Atencao, ha cotacoes nao processadas. Verifique"
-                            + " essas cotacoes antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
-                }*/
+                    JOptionPane.showMessageDialog(null, "Atencao, ha pedidos nao processados. Verifique"
+                        + " esses pedidos antes de finalizar a requisicao." , "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+               
             }
             atualizaTabela();
             
@@ -366,8 +388,8 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
         Statement stmt;
                     ResultSet rs;
 
-                    String sqlquery = "select NumSolicitacao, NumCotacao, c.CodMaterial, NomeMaterial, CNPJ, SituacaoCotacao from tbl_Cotacao c, tbl_Material m "
-                            + "where c.CodMaterial = m.CodMaterial AND NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
+                    String sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, NumCotacao as NUMERO_COTACAO, c.CodMaterial as CODIGO_MATERIAL, NomeMaterial as NOME_MATERIAL, CNPJ, SituacaoCotacao as SITUACAO_COTACAO "
+                            + "from tbl_Cotacao c, tbl_Material m where c.CodMaterial = m.CodMaterial AND NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
                     try{
                         stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
                         rs = stmt.executeQuery(sqlquery);
@@ -378,7 +400,8 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
                     
                     DefaultTableModel dm = (DefaultTableModel) jTableCotacoesMaterial.getModel();
 
-                    sqlquery = "select NumSolicitacao, NumPedido, NumCotacao, Situacao from tbl_Pedido_Compra where NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
+                    sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, NumPedido as NUMERO_PEDIDO, NumCotacao as NUMERO_COTACAO, Situacao as SITUACAO_PEDIDO "
+                            + "from tbl_Pedido_Compra where NumSolicitacao = " + txtNumeroRequisicao.getText().trim();
                     try{
                         stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
                         rs = stmt.executeQuery(sqlquery);
@@ -411,6 +434,8 @@ public class GUI_FinalizarCompra extends javax.swing.JFrame {
     private DaoPedCompra daoPedido;
     private Material material;
     private DaoMaterial daoMaterial;
+    private MateriaisSolicitados materiaisSolicitados;
+    private DaoMateriaisSolicitados daoMateriaisSolicitados;
     private Cotacao cotacao;
     private DaoCotacao daoCotacao;
     private RequisicaoCompra requisicao;
