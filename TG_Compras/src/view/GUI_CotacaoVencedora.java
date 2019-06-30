@@ -17,6 +17,8 @@ import java.awt.datatransfer.StringSelection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -45,9 +47,9 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         initComponents();
         jTableComparacaoFornecedores.setAutoCreateRowSorter(true);
         jTableCompararValor.setAutoCreateRowSorter(true);
-        
+
     }
-    
+
     public static String CotacaoVencedora;
 
     /**
@@ -499,7 +501,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         daoMateriaisSolicitados = new DaoMateriaisSolicitados(conexao.conectar());
         daoMaterial = new DaoMaterial(conexao.conectar());
         daoFornecedor = new DaoFornecedor(conexao.conectar());
-        
+
 
     }//GEN-LAST:event_formWindowOpened
 
@@ -518,26 +520,24 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                 if (requisicao == null) {
                     throw new Exception("Id Requisicao de Compra informado não existe.\n ");
                 } else {
-                    
+
                     listaComboMaterial = daoMateriaisSolicitados.listarMateriaisSolicitadosDeUmaRequisicao(txtIDRequisicao.getText().trim());
-                    
+
                     try {
-                        for (int i = 0; i < listaComboMaterial.size(); i++) {                           
+                        for (int i = 0; i < listaComboMaterial.size(); i++) {
                             cmbCodigoMaterial.addItem(listaComboMaterial.get(i).getNomeMaterial());
-                            
+
                         }
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Falha ao iniciar: xxx" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
-                    
-                    
+
                     material = listaComboMaterial.get(cmbCodigoMaterial.getSelectedIndex());
-                    
+
                     cmbCodigoMaterial.setEnabled(true);
                     btnConsultarCotacoes.setEnabled(true);
-                    
-                    
-                    }
+
+                }
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Falha ao pesquisar Requisicao: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -568,13 +568,13 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     private void btnConsultarCotacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarCotacoesActionPerformed
         material = listaComboMaterial.get(cmbCodigoMaterial.getSelectedIndex());
         String sqlquery;
-                     
-                             sqlquery = "select tbl_fornecedor.CNPJ, tbl_fornecedor.nomefornecedor, PRECOUNITARIO from tbl_cotacao " 
-                            + "inner join tbl_fornecedor on tbl_fornecedor.cnpj = tbl_cotacao.cnpj "
-                            +"where codmaterial = " + material.getCodMaterial()
-                                     + "and numsolicitacao = " + txtIDRequisicao.getText();
-                    
-                    Statement stmt;
+
+        sqlquery = "select tbl_fornecedor.CNPJ, tbl_fornecedor.nomefornecedor as Nome_Fornecedor, PRECOUNITARIO as Preço_Unitário, DataEntrega as Data_Entrega from tbl_cotacao "
+                + "inner join tbl_fornecedor on tbl_fornecedor.cnpj = tbl_cotacao.cnpj "
+                + "where codmaterial = " + material.getCodMaterial()
+                + "and numsolicitacao = " + txtIDRequisicao.getText();
+
+        Statement stmt;
         ResultSet rs;
 
         try {
@@ -584,22 +584,63 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            for (int i = 0; i < jTableCompararValor.getRowCount(); i++) {
+                String data = jTableCompararValor.getValueAt(i, 3).toString();
+                DataEntrega.add(sdf.parse(data));
+                System.out.println("pegou data");
+            }
+            for (int i = 0; i < DataEntrega.size(); i++) {
+                int nota = 0;
+                Date data = DataEntrega.get(i);
+                
+                for (int c = 0; c < DataEntrega.size(); c++) {
+                    Date compara = DataEntrega.get(c);
+
+                    if (i == c) {
+                        /*Não compare a si mesmo...*/
+                    } else {
+                        
+                        if (data.compareTo(compara) > 0) {
+                            nota += 1;
+                        } else if (data.compareTo(compara) == 0) {
+                            
+                        } else {
+                            nota -= 1;
+                        }
+                    }
+
+                }
+                if(nota == DataEntrega.size()){
+                    nota = 10;
+                } else {
+                    nota = 0;
+                }
+                NotaEntrega.add(nota);
+                System.out.println("Fim add Nota " + i);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
         //ARRUMAR UMA MANEIRA DE IMPLEMENTAR UM RESET NA TABELA
-//JTable table = new JTable();
-       //table = jTableComparacaoFornecedores;
-       DefaultTableModel model = (DefaultTableModel) jTableComparacaoFornecedores.getModel();
-       
-       model.setRowCount(0);
-       model.setColumnCount(1);
-       //jTableComparacaoFornecedores = table;
-       
-       rbNotaHistorico.setEnabled(true);
-                    rbNotaPreco.setEnabled(true);
-       
-       btnCopiarCodigo.setEnabled(false);
-       btnSalvarCotacaoVencedora.setEnabled(false);
-       btnCriarPedidodeCompra.setEnabled(false);
+        //JTable table = new JTable();
+        //table = jTableComparacaoFornecedores;
+        DefaultTableModel model = (DefaultTableModel) jTableComparacaoFornecedores.getModel();
+
+        model.setRowCount(0);
+        model.setColumnCount(1);
+        //jTableComparacaoFornecedores = table;
+
+        rbNotaHistorico.setEnabled(true);
+        rbNotaHistorico.setSelected(true);
+        rbNotaPreco.setEnabled(true);
+
+        btnCopiarCodigo.setEnabled(false);
+        btnSalvarCotacaoVencedora.setEnabled(false);
+        btnCriarPedidodeCompra.setEnabled(false);
+        btnCalcularNota.setEnabled(true);
     }//GEN-LAST:event_btnConsultarCotacoesActionPerformed
 
     private void btnCalcularNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularNotaActionPerformed
@@ -616,183 +657,177 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         jTableComparacaoFornecedores.setValueAt("Media Ponderada", 6, 0);
         jTableComparacaoFornecedores.setValueAt("Preco Unitario", 7, 0);
         jTableComparacaoFornecedores.setValueAt("Vencedor", 8, 0);
-       
-        
-        int qntdFornecedores = jTableCompararValor.getRowCount();
-        int cont=0;
-        String CNPJ;       
-        
-        for(cont=0;cont<qntdFornecedores;cont++){
-            model.addColumn("Nota Fornecedor" + (cont+1));
-        }
-        
-        
-        for(cont=0;cont<qntdFornecedores;cont++){
-        
-        CNPJ = jTableCompararValor.getValueAt(cont , 0).toString();
-        fornecedor = daoFornecedor.consultar(CNPJ);
 
-        jTableComparacaoFornecedores.setValueAt(fornecedor.getNomeFornecedor(), 0, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPreco(), 1, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaQualidade(), 2, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaVelocidadeEntrega(), 3, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPosVenda(), 4, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 5, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(jTableCompararValor.getValueAt(cont, 2), 7, cont + 1);
-        
-        
-        //Implementar a Media Ponderada aqui
-        if(chkEntregaRapida.isSelected() == false && chkMaiorQualidade.isSelected()==false
-                && chkMenorPreco.isSelected()==false && chkPossuiGarantia.isSelected()==false){
-            
-        jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 6, cont + 1);
-        
-        }else{
-        int mediaPonderada=0;
-        int divisor=4;
-        int notaEntrega = fornecedor.getNotaVelocidadeEntrega(),
-                notaQualidade = fornecedor.getNotaQualidade(),
-                notaPreco = fornecedor.getNotaPreco(),
-                notaGarantia = fornecedor.getNotaPosVenda();
-        String importancia;
-        //Baixa * 2, Intermediaria * 3, Alta * 4
-        
-        /*
-        Precisa Arranjar uma maneira de Implementar o Calculo das Datas da Entrega Rapida!!
-        */
-        if(chkEntregaRapida.isSelected()){
-            importancia = cmbImportanciaEntregaRapida.getSelectedItem().toString();
-            if(importancia.trim().equals("Baixa")){
-                divisor = divisor + 1;
-                notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 2);
-            }else if(importancia.trim().equals("Intermediaria")){
-                divisor = divisor + 2;
-                notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 3);
-            }else{
-                divisor = divisor + 3;
-                notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 4);
-            }
-        }if(chkMaiorQualidade.isSelected()){
-            importancia = cmbImportanciaMaiorQualidade.getSelectedItem().toString();
-            if(importancia.trim().equals("Baixa")){
-                divisor = divisor + 1;
-                notaQualidade = (fornecedor.getNotaQualidade() * 2);
-            }else if(importancia.trim().equals("Intermediaria")){
-                divisor = divisor + 2;
-                notaQualidade = (fornecedor.getNotaQualidade()  * 3);
-            }else{
-                divisor = divisor + 3;
-                notaQualidade = (fornecedor.getNotaQualidade()  * 4);
-            }
-        }if(chkMenorPreco.isSelected()){
-            importancia = cmbImportanciaMenorPreco.getSelectedItem().toString();
-            if(importancia.trim().equals("Baixa")){
-                divisor = divisor + 1;
-                notaPreco = (fornecedor.getNotaPreco()* 2);
-            }else if(importancia.trim().equals("Intermediaria")){
-                divisor = divisor + 2;
-                notaPreco = (fornecedor.getNotaPreco()* 3);
-            }else{
-                divisor = divisor + 3;
-                notaPreco = (fornecedor.getNotaPreco()* 4);
-            }
-        }if(chkPossuiGarantia.isSelected()){
-            importancia = cmbImportanciaPossuiGarantia.getSelectedItem().toString();
-            if(importancia.trim().equals("Baixa")){
-                divisor = divisor + 1;
-                notaGarantia = (fornecedor.getNotaPosVenda() * 2);
-            }else if(importancia.trim().equals("Intermediaria")){
-                divisor = divisor + 2;
-                notaGarantia = (fornecedor.getNotaPosVenda()  * 3);
-            }else{
-                divisor = divisor + 3;
-                notaGarantia = (fornecedor.getNotaPosVenda()  * 4);
-            }
+        int qntdFornecedores = jTableCompararValor.getRowCount();
+        int cont = 0, NumCot;;
+        String CNPJ;
+
+        for (cont = 0; cont < qntdFornecedores; cont++) {
+            model.addColumn("Nota Fornecedor" + (cont + 1));
         }
-        
-            
-            
-        
-        mediaPonderada = notaEntrega + notaGarantia + notaPreco + notaQualidade;
-        mediaPonderada = mediaPonderada / divisor;
-        
-        jTableComparacaoFornecedores.setValueAt(mediaPonderada, 6, cont + 1);
+
+        for (cont = 0; cont < qntdFornecedores; cont++) {
+
+            CNPJ = jTableCompararValor.getValueAt(cont, 1).toString();
+            NumCot = Integer.parseInt(jTableCompararValor.getValueAt(cont, 0).toString());
+            fornecedor = daoFornecedor.consultar(CNPJ);
+
+            jTableComparacaoFornecedores.setValueAt(fornecedor.getNomeFornecedor(), 0, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPreco(), 1, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaQualidade(), 2, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(NotaEntrega.get(cont), 3, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPosVenda(), 4, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 5, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(jTableCompararValor.getValueAt(cont, 2), 7, cont + 1);
+
+            //Implementar a Media Ponderada aqui
+            if (chkEntregaRapida.isSelected() == false && chkMaiorQualidade.isSelected() == false && chkMenorPreco.isSelected() == false && chkPossuiGarantia.isSelected() == false) {
+                jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 6, cont + 1);
+            } else {
+                int mediaPonderada = 0;
+                int divisor = 4;
+                int notaEntrega = NotaEntrega.get(cont),
+                        notaQualidade = fornecedor.getNotaQualidade(),
+                        notaPreco = fornecedor.getNotaPreco(),
+                        notaGarantia = fornecedor.getNotaPosVenda();
+                String importancia;
+                /*
+                    Baixa * 2, Intermediaria * 3, Alta * 4
+                 */
+                if (chkEntregaRapida.isSelected()) {
+                    importancia = cmbImportanciaEntregaRapida.getSelectedItem().toString();
+                    if (importancia.trim().equals("Baixa")) {
+                        divisor = divisor + 1;
+                        notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 2);
+                    } else if (importancia.trim().equals("Intermediaria")) {
+                        divisor = divisor + 2;
+                        notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 3);
+                    } else {
+                        divisor = divisor + 3;
+                        notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 4);
+                    }
+                }
+                if (chkMaiorQualidade.isSelected()) {
+                    importancia = cmbImportanciaMaiorQualidade.getSelectedItem().toString();
+                    if (importancia.trim().equals("Baixa")) {
+                        divisor = divisor + 1;
+                        notaQualidade = (fornecedor.getNotaQualidade() * 2);
+                    } else if (importancia.trim().equals("Intermediaria")) {
+                        divisor = divisor + 2;
+                        notaQualidade = (fornecedor.getNotaQualidade() * 3);
+                    } else {
+                        divisor = divisor + 3;
+                        notaQualidade = (fornecedor.getNotaQualidade() * 4);
+                    }
+                }
+                if (chkMenorPreco.isSelected()) {
+                    importancia = cmbImportanciaMenorPreco.getSelectedItem().toString();
+                    if (importancia.trim().equals("Baixa")) {
+                        divisor = divisor + 1;
+                        notaPreco = (fornecedor.getNotaPreco() * 2);
+                    } else if (importancia.trim().equals("Intermediaria")) {
+                        divisor = divisor + 2;
+                        notaPreco = (fornecedor.getNotaPreco() * 3);
+                    } else {
+                        divisor = divisor + 3;
+                        notaPreco = (fornecedor.getNotaPreco() * 4);
+                    }
+                }
+                if (chkPossuiGarantia.isSelected()) {
+                    importancia = cmbImportanciaPossuiGarantia.getSelectedItem().toString();
+                    if (importancia.trim().equals("Baixa")) {
+                        divisor = divisor + 1;
+                        notaGarantia = (fornecedor.getNotaPosVenda() * 2);
+                    } else if (importancia.trim().equals("Intermediaria")) {
+                        divisor = divisor + 2;
+                        notaGarantia = (fornecedor.getNotaPosVenda() * 3);
+                    } else {
+                        divisor = divisor + 3;
+                        notaGarantia = (fornecedor.getNotaPosVenda() * 4);
+                    }
+                }
+
+                mediaPonderada = notaEntrega + notaGarantia + notaPreco + notaQualidade;
+                mediaPonderada = mediaPonderada / divisor;
+
+                jTableComparacaoFornecedores.setValueAt(mediaPonderada, 6, cont + 1);
+            }
+
         }
-        
+
+        int qtdeColuna = jTableComparacaoFornecedores.getColumnCount();
+        for (cont = qtdeColuna; cont > qntdFornecedores + 1; cont--) {
+
+            jTableComparacaoFornecedores.removeColumn(jTableComparacaoFornecedores.getColumn("Nota Fornecedor" + (cont - 1)));
+
         }
-        
-       int qtdeColuna = jTableComparacaoFornecedores.getColumnCount();
-       for(cont=qtdeColuna;cont>qntdFornecedores+1;cont--){
-       
-       jTableComparacaoFornecedores.removeColumn(jTableComparacaoFornecedores.getColumn("Nota Fornecedor" + (cont-1) ));
-       
-       }
-       boolean FornecSemNota = false;
-       for(cont=0;cont<qntdFornecedores;cont++){
-            if(Integer.parseInt(jTableComparacaoFornecedores.getValueAt(5, cont + 1).toString()) == 0){
+        boolean FornecSemNota = false;
+        for (cont = 0; cont < qntdFornecedores; cont++) {
+            if (Integer.parseInt(jTableComparacaoFornecedores.getValueAt(5, cont + 1).toString()) == 0) {
                 FornecSemNota = true;
             }
         }
-       
-       if(FornecSemNota == true){
-       JOptionPane.showMessageDialog(null, "Falha existe ao menos 1 Fornecedor "
-               + "que nao foi avaliado, por favor use o metodo \n"
-               + "Calcular nota somente para o Preco", "Erro", JOptionPane.ERROR_MESSAGE);
-                    
-       }else{
-       
-       int MaiorNota=0;
-       int ColumnFornecedorVencedor=0;
-       for (cont=1;cont<=qntdFornecedores;cont++){
-           
-           if(Integer.parseInt(jTableComparacaoFornecedores.getValueAt(6, cont).toString()) > MaiorNota){
-               MaiorNota = Integer.parseInt(jTableComparacaoFornecedores.getValueAt(6, cont).toString());
-               ColumnFornecedorVencedor = cont;
-           }
-       
-       }
-       jTableComparacaoFornecedores.setValueAt("VENCEDOR!!!", 8 , ColumnFornecedorVencedor);
-       
-       txtFornecedorVencedor.setText(jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString());
-        
-       //Carregar O numero da Cotacao Vencedora
-        int numcotacao = 0;
-       
-        String sqlquery;
-        String CNPJbd = null,aux;
-        aux = jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString();
-        
-        for(cont=0;cont<qntdFornecedores;cont++){
-        if(aux.equals(jTableCompararValor.getValueAt(cont, 1).toString()))
-            CNPJbd = jTableCompararValor.getValueAt(cont, 0).toString();        
-        }
-                             sqlquery = "select NUMCOTACAO from tbl_cotacao where CNPJ = " 
-                                     + CNPJbd + " and PRECOUNITARIO = " + 
-                                     jTableComparacaoFornecedores.getValueAt(7, ColumnFornecedorVencedor) + 
-                                     "and NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
-// Talvez Colocar ' ' 
-                         System.out.println(sqlquery);    
-                    Statement stmt;
-        ResultSet rs;
 
-        try {
-            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery(sqlquery);
-            if(rs.next() == true){
-            numcotacao = rs.getInt("NumCotacao");
-            System.out.println(numcotacao);
+        if (FornecSemNota == true) {
+            JOptionPane.showMessageDialog(null, "Falha existe ao menos 1 Fornecedor "
+                    + "que nao foi avaliado, por favor use o metodo \n"
+                    + "Calcular nota somente para o Preco", "Erro", JOptionPane.ERROR_MESSAGE);
+
+        } else {
+
+            int MaiorNota = 0;
+            int ColumnFornecedorVencedor = 0;
+            for (cont = 1; cont <= qntdFornecedores; cont++) {
+
+                if (Integer.parseInt(jTableComparacaoFornecedores.getValueAt(6, cont).toString()) > MaiorNota) {
+                    MaiorNota = Integer.parseInt(jTableComparacaoFornecedores.getValueAt(6, cont).toString());
+                    ColumnFornecedorVencedor = cont;
+                }
+
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+            jTableComparacaoFornecedores.setValueAt("VENCEDOR!!!", 8, ColumnFornecedorVencedor);
+
+            txtFornecedorVencedor.setText(jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString());
+
+            //Carregar O numero da Cotacao Vencedora
+            int numcotacao = 0;
+
+            String sqlquery;
+            String CNPJbd = null, aux;
+            aux = jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString();
+
+            for (cont = 0; cont < qntdFornecedores; cont++) {
+                if (aux.equals(jTableCompararValor.getValueAt(cont, 1).toString())) {
+                    CNPJbd = jTableCompararValor.getValueAt(cont, 0).toString();
+                }
+            }
+            sqlquery = "select NUMCOTACAO from tbl_cotacao where CNPJ = "
+                    + CNPJbd + " and PRECOUNITARIO = "
+                    + jTableComparacaoFornecedores.getValueAt(7, ColumnFornecedorVencedor)
+                    + "and NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
+// Talvez Colocar ' ' 
+            System.out.println(sqlquery);
+            Statement stmt;
+            ResultSet rs;
+
+            try {
+                stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                rs = stmt.executeQuery(sqlquery);
+                if (rs.next() == true) {
+                    numcotacao = rs.getInt("NumCotacao");
+                    System.out.println(numcotacao);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            txtCotacaoVencedora.setText(Integer.toString(numcotacao));
+            CotacaoVencedora = txtCotacaoVencedora.getText();
+
+            btnCopiarCodigo.setEnabled(true);
+            btnSalvarCotacaoVencedora.setEnabled(true);
+            btnCriarPedidodeCompra.setEnabled(true);
         }
-        
-       txtCotacaoVencedora.setText(Integer.toString(numcotacao));
-       CotacaoVencedora = txtCotacaoVencedora.getText();
-       
-       btnCopiarCodigo.setEnabled(true);
-       btnSalvarCotacaoVencedora.setEnabled(true);
-       btnCriarPedidodeCompra.setEnabled(true);
-       }
     }//GEN-LAST:event_btnCalcularNotaActionPerformed
 
     private void btnCopiarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarCodigoActionPerformed
@@ -804,18 +839,18 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCopiarCodigoActionPerformed
 
     private void btnCriarPedidodeCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarPedidodeCompraActionPerformed
-       new GUI_GerenciarPedidoCompra().setVisible(true);
+        new GUI_GerenciarPedidoCompra().setVisible(true);
     }//GEN-LAST:event_btnCriarPedidodeCompraActionPerformed
 
     private void rbNotaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbNotaHistoricoActionPerformed
-        if(rbNotaHistorico.isSelected()){
-        chkEntregaRapida.setEnabled(true);
-        chkMaiorQualidade.setEnabled(true);
-        chkMenorPreco.setEnabled(true);
-        chkPossuiGarantia.setEnabled(true);
-        btnCalcularNota.setEnabled(true);
-        btnCalcularNotaPreco.setEnabled(false);
-        }else{
+        if (rbNotaHistorico.isSelected()) {
+            chkEntregaRapida.setEnabled(true);
+            chkMaiorQualidade.setEnabled(true);
+            chkMenorPreco.setEnabled(true);
+            chkPossuiGarantia.setEnabled(true);
+            btnCalcularNota.setEnabled(true);
+            btnCalcularNotaPreco.setEnabled(false);
+        } else {
             chkEntregaRapida.setEnabled(false);
             chkMaiorQualidade.setEnabled(false);
             chkMenorPreco.setEnabled(false);
@@ -825,21 +860,21 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     }//GEN-LAST:event_rbNotaHistoricoActionPerformed
 
     private void rbNotaPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbNotaPrecoActionPerformed
-       if(rbNotaPreco.isSelected()){
-           btnCalcularNotaPreco.setEnabled(true);
-           chkEntregaRapida.setEnabled(false);
+        if (rbNotaPreco.isSelected()) {
+            btnCalcularNotaPreco.setEnabled(true);
+            chkEntregaRapida.setEnabled(false);
             chkMaiorQualidade.setEnabled(false);
             chkMenorPreco.setEnabled(false);
             chkPossuiGarantia.setEnabled(false);
             btnCalcularNota.setEnabled(false);
-       }else{
-        chkEntregaRapida.setEnabled(true);
-        chkMaiorQualidade.setEnabled(true);
-        chkMenorPreco.setEnabled(true);
-        chkPossuiGarantia.setEnabled(true);
-        btnCalcularNota.setEnabled(true);
-        btnCalcularNotaPreco.setEnabled(false);
-       }
+        } else {
+            chkEntregaRapida.setEnabled(true);
+            chkMaiorQualidade.setEnabled(true);
+            chkMenorPreco.setEnabled(true);
+            chkPossuiGarantia.setEnabled(true);
+            btnCalcularNota.setEnabled(true);
+            btnCalcularNotaPreco.setEnabled(false);
+        }
     }//GEN-LAST:event_rbNotaPrecoActionPerformed
 
     private void btnCalcularNotaPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularNotaPrecoActionPerformed
@@ -856,91 +891,89 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         jTableComparacaoFornecedores.setValueAt("Media Ponderada", 6, 0);
         jTableComparacaoFornecedores.setValueAt("Preco Unitario", 7, 0);
         jTableComparacaoFornecedores.setValueAt("Vencedor", 8, 0);
-       
-        
+
         int qntdFornecedores = jTableCompararValor.getRowCount();
-        int cont=0;
-        String CNPJ;       
-        
-        for(cont=0;cont<qntdFornecedores;cont++){
-            model.addColumn("Nota Fornecedor" + (cont+1));
+        int cont = 0;
+        String CNPJ;
+
+        for (cont = 0; cont < qntdFornecedores; cont++) {
+            model.addColumn("Nota Fornecedor" + (cont + 1));
         }
-        
-        
-        for(cont=0;cont<qntdFornecedores;cont++){
-        
-        CNPJ = jTableCompararValor.getValueAt(cont , 0).toString();
-        fornecedor = daoFornecedor.consultar(CNPJ);
+
+        for (cont = 0; cont < qntdFornecedores; cont++) {
+
+            CNPJ = jTableCompararValor.getValueAt(cont, 0).toString();
+            fornecedor = daoFornecedor.consultar(CNPJ);
             System.out.println(CNPJ);
             System.out.println(cont);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.getNomeFornecedor(), 0, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPreco(), 1, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaQualidade(), 2, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaVelocidadeEntrega(), 3, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPosVenda(), 4, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 5, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 6, cont + 1);
-        jTableComparacaoFornecedores.setValueAt(jTableCompararValor.getValueAt(cont, 2), 7, cont + 1);
-        
-        
+            jTableComparacaoFornecedores.setValueAt(fornecedor.getNomeFornecedor(), 0, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPreco(), 1, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaQualidade(), 2, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaVelocidadeEntrega(), 3, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(fornecedor.getNotaPosVenda(), 4, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 5, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(fornecedor.calculaNotaTotal(), 6, cont + 1);
+            jTableComparacaoFornecedores.setValueAt(jTableCompararValor.getValueAt(cont, 2), 7, cont + 1);
+
         }
-        
-       int qtdeColuna = jTableComparacaoFornecedores.getColumnCount();
-       for(cont=qtdeColuna;cont>qntdFornecedores+1;cont--){
-       
-       jTableComparacaoFornecedores.removeColumn(jTableComparacaoFornecedores.getColumn("Nota Fornecedor" + (cont-1) ));
-       
-       }
-       float MenorPreco=99999999;
-       int ColumnFornecedorVencedor=0;
-       for (cont=1;cont<=qntdFornecedores;cont++){
-           
-           if(Float.parseFloat(jTableCompararValor.getValueAt(cont-1, 2).toString()) < MenorPreco){
-               MenorPreco = Float.parseFloat(jTableCompararValor.getValueAt(cont-1, 2).toString());
-               ColumnFornecedorVencedor = cont;
-           }
-       
-       }
-       jTableComparacaoFornecedores.setValueAt("VENCEDOR!!!", 8 , ColumnFornecedorVencedor);
-       
-       txtFornecedorVencedor.setText(jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString());
-        
-       //Carregar O numero da Cotacao Vencedora
+
+        int qtdeColuna = jTableComparacaoFornecedores.getColumnCount();
+        for (cont = qtdeColuna; cont > qntdFornecedores + 1; cont--) {
+
+            jTableComparacaoFornecedores.removeColumn(jTableComparacaoFornecedores.getColumn("Nota Fornecedor" + (cont - 1)));
+
+        }
+        float MenorPreco = 99999999;
+        int ColumnFornecedorVencedor = 0;
+        for (cont = 1; cont <= qntdFornecedores; cont++) {
+
+            if (Float.parseFloat(jTableCompararValor.getValueAt(cont - 1, 2).toString()) < MenorPreco) {
+                MenorPreco = Float.parseFloat(jTableCompararValor.getValueAt(cont - 1, 2).toString());
+                ColumnFornecedorVencedor = cont;
+            }
+
+        }
+        jTableComparacaoFornecedores.setValueAt("VENCEDOR!!!", 8, ColumnFornecedorVencedor);
+
+        txtFornecedorVencedor.setText(jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString());
+
+        //Carregar O numero da Cotacao Vencedora
         int numcotacao = 0;
-       
+
         String sqlquery;
-        String CNPJbd = null,aux;
+        String CNPJbd = null, aux;
         aux = jTableComparacaoFornecedores.getValueAt(0, ColumnFornecedorVencedor).toString();
-        
-        for(cont=0;cont<qntdFornecedores;cont++){
-        if(aux.equals(jTableCompararValor.getValueAt(cont, 1).toString()))
-            CNPJbd = jTableCompararValor.getValueAt(cont, 0).toString();        
+
+        for (cont = 0; cont < qntdFornecedores; cont++) {
+            if (aux.equals(jTableCompararValor.getValueAt(cont, 1).toString())) {
+                CNPJbd = jTableCompararValor.getValueAt(cont, 0).toString();
+            }
         }
-                             sqlquery = "select NUMCOTACAO from tbl_cotacao where CNPJ = " 
-                                     + CNPJbd + "and PRECOUNITARIO = " + 
-                                     jTableComparacaoFornecedores.getValueAt(7, ColumnFornecedorVencedor) + 
-                                     "and NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
-     
-                    Statement stmt;
+        sqlquery = "select NUMCOTACAO from tbl_cotacao where CNPJ = "
+                + CNPJbd + "and PRECOUNITARIO = "
+                + jTableComparacaoFornecedores.getValueAt(7, ColumnFornecedorVencedor)
+                + "and NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
+
+        Statement stmt;
         ResultSet rs;
 
         try {
             stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             rs = stmt.executeQuery(sqlquery);
-            if(rs.next() == true){
-            numcotacao = rs.getInt("NumCotacao");
-            System.out.println(numcotacao);
+            if (rs.next() == true) {
+                numcotacao = rs.getInt("NumCotacao");
+                System.out.println(numcotacao);
             }
         } catch (SQLException ex) {
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-       txtCotacaoVencedora.setText(Integer.toString(numcotacao));
-       CotacaoVencedora = txtCotacaoVencedora.getText();
-       
-       btnCopiarCodigo.setEnabled(true);
-       btnSalvarCotacaoVencedora.setEnabled(true);
-       btnCriarPedidodeCompra.setEnabled(true);
+
+        txtCotacaoVencedora.setText(Integer.toString(numcotacao));
+        CotacaoVencedora = txtCotacaoVencedora.getText();
+
+        btnCopiarCodigo.setEnabled(true);
+        btnSalvarCotacaoVencedora.setEnabled(true);
+        btnCriarPedidodeCompra.setEnabled(true);
     }//GEN-LAST:event_btnCalcularNotaPrecoActionPerformed
 
     private void btnSalvarCotacaoVencedoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarCotacaoVencedoraActionPerformed
@@ -951,8 +984,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                 + "Voce Pode veificar essa Cotacao na tela de Consulta Cotacao \n "
                 + "ATENCAO!!! eh recomendado que seja feito o pedido de compra Imediatamente apos a escolha da cotacao vencedora");
 
-        
-        
+
     }//GEN-LAST:event_btnSalvarCotacaoVencedoraActionPerformed
 
     /**
@@ -1029,7 +1061,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     private javax.swing.JTextField txtIDCotacao;
     private javax.swing.JTextField txtIDRequisicao;
     // End of variables declaration//GEN-END:variables
-private Conexao conexao = null;
+    private Conexao conexao = null;
     private Cotacao cotacao;
     private DaoCotacao daoCotacao;
     private RequisicaoCompra requisicao;
@@ -1041,4 +1073,6 @@ private Conexao conexao = null;
     private DaoMaterial daoMaterial;
     private Fornecedor fornecedor;
     private DaoFornecedor daoFornecedor;
+    private List<Integer> NotaEntrega;
+    private List<Date> DataEntrega;
 }
