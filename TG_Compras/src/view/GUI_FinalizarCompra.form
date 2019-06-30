@@ -48,7 +48,7 @@
                           </Group>
                           <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="64" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="306" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -115,12 +115,12 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="6" rowCount="3">
-                <Column editable="false" title="ID Requisi&#xe7;&#xe3;o de Compra" type="java.lang.Object"/>
-                <Column editable="true" title="N&#xfa;mero Cota&#xe7;&#xe3;o" type="java.lang.Object"/>
-                <Column editable="true" title="C&#xf3;digo Material" type="java.lang.Object"/>
-                <Column editable="true" title="Nome Material" type="java.lang.Object"/>
-                <Column editable="true" title="CNPJ Fornecedor" type="java.lang.Object"/>
-                <Column editable="true" title="Status" type="java.lang.Object"/>
+                <Column editable="false" title="NUMERO_SOLICITACAO" type="java.lang.Object"/>
+                <Column editable="true" title="NUMERO_COTACAO" type="java.lang.Object"/>
+                <Column editable="true" title="CODIGO_MATERIAL" type="java.lang.Object"/>
+                <Column editable="true" title="NOME_MATERIAL" type="java.lang.Object"/>
+                <Column editable="true" title="CNPJ" type="java.lang.Object"/>
+                <Column editable="true" title="SITUACAO_COTACAO" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -185,10 +185,10 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="4" rowCount="3">
-                <Column editable="false" title="ID Requisi&#xe7;&#xe3;o de Compra" type="java.lang.Object"/>
-                <Column editable="true" title="ID Pedido de Compra" type="java.lang.Object"/>
-                <Column editable="true" title="ID Cota&#xe7;&#xe3;o Vencedora" type="java.lang.Object"/>
-                <Column editable="true" title="Status" type="java.lang.Object"/>
+                <Column editable="false" title="NUMERO_SOLICITACAO" type="java.lang.Object"/>
+                <Column editable="true" title="NUMERO_PEDIDO" type="java.lang.Object"/>
+                <Column editable="true" title="NUMERO_COTACAO" type="java.lang.Object"/>
+                <Column editable="true" title="SITUACAO_PEDIDO" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
