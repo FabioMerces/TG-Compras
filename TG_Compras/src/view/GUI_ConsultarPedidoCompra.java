@@ -7,6 +7,7 @@ package view;
 
 import control.Conexao;
 import control.DaoCotacao;
+import control.DaoMaterial;
 import control.DaoPedCompra;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.Cotacao;
+import model.Material;
 import model.PedidoCompra;
 import net.proteanit.sql.DbUtils;
 import net.sf.jasperreports.engine.JRException;
@@ -82,7 +84,10 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
 
         jLabel1.setText("ID Pedido de Compra");
 
+        txtPedidoCompra.setEnabled(false);
+
         btnBuscarIDPedidoCompra.setText("Buscar");
+        btnBuscarIDPedidoCompra.setEnabled(false);
         btnBuscarIDPedidoCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarIDPedidoCompraActionPerformed(evt);
@@ -93,18 +98,18 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
 
         jTablePedidosCompra.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID Pedido de Compra", "ID Cotação Vencedora", "Nome do Material", "Nome do Fornecedor", "Status"
+                "NUMERO_PEDIDO", "NUMERO_COTACAO", "NUMERO_SOLICITACAO", "NOME_MATERIAL", "DATA_PEDIDO", "SITUACAO_PEDIDO"
             }
         ));
         jScrollPane1.setViewportView(jTablePedidosCompra);
@@ -190,35 +195,6 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(rbIDPedidoCompra)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(rbIDCotacaoVencedora)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtCotacaoVencedora))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtPedidoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnBuscarIDPedidoCompra)
-                            .addComponent(btnBuscarCotacaoVencedora))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rbPedidoConcluido)
-                            .addComponent(rbAguardandoAprovacao)
-                            .addComponent(rbPedidoNegado)
-                            .addComponent(rbAguardandoContatoFornecedor))
-                        .addGap(31, 31, 31))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
@@ -230,7 +206,34 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(btnGerarReport)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rbIDCotacaoVencedora)
+                            .addComponent(rbIDPedidoCompra))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtPedidoCompra)
+                            .addComponent(txtCotacaoVencedora, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnBuscarCotacaoVencedora)
+                            .addComponent(btnBuscarIDPedidoCompra))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rbPedidoConcluido)
+                                    .addComponent(rbAguardandoAprovacao)
+                                    .addComponent(rbAguardandoContatoFornecedor))
+                                .addGap(86, 86, 86))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(rbPedidoNegado)
+                                .addGap(49, 49, 49))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,28 +241,28 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(txtPedidoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBuscarIDPedidoCompra)
-                            .addComponent(rbIDPedidoCompra))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtCotacaoVencedora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBuscarCotacaoVencedora)
-                            .addComponent(rbIDCotacaoVencedora)))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(rbAguardandoAprovacao)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rbAguardandoContatoFornecedor)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rbPedidoConcluido)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rbPedidoNegado)))
+                        .addComponent(rbPedidoNegado))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(rbIDPedidoCompra)
+                            .addComponent(txtPedidoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscarIDPedidoCompra))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(rbIDCotacaoVencedora)
+                            .addComponent(txtCotacaoVencedora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscarCotacaoVencedora))))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(11, 11, 11)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -283,7 +286,9 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                 if (pedido == null) {
                     throw new Exception("Id do Pedido informado não existe.\n ");
                 } else {
-                    String sqlquery = "select * from tbl_Pedido_Compra where NUMPEDIDO = " + txtPedidoCompra.getText().trim();
+                    String sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND NumPedido = " + txtPedidoCompra.getText().trim();
 
                     Statement stmt;
                     ResultSet rs;
@@ -316,7 +321,9 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                 if (cotacao == null) {
                     throw new Exception("Id Cotacao informado não existe.\n ");
                 } else {
-                    String sqlquery = "select * from tbl_Pedido_Compra where NUMCOTACAO = " + txtCotacaoVencedora.getText().trim();
+                    String sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.NUMCOTACAO = " + txtCotacaoVencedora.getText().trim();
 
                     Statement stmt;
                     ResultSet rs;
@@ -340,9 +347,22 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     private void rbAguardandoAprovacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAguardandoAprovacaoActionPerformed
         if (rbAguardandoAprovacao.isSelected()) {
 
-            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
-                    + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia'";
+            String sqlquery;
+            if(rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia' AND NumPedido = " + txtPedidoCompra.getText().trim();
+                
+            } else if(rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
+                
+            } else {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia'";
+            }
 
             Statement stmt;
             ResultSet rs;
@@ -365,9 +385,22 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     private void rbAguardandoContatoFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAguardandoContatoFornecedorActionPerformed
         if (rbAguardandoContatoFornecedor.isSelected()) {
 
-            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
-                    + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor'";
+            String sqlquery;
+            if(rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor' AND NumPedido = " + txtPedidoCompra.getText().trim();
+                
+            } else if(rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
+                
+            } else {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor'";
+            }
 
             Statement stmt;
             ResultSet rs;
@@ -390,10 +423,23 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     private void rbPedidoConcluidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPedidoConcluidoActionPerformed
         if (rbPedidoConcluido.isSelected()) {
 
-            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
-                    + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Concluido'";
-
+            String sqlquery;
+            if(rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Concluido' AND NumPedido = " + txtPedidoCompra.getText().trim();
+                
+            } else if(rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Concluido' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
+                
+            } else {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Concluido'";
+            }
+            
             Statement stmt;
             ResultSet rs;
 
@@ -415,9 +461,23 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     private void rbPedidoNegadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPedidoNegadoActionPerformed
         if (rbPedidoNegado.isSelected()) {
 
-            String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
-                    + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ AND tpc.SITUACAO = 'Negado'";
+            String sqlquery;
+            
+            if(rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Negado' AND NumPedido = " + txtPedidoCompra.getText().trim();
+                
+            } else if(rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Negado' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
+                
+            } else {
+                sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Negado'";
+            }
 
             Statement stmt;
             ResultSet rs;
@@ -456,15 +516,17 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     }//GEN-LAST:event_rbIDPedidoCompraActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        
         conexao = new Conexao("GABRIEL", "GABRIEL");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoPedido = new DaoPedCompra(conexao.conectar());
         daoCotacao = new DaoCotacao(conexao.conectar());
+        daoMaterial = new DaoMaterial(conexao.conectar());
 
-        String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
-                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
-                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ";
+        String sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm  "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial";
 
         Statement stmt;
         ResultSet rs;
@@ -482,9 +544,10 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnRecarregarTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregarTabelaActionPerformed
-        String sqlquery = "Select NumPedido, tpc.NumCotacao, NomeMaterial, tf.NomeFornecedor, "
-                + "tpc.Situacao from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm, tbl_Fornecedor tf "
-                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.CNPJ = tf.CNPJ";
+        
+        String sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
+                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial";
 
         Statement stmt;
         ResultSet rs;
@@ -493,10 +556,14 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
             stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             rs = stmt.executeQuery(sqlquery);
             jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
+        rbAguardandoAprovacao.setSelected(false);
+        rbAguardandoContatoFornecedor.setSelected(false);
+        rbPedidoConcluido.setSelected(false);
+        rbPedidoNegado.setSelected(false);
         DefaultTableModel dm = (DefaultTableModel) jTablePedidosCompra.getModel();
     }//GEN-LAST:event_btnRecarregarTabelaActionPerformed
 
@@ -593,6 +660,8 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     private Conexao conexao = null;
     private Cotacao cotacao;
     private DaoCotacao daoCotacao;
+    private Material material;
+    private DaoMaterial daoMaterial;
     private PedidoCompra pedido;
     private DaoPedCompra daoPedido;
 }

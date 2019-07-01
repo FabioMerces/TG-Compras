@@ -37,24 +37,31 @@
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="rbPesquisarRequisicaoCompra" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="chkFiltrarRequisicoesAberto" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
+                              <Component id="btnFazerCotacao" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnCopiarIDRequisicao" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              <Component id="btnRecarregaTabela" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="rbPesquisarRequisicaoCompra" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="rbPesquisarPedidoCompra" min="-2" max="-2" attributes="0"/>
                                   <Component id="rbPesquisarCotacao" min="-2" max="-2" attributes="0"/>
                                   <Component id="rbPesquisarTodas" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="rbPesquisarSetor" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace pref="32" max="32767" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="txtPedidoDeCompra" alignment="1" min="-2" pref="99" max="-2" attributes="0"/>
                                           <Component id="txtIdRequisicao" alignment="1" min="-2" pref="99" max="-2" attributes="0"/>
@@ -70,10 +77,10 @@
                                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="txtCotacao" pref="100" max="32767" attributes="0"/>
-                                          <Component id="cmbSetores" max="32767" attributes="0"/>
+                                          <Component id="txtCotacao" max="32767" attributes="0"/>
+                                          <Component id="cmbSetores" min="-2" pref="100" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -83,15 +90,8 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnFazerCotacao" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="btnCopiarIDRequisicao" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                              <Component id="btnRecarregaTabela" min="-2" max="-2" attributes="0"/>
-                          </Group>
                       </Group>
-                      <EmptySpace min="0" pref="286" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="379" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -103,35 +103,41 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Component id="rbPesquisarTodas" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtIdRequisicao" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnBuscarRequisicao" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="rbPesquisarRequisicaoCompra" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtPedidoDeCompra" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnBuscarPedidoCompra" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="rbPesquisarPedidoCompra" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtCotacao" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnBuscarCotacao" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="rbPesquisarCotacao" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="rbPesquisarSetor" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cmbSetores" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnBuscarSetor" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="txtIdRequisicao" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnBuscarRequisicao" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="txtPedidoDeCompra" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnBuscarPedidoCompra" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="rbPesquisarPedidoCompra" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCotacao" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnBuscarCotacao" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="rbPesquisarCotacao" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbSetores" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnBuscarSetor" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="rbPesquisarSetor" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbPesquisarRequisicaoCompra" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="22" max="32767" attributes="0"/>
+              <EmptySpace pref="19" max="32767" attributes="0"/>
               <Component id="chkFiltrarRequisicoesAberto" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -164,23 +170,17 @@
         <Component class="javax.swing.JTable" name="jTableRequisicao">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="7" rowCount="12">
-                <Column editable="true" title="Id Requerente" type="java.lang.Object"/>
-                <Column editable="true" title="Setor do Requerente" type="java.lang.Object"/>
-                <Column editable="true" title="Id Requisi&#xe7;&#xe3;o" type="java.lang.Object"/>
-                <Column editable="true" title="Status" type="java.lang.Object"/>
-                <Column editable="true" title="Data da Requisi&#xe7;&#xe3;o" type="java.lang.Object"/>
-                <Column editable="true" title="Id da Cota&#xe7;&#xe3;o Relacionada" type="java.lang.Object"/>
-                <Column editable="true" title="Id do Pedido de Compra" type="java.lang.Object"/>
+              <Table columnCount="6" rowCount="12">
+                <Column editable="true" title="NUMERO_SOLICITACAO" type="java.lang.Object"/>
+                <Column editable="true" title="CPF_REQUERENTE" type="java.lang.Object"/>
+                <Column editable="true" title="CODIGO_SETOR" type="java.lang.Object"/>
+                <Column editable="true" title="DATA_SOLICITACAO" type="java.lang.Object"/>
+                <Column editable="true" title="MATERIAL_NAO_ENCONTRADO" type="java.lang.Object"/>
+                <Column editable="true" title="SITUACAO_SOLICITACAO" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>

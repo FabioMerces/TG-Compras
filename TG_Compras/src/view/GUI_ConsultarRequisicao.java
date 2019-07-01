@@ -6,8 +6,10 @@
 package view;
 
 import control.Conexao;
+import control.DaoCotacao;
 import control.DaoMateriaisSolicitados;
 import control.DaoMaterial;
+import control.DaoPedCompra;
 import control.DaoRequisicaoCompra;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -21,8 +23,10 @@ import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import model.Cotacao;
 import model.MateriaisSolicitados;
 import model.Material;
+import model.PedidoCompra;
 import model.RequisicaoCompra;
 import model.Setor;
 import net.proteanit.sql.DbUtils;
@@ -91,21 +95,21 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
         jTableRequisicao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Id Requerente", "Setor do Requerente", "Id Requisição", "Status", "Data da Requisição", "Id da Cotação Relacionada", "Id do Pedido de Compra"
+                "NUMERO_SOLICITACAO", "CPF_REQUERENTE", "CODIGO_SETOR", "DATA_SOLICITACAO", "MATERIAL_NAO_ENCONTRADO", "SITUACAO_SOLICITACAO"
             }
         ));
         jScrollPane1.setViewportView(jTableRequisicao);
@@ -247,22 +251,28 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rbPesquisarRequisicaoCompra)
                             .addComponent(jLabel1)
                             .addComponent(chkFiltrarRequisicoesAberto)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnFazerCotacao)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCopiarIDRequisicao)
+                                .addGap(29, 29, 29)
+                                .addComponent(btnRecarregaTabela))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rbPesquisarRequisicaoCompra)
                                     .addComponent(rbPesquisarPedidoCompra)
                                     .addComponent(rbPesquisarCotacao)
                                     .addComponent(rbPesquisarTodas)
                                     .addComponent(rbPesquisarSetor))
-                                .addGap(25, 25, 25)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGap(102, 102, 102)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel2)
                                             .addComponent(jLabel4))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtPedidoDeCompra, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtIdRequisicao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -274,21 +284,15 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel5)
                                             .addComponent(jLabel3))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtCotacao, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                                            .addComponent(cmbSetores, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(txtCotacao)
+                                            .addComponent(cmbSetores, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(btnBuscarCotacao)
-                                            .addComponent(btnBuscarSetor)))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnFazerCotacao)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCopiarIDRequisicao)
-                                .addGap(29, 29, 29)
-                                .addComponent(btnRecarregaTabela)))
-                        .addGap(0, 286, Short.MAX_VALUE)))
+                                            .addComponent(btnBuscarSetor))))))
+                        .addGap(0, 379, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -296,31 +300,34 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(rbPesquisarTodas)
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtIdRequisicao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscarRequisicao)
-                    .addComponent(rbPesquisarRequisicaoCompra))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtPedidoDeCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscarPedidoCompra)
-                    .addComponent(rbPesquisarPedidoCompra))
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtCotacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscarCotacao)
-                    .addComponent(rbPesquisarCotacao))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rbPesquisarSetor)
-                    .addComponent(jLabel5)
-                    .addComponent(cmbSetores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscarSetor))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtIdRequisicao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscarRequisicao))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtPedidoDeCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscarPedidoCompra)
+                            .addComponent(jLabel4)
+                            .addComponent(rbPesquisarPedidoCompra))
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtCotacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscarCotacao)
+                            .addComponent(rbPesquisarCotacao))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(cmbSetores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscarSetor)
+                            .addComponent(rbPesquisarSetor)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(rbPesquisarRequisicaoCompra)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addComponent(chkFiltrarRequisicoesAberto)
                 .addGap(12, 12, 12)
                 .addComponent(jLabel1)
@@ -347,8 +354,11 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoMaterial = new DaoMaterial(conexao.conectar());
         daoReq = new DaoRequisicaoCompra(conexao.conectar());
+        daoCotacao = new DaoCotacao(conexao.conectar());
+        daoPedido = new DaoPedCompra(conexao.conectar());
         
-        String sqlquery = "select * from tbl_solicitacao_compra";
+        String sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                + "from tbl_solicitacao_compra";
         
         Statement stmt;
         ResultSet rs;
@@ -396,23 +406,51 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIdRequisicaoKeyReleased
 
     private void btnBuscarRequisicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarRequisicaoActionPerformed
-        String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + txtIdRequisicao.getText().trim();
-        Statement stmt;
-        ResultSet rs;
-        
-        try{
-            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery(sqlquery);
-            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
-        
-        } catch(SQLException ex){
-            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        requisicaoCompra = null;
+        try {
+            if (txtIdRequisicao.getText().isEmpty()) {
+                throw new Exception("Numero da Solicitacao não foi informado.\n"
+                        + "Por favor informar um numero de solicitacao para pesquisa.");
+            } else {
+                requisicaoCompra = daoReq.consultar(Integer.parseInt(txtIdRequisicao.getText().trim()));
+
+                if (requisicaoCompra == null) {
+                    throw new Exception("Numero de solicitacao informado não existe.\n ");
+                    
+                } else {
+                    Statement stmt;
+                    ResultSet rs;
+
+                    try{
+                        String sqlquery;
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        if(chkFiltrarRequisicoesAberto.isSelected()){
+                             sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                                + "from tbl_solicitacao_compra where SituacaoSolicitacao = 'Em Aberto' AND NUMSOLICITACAO = " + txtIdRequisicao.getText().trim();
+                        } else {
+                             sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                                + "from tbl_solicitacao_compra where NUMSOLICITACAO = " + txtIdRequisicao.getText().trim();
+                        }
+                       
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }        
+                    dm =  (DefaultTableModel) jTableRequisicao.getModel();
+                    
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        dm =  (DefaultTableModel) jTableRequisicao.getModel();
+        
     }//GEN-LAST:event_btnBuscarRequisicaoActionPerformed
 
     private void btnRecarregaTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregaTabelaActionPerformed
-        String sqlquery = "select * from tbl_solicitacao_compra";
+        String sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                + "from tbl_solicitacao_compra";
         
         Statement stmt;
         ResultSet rs;
@@ -429,60 +467,107 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRecarregaTabelaActionPerformed
 
     private void btnBuscarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPedidoCompraActionPerformed
-        //Inserir o numero da requisicao de compra na tabela PedidoCompra para essa busca funcionar
-        String codigoPedidoCompra = txtPedidoDeCompra.getText().trim();
-        int codigoRequisicaoCompra = 0;
-        
-        String Query2 = "select NUMSOLICITACAO from tbl_pedido_compra where NUMPEDIDO = " + codigoPedidoCompra;
-        
-        
-        Statement stmt;
-        ResultSet rs;
-        System.out.println(codigoPedidoCompra);
-        
-        try{
-            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery(Query2);
-            while(rs.next()){
-            codigoRequisicaoCompra = rs.getInt("NUMSOLICITACAO");
+        pedido = null;
+        try {
+            if (txtPedidoDeCompra.getText().isEmpty()) {
+                throw new Exception("Numero do Pedido não foi informado.\n"
+                        + "Por favor informar um numero de pedido para pesquisa.");
+            } else {
+                pedido = daoPedido.consultar(Integer.parseInt(txtPedidoDeCompra.getText().trim()));
+
+                if (pedido == null) {
+                    throw new Exception("Numero de pedido informado não existe.\n ");
+                } else {
+                    int codigoRequisicaoCompra = 0;
+                    String Query2 = "select NUMSOLICITACAO from tbl_pedido_compra where NumPedido = " + txtPedidoDeCompra.getText().trim();
+                    Statement stmt;
+                    ResultSet rs;
+
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(Query2);
+                        while(rs.next()){
+                            codigoRequisicaoCompra = rs.getInt("NUMSOLICITACAO");
+                        }
+                        String sqlquery;
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        
+                        if(chkFiltrarRequisicoesAberto.isSelected()){
+                             sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                                + "from tbl_solicitacao_compra where SituacaoSolicitacao = 'Em Aberto' AND NUMSOLICITACAO = " + codigoRequisicaoCompra;
+                        } else {
+                             sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                                + "from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigoRequisicaoCompra;
+                        }
+                        
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }        
+                    dm =  (DefaultTableModel) jTableRequisicao.getModel();
+                    
+                }
             }
-            String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigoRequisicaoCompra;
-            rs = stmt.executeQuery(sqlquery);
-            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
         
-        } catch(SQLException ex){
-            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        dm =  (DefaultTableModel) jTableRequisicao.getModel();
+        
     }//GEN-LAST:event_btnBuscarPedidoCompraActionPerformed
 
     private void btnBuscarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCotacaoActionPerformed
-    //Inserir o numero da requisicao de compra na tabela cotacao para essa busca funcionar
-        String numCotacao =  txtCotacao.getText().trim();
-        int codigoCotacao = 0;
-    
-        String queryCotacao = "select NUMSOLICITACAO from tbl_cotacao where NUMCOTACAO = " + numCotacao;
-        
-        Statement stmt;
-        ResultSet rs;
-        
-        try{
-            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery(queryCotacao);
-            while(rs.next()){
-            codigoCotacao = rs.getInt("NUMSOLICITACAO");
-            }          
-            String sqlquery = "select * from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigoCotacao;
-            rs = stmt.executeQuery(sqlquery);
-            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
-        
-        } catch(SQLException ex){
-            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        cotacao = null;
+        try {
+            if (txtCotacao.getText().isEmpty()) {
+                throw new Exception("Id Cotacao não foi informado.\n"
+                        + "Por favor informar um código de cotacao para pesquisa.");
+            } else {
+                cotacao = daoCotacao.consultar(Integer.parseInt(txtCotacao.getText().trim()));
+
+                if (cotacao == null) {
+                    throw new Exception("Id Cotacao informado não existe.\n ");
+                } else {
+                    int codigoRequisicaoCompra = 0;
+                    String Query2 = "select NUMSOLICITACAO from tbl_cotacao where NumCotacao = " + txtCotacao.getText().trim();
+                    Statement stmt;
+                    ResultSet rs;
+
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(Query2);
+                        String sqlquery;
+                        while(rs.next()){
+                            codigoRequisicaoCompra = rs.getInt("NUMSOLICITACAO");
+                        }
+                        
+                        if(chkFiltrarRequisicoesAberto.isSelected()){
+                             sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                                + "from tbl_solicitacao_compra where SituacaoSolicitacao = 'Em Aberto' AND NUMSOLICITACAO = " + codigoRequisicaoCompra;
+                        } else {
+                             sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                                + "from tbl_solicitacao_compra where NUMSOLICITACAO = " + codigoRequisicaoCompra;
+                        }
+                        
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }        
+                    dm =  (DefaultTableModel) jTableRequisicao.getModel();
+                    
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao pesquisar Pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        dm =  (DefaultTableModel) jTableRequisicao.getModel();
+        
     }//GEN-LAST:event_btnBuscarCotacaoActionPerformed
 
     private void btnBuscarSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarSetorActionPerformed
+        
         String nomeSetor;
         nomeSetor = "'" + cmbSetores.getSelectedItem().toString().trim() + "'";
         int codigoSetor = 0;
@@ -496,10 +581,20 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
         try{
             stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
             rs = stmt.executeQuery(querySetor);
+            String sqlquery;
             while(rs.next()){
-            codigoSetor = rs.getInt("CODSETOR");
+                codigoSetor = rs.getInt("CODSETOR");
             }
-            String sqlquery = "select * from tbl_solicitacao_compra where SETOR = " + codigoSetor;
+            
+            if(chkFiltrarRequisicoesAberto.isSelected()){
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                   + "from tbl_solicitacao_compra where SituacaoSolicitacao = 'Em Aberto' AND NUMSOLICITACAO = " + codigoSetor;
+           } else {
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra where SETOR = " + codigoSetor;
+           }
+            
+            
             rs = stmt.executeQuery(sqlquery);
             jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
         
@@ -511,22 +606,23 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
     private void chkFiltrarRequisicoesAbertoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFiltrarRequisicoesAbertoActionPerformed
         if(chkFiltrarRequisicoesAberto.isSelected()){
-            String sqlquery = "select * from tbl_solicitacao_compra where SITUACAOSOLICITACAO = 'Em Aberto'";
+            String sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra where SITUACAOSOLICITACAO = 'Em Aberto'";
         
-        Statement stmt;
-        ResultSet rs;
-        
-        try{
-            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery(sqlquery);
-            jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
-        
-        } catch(SQLException ex){
-            Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        dm =  (DefaultTableModel) jTableRequisicao.getModel();
-            
-        }else{
+            Statement stmt;
+            ResultSet rs;
+
+            try{
+                stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                rs = stmt.executeQuery(sqlquery);
+                jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+
+            } catch(SQLException ex){
+                Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            dm =  (DefaultTableModel) jTableRequisicao.getModel();
+
+        } else{
             btnRecarregaTabelaActionPerformed(evt);
         }
     }//GEN-LAST:event_chkFiltrarRequisicoesAbertoActionPerformed
@@ -551,63 +647,54 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
 
     private void rbPesquisarRequisicaoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarRequisicaoCompraActionPerformed
         if(rbPesquisarRequisicaoCompra.isSelected()){
-        txtIdRequisicao.setEnabled(true);
-        btnBuscarRequisicao.setEnabled(true);
-        
-        txtCotacao.setEnabled(false);
-        btnBuscarCotacao.setEnabled(false);
-        txtPedidoDeCompra.setEnabled(false);
-        btnBuscarPedidoCompra.setEnabled(false);
-        cmbSetores.setEnabled(false);
-        btnBuscarSetor.setEnabled(false);
+            txtIdRequisicao.setEnabled(true);
+            btnBuscarRequisicao.setEnabled(true);
+
+            txtCotacao.setEnabled(false);
+            btnBuscarCotacao.setEnabled(false);
+            txtPedidoDeCompra.setEnabled(false);
+            btnBuscarPedidoCompra.setEnabled(false);
+            cmbSetores.setEnabled(false);
+            btnBuscarSetor.setEnabled(false);
         }
     }//GEN-LAST:event_rbPesquisarRequisicaoCompraActionPerformed
 
     private void rbPesquisarPedidoCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarPedidoCompraActionPerformed
         if(rbPesquisarPedidoCompra.isSelected()){
-        txtPedidoDeCompra.setEnabled(true);
-        btnBuscarPedidoCompra.setEnabled(true);
-        
-        
-        txtCotacao.setEnabled(false);
-        btnBuscarCotacao.setEnabled(false);
-        txtIdRequisicao.setEnabled(false);
-        btnBuscarRequisicao.setEnabled(false);
-        cmbSetores.setEnabled(false);
-        btnBuscarSetor.setEnabled(false);
+            txtPedidoDeCompra.setEnabled(true);
+            btnBuscarPedidoCompra.setEnabled(true);
+            txtCotacao.setEnabled(false);
+            btnBuscarCotacao.setEnabled(false);
+            txtIdRequisicao.setEnabled(false);
+            btnBuscarRequisicao.setEnabled(false);
+            cmbSetores.setEnabled(false);
+            btnBuscarSetor.setEnabled(false);
         }
     }//GEN-LAST:event_rbPesquisarPedidoCompraActionPerformed
 
     private void rbPesquisarCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarCotacaoActionPerformed
         if(rbPesquisarCotacao.isSelected()){
             txtCotacao.setEnabled(true);
-        btnBuscarCotacao.setEnabled(true);
-        
-        
-        
-        txtPedidoDeCompra.setEnabled(false);
-        btnBuscarPedidoCompra.setEnabled(false);
-        txtIdRequisicao.setEnabled(false);
-        btnBuscarRequisicao.setEnabled(false);
-        cmbSetores.setEnabled(false);
-        btnBuscarSetor.setEnabled(false);
+            btnBuscarCotacao.setEnabled(true);
+            txtPedidoDeCompra.setEnabled(false);
+            btnBuscarPedidoCompra.setEnabled(false);
+            txtIdRequisicao.setEnabled(false);
+            btnBuscarRequisicao.setEnabled(false);
+            cmbSetores.setEnabled(false);
+            btnBuscarSetor.setEnabled(false);
         }
     }//GEN-LAST:event_rbPesquisarCotacaoActionPerformed
 
     private void rbPesquisarSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPesquisarSetorActionPerformed
         if(rbPesquisarSetor.isSelected()){
             cmbSetores.setEnabled(true);
-        btnBuscarSetor.setEnabled(true);
-
-        
-        
-        
-        txtPedidoDeCompra.setEnabled(false);
-        btnBuscarPedidoCompra.setEnabled(false);
-        txtIdRequisicao.setEnabled(false);
-        btnBuscarRequisicao.setEnabled(false);
+            btnBuscarSetor.setEnabled(true);
+            txtPedidoDeCompra.setEnabled(false);
+            btnBuscarPedidoCompra.setEnabled(false);
+            txtIdRequisicao.setEnabled(false);
+            btnBuscarRequisicao.setEnabled(false);
             txtCotacao.setEnabled(false);
-        btnBuscarCotacao.setEnabled(false);
+            btnBuscarCotacao.setEnabled(false);
         }
     }//GEN-LAST:event_rbPesquisarSetorActionPerformed
 
@@ -620,6 +707,8 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
         btnBuscarSetor.setEnabled(false);
         txtCotacao.setEnabled(false);
         btnBuscarCotacao.setEnabled(false);
+        chkFiltrarRequisicoesAberto.setSelected(false);
+        btnRecarregaTabela.doClick();
     }//GEN-LAST:event_rbPesquisarTodasActionPerformed
 
     private void Filter(String query){
@@ -695,6 +784,10 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
     private Conexao conexao;
     private Material material;
     private DaoMaterial daoMaterial;
+    private Cotacao cotacao;
+    private DaoCotacao daoCotacao;
+    private PedidoCompra pedido;
+    private DaoPedCompra daoPedido;
     private DaoRequisicaoCompra daoReq;
     private RequisicaoCompra requisicaoCompra;
     private MateriaisSolicitados materiaisSolicitados;
