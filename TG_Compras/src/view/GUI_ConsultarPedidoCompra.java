@@ -1,14 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import control.Conexao;
 import control.DaoCotacao;
 import control.DaoMaterial;
 import control.DaoPedCompra;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,7 +23,8 @@ import model.Material;
 import model.PedidoCompra;
 import net.proteanit.sql.DbUtils;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -287,8 +286,8 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                     throw new Exception("Id do Pedido informado não existe.\n ");
                 } else {
                     String sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND NumPedido = " + txtPedidoCompra.getText().trim();
+                            + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                            + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND NumPedido = " + txtPedidoCompra.getText().trim();
 
                     Statement stmt;
                     ResultSet rs;
@@ -322,8 +321,8 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
                     throw new Exception("Id Cotacao informado não existe.\n ");
                 } else {
                     String sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.NUMCOTACAO = " + txtCotacaoVencedora.getText().trim();
+                            + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                            + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tc.NUMCOTACAO = " + txtCotacaoVencedora.getText().trim();
 
                     Statement stmt;
                     ResultSet rs;
@@ -348,20 +347,20 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         if (rbAguardandoAprovacao.isSelected()) {
 
             String sqlquery;
-            if(rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
+            if (rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia' AND NumPedido = " + txtPedidoCompra.getText().trim();
-                
-            } else if(rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia' AND NumPedido = " + txtPedidoCompra.getText().trim();
+
+            } else if (rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
-                
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
+
             } else {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia'";
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Aprovacao da Gerencia'";
             }
 
             Statement stmt;
@@ -386,20 +385,20 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         if (rbAguardandoContatoFornecedor.isSelected()) {
 
             String sqlquery;
-            if(rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
+            if (rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor' AND NumPedido = " + txtPedidoCompra.getText().trim();
-                
-            } else if(rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor' AND NumPedido = " + txtPedidoCompra.getText().trim();
+
+            } else if (rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
-                
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
+
             } else {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor'";
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Aguardando Contato com Fornecedor'";
             }
 
             Statement stmt;
@@ -424,22 +423,22 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         if (rbPedidoConcluido.isSelected()) {
 
             String sqlquery;
-            if(rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
+            if (rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Concluido' AND NumPedido = " + txtPedidoCompra.getText().trim();
-                
-            } else if(rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Concluido' AND NumPedido = " + txtPedidoCompra.getText().trim();
+
+            } else if (rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Concluido' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
-                
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Concluido' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
+
             } else {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Concluido'";
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Concluido'";
             }
-            
+
             Statement stmt;
             ResultSet rs;
 
@@ -462,21 +461,21 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         if (rbPedidoNegado.isSelected()) {
 
             String sqlquery;
-            
-            if(rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
+
+            if (rbIDPedidoCompra.isSelected() && !txtPedidoCompra.getText().isEmpty()) {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Negado' AND NumPedido = " + txtPedidoCompra.getText().trim();
-                
-            } else if(rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Negado' AND NumPedido = " + txtPedidoCompra.getText().trim();
+
+            } else if (rbIDCotacaoVencedora.isSelected() && !txtCotacaoVencedora.getText().isEmpty()) {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Negado' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
-                
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Negado' AND tc.NumCotacao = " + txtCotacaoVencedora.getText().trim();
+
             } else {
                 sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Negado'";
+                        + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                        + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial AND tpc.SITUACAO = 'Negado'";
             }
 
             Statement stmt;
@@ -516,7 +515,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     }//GEN-LAST:event_rbIDPedidoCompraActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
+
         conexao = new Conexao("GABRIEL", "GABRIEL");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
@@ -525,8 +524,8 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
         daoMaterial = new DaoMaterial(conexao.conectar());
 
         String sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm  "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial";
+                + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm  "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial";
 
         Statement stmt;
         ResultSet rs;
@@ -544,10 +543,10 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnRecarregarTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregarTabelaActionPerformed
-        
+
         String sqlquery = "Select NumPedido as NUMERO_PEDIDO, tpc.NumCotacao as NUMERO_COTACAO, tpc.NumSolicitacao as NUMERO_SOLICITACAO, NomeMaterial as NOME_MATERIAL, "
-                    + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
-                    + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial";
+                + "DataPedido as DATA_PEDIDO, tpc.Situacao as SITUACAO_PEDIDO from tbl_Pedido_Compra tpc, tbl_Cotacao tc, tbl_Material tm "
+                + "where tpc.NumCotacao = tc.NumCotacao AND tc.CodMaterial = tm.CodMaterial";
 
         Statement stmt;
         ResultSet rs;
@@ -556,7 +555,7 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
             stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             rs = stmt.executeQuery(sqlquery);
             jTablePedidosCompra.setModel(DbUtils.resultSetToTableModel(rs));
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -573,15 +572,37 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
 
     private void gerarReport() {
         try {
-            String src = "src/report/report_PedidoCompra.jrxml";
+            String sqlquery = "SELECT "
+                    + "     TBL_PEDIDO_COMPRA.NUMPEDIDO AS TBL_PEDIDO_COMPRA_NUMPEDIDO,"
+                    + "     TBL_PEDIDO_COMPRA.NUMCOTACAO AS TBL_PEDIDO_COMPRA_NUMCOTACAO,"
+                    + "     TBL_PEDIDO_COMPRA.NUMSOLICITACAO AS TBL_PEDIDO_COMPRA_NUMSOLICITAC,"
+                    + "     TBL_PEDIDO_COMPRA.DATAPEDIDO AS TBL_PEDIDO_COMPRA_DATAPEDIDO,"
+                    + "     TBL_PEDIDO_COMPRA.SITUACAO AS TBL_PEDIDO_COMPRA_SITUACAO,"
+                    + "     TBL_PEDIDO_COMPRA.CPFGERENTE AS TBL_PEDIDO_COMPRA_CPFGERENTE"
+                    + " FROM TBL_PEDIDO_COMPRA";
+            Statement stmt;
+            ResultSet rs;
 
-            Map params = new HashMap();
-            params.put("GABRIEL", "GABRIEL");
-            JasperReport jr = JasperCompileManager.compileReport(src);
-            JasperPrint jp = JasperFillManager.fillReport(jr, null, conexao.conectar());
-            JasperViewer.viewReport(jp, false);
-        } catch (JRException ex) {
-            JOptionPane.showMessageDialog(null, "Erro File-Report: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sqlquery);
+
+            JRResultSetDataSource jrRS = new JRResultSetDataSource(rs);
+            //caminho relatório
+            InputStream caminhoRelatorio = this.getClass().getClassLoader().getResourceAsStream("report/report_PedidoCompra.jasper");
+            JasperPrint jspPrint = JasperFillManager.fillReport(caminhoRelatorio, new HashMap(), jrRS);
+            System.out.println("montou JPrint Ok");
+            JasperExportManager.exportReportToPdfFile(jspPrint, "C:/Users/Thais/Desktop/Github - Matheus/TG-Compras/TG_Compras/relatorios/rel_PedCompra.pdf");
+            System.out.println("ExportManager Ok");
+
+            File file = new File("C:/Users/Thais/Desktop/Github - Matheus/TG-Compras/TG_Compras/relatorios/rel_PedCompra.pdf");
+            try {
+                Desktop.getDesktop().open(file);
+            } catch (Exception e) {
+                JOptionPane.showConfirmDialog(null, e);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            //JOptionPane.showMessageDialog(null, "Erro File-Report: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -656,7 +677,6 @@ public class GUI_ConsultarPedidoCompra extends javax.swing.JFrame {
     private javax.swing.JTextField txtCotacaoVencedora;
     private javax.swing.JTextField txtPedidoCompra;
     // End of variables declaration//GEN-END:variables
-
     private Conexao conexao = null;
     private Cotacao cotacao;
     private DaoCotacao daoCotacao;

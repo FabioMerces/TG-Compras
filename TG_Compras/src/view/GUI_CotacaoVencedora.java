@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -569,7 +570,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         material = listaComboMaterial.get(cmbCodigoMaterial.getSelectedIndex());
         String sqlquery;
 
-        sqlquery = "select tbl_fornecedor.CNPJ, tbl_fornecedor.nomefornecedor as Nome_Fornecedor, PRECOUNITARIO as Preço_Unitário, DataEntrega as Data_Entrega from tbl_cotacao "
+        sqlquery = "select tbl_fornecedor.CNPJ, tbl_fornecedor.nomefornecedor as Nome_Fornecedor, precounitario as Preço_Unitário, DataEntrega as Data_Entrega from tbl_cotacao "
                 + "inner join tbl_fornecedor on tbl_fornecedor.cnpj = tbl_cotacao.cnpj "
                 + "where codmaterial = " + material.getCodMaterial()
                 + "and numsolicitacao = " + txtIDRequisicao.getText();
@@ -588,40 +589,31 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             for (int i = 0; i < jTableCompararValor.getRowCount(); i++) {
-                String data = jTableCompararValor.getValueAt(i, 3).toString();
-                DataEntrega.add(sdf.parse(data));
-                System.out.println("pegou data");
-            }
-            for (int i = 0; i < DataEntrega.size(); i++) {
                 int nota = 0;
-                Date data = DataEntrega.get(i);
-
-                for (int c = 0; c < DataEntrega.size(); c++) {
-                    Date compara = DataEntrega.get(c);
-
+                String data = jTableCompararValor.getValueAt(i, 3).toString();
+                for (int c = 0; c < jTableCompararValor.getRowCount(); c++) {
+                    String compara = jTableCompararValor.getValueAt(c, 3).toString();
                     if (i == c) {
-                        /*Não compare a si mesmo...*/
+                        /*Não se compare a si mesmo...*/
                     } else {
-
-                        if (data.compareTo(compara) > 0) {
+                        if (sdf.format(data).compareTo(sdf.format(compara)) > 0) {
                             nota += 1;
-                        } else if (data.compareTo(compara) == 0) {
+                        } else if (sdf.format(data).compareTo(sdf.format(compara)) == 0) {
 
                         } else {
                             nota -= 1;
                         }
                     }
-
                 }
-                if (nota == DataEntrega.size()) {
+                if (nota == jTableCompararValor.getRowCount()) {
                     nota = 10;
                 } else {
                     nota = 0;
                 }
                 NotaEntrega.add(nota);
-                System.out.println("Fim add Nota " + i);
             }
         } catch (Exception e) {
+            //JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage());
             System.out.println("Erro: " + e.getMessage());
         }
         //ARRUMAR UMA MANEIRA DE IMPLEMENTAR UM RESET NA TABELA
@@ -659,7 +651,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
         jTableComparacaoFornecedores.setValueAt("Vencedor", 8, 0);
 
         int qntdFornecedores = jTableCompararValor.getRowCount();
-        int cont = 0, NumCot;;
+        int cont = 0;
         String CNPJ;
 
         for (cont = 0; cont < qntdFornecedores; cont++) {
@@ -668,8 +660,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
 
         for (cont = 0; cont < qntdFornecedores; cont++) {
 
-            CNPJ = jTableCompararValor.getValueAt(cont, 1).toString();
-            NumCot = Integer.parseInt(jTableCompararValor.getValueAt(cont, 0).toString());
+            CNPJ = jTableCompararValor.getValueAt(cont, 0).toString();
             fornecedor = daoFornecedor.consultar(CNPJ);
 
             jTableComparacaoFornecedores.setValueAt(fornecedor.getNomeFornecedor(), 0, cont + 1);
@@ -698,13 +689,13 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
                     importancia = cmbImportanciaEntregaRapida.getSelectedItem().toString();
                     if (importancia.trim().equals("Baixa")) {
                         divisor = divisor + 1;
-                        notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 2);
+                        notaEntrega = (notaEntrega * 2);
                     } else if (importancia.trim().equals("Intermediaria")) {
                         divisor = divisor + 2;
-                        notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 3);
+                        notaEntrega = (notaEntrega * 3);
                     } else {
                         divisor = divisor + 3;
-                        notaEntrega = (fornecedor.getNotaVelocidadeEntrega() * 4);
+                        notaEntrega = (notaEntrega * 4);
                     }
                 }
                 if (chkMaiorQualidade.isSelected()) {
@@ -757,9 +748,7 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
 
         int qtdeColuna = jTableComparacaoFornecedores.getColumnCount();
         for (cont = qtdeColuna; cont > qntdFornecedores + 1; cont--) {
-
             jTableComparacaoFornecedores.removeColumn(jTableComparacaoFornecedores.getColumn("Nota Fornecedor" + (cont - 1)));
-
         }
         boolean FornecSemNota = false;
         for (cont = 0; cont < qntdFornecedores; cont++) {
@@ -1073,6 +1062,5 @@ public class GUI_CotacaoVencedora extends javax.swing.JFrame {
     private DaoMaterial daoMaterial;
     private Fornecedor fornecedor;
     private DaoFornecedor daoFornecedor;
-    private List<Integer> NotaEntrega;
-    private List<Date> DataEntrega;
+    private ArrayList<Integer> NotaEntrega = new ArrayList<>();
 }
