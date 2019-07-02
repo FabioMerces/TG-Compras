@@ -254,15 +254,17 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                 if (cotacao == null) {
                     throw new Exception("Id Cotacao informado não existe.\n ");
                 } else {
-                    String sqlquery = "select NumCotacao as Numero_Cotacao," +
-                                    "  NumSolicitacao as Codigo_Requisicao," +
-                                    "  DataCotacao as Data_Cotacao," +
-                                    "  DataEntrega as Data_Entrega," +
-                                    "  CNPJ," +
-                                    "  CodMaterial as Codigo_Material," +
-                                    "  PrecoUnitario as Preco_Unitario, " +
-                                    "  SituacaoCotacao as Situacao_Cotacao," +
-                                    "  Vencedora from tbl_cotacao where NUMCOTACAO = " + txtIDCotacao.getText().trim();
+                    String sqlquery = "0";
+                    if(chkStatusCotacao.isSelected()){
+                        sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' AND NUMCOTACAO = " + txtIDCotacao.getText().trim();
+                    } else if(chkCotacoesVencedoras.isSelected()){
+                        sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where VENCEDORA = 'SIM' AND NUMCOTACAO = " + txtIDCotacao.getText().trim();
+                    } else {
+                        sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where NUMCOTACAO = " + txtIDCotacao.getText().trim();
+                    }
         
                     Statement stmt;
                     ResultSet rs;
@@ -319,15 +321,8 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
     }//GEN-LAST:event_rbIDRequisicaoActionPerformed
 
     private void btnRecarregaTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecarregaTabelaActionPerformed
-        String sqlquery = "select NumCotacao as Numero_Cotacao," +
-                                    "  NumSolicitacao as Codigo_Requisicao," +
-                                    "  DataCotacao as Data_Cotacao," +
-                                    "  DataEntrega as Data_Entrega," +
-                                    "  CNPJ," +
-                                    "  CodMaterial as Codigo_Material," +
-                                    "  PrecoUnitario as Preco_Unitario, " +
-                                    "  SituacaoCotacao as Situacao_Cotacao," +
-                                    "  Vencedora  from tbl_cotacao";
+        String sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora  from tbl_cotacao";
         
         Statement stmt;
         ResultSet rs;
@@ -353,15 +348,8 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:xe");
         daoCotacao = new DaoCotacao(conexao.conectar());
         daoRequisicao = new DaoRequisicaoCompra(conexao.conectar());
-        String sqlquery = "select NumCotacao as Numero_Cotacao," +
-                                "  NumSolicitacao as Codigo_Requisicao," +
-                                "  DataCotacao as Data_Cotacao," +
-                                "  DataEntrega as Data_Entrega," +
-                                "  CNPJ," +
-                                "  CodMaterial as Codigo_Material," +
-                                "  PrecoUnitario as Preco_Unitario, " +
-                                "  SituacaoCotacao as Situacao_Cotacao," +
-                                "  Vencedora  from tbl_cotacao";
+        String sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                "  SituacaoCotacao as Situacao_Cotacao, Vencedora  from tbl_cotacao";
         
         Statement stmt;
         ResultSet rs;
@@ -389,15 +377,17 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                 if (requisicao == null) {
                     throw new Exception("Id Requisicao de Compra informado não existe.\n ");
                 } else {
-                    String sqlquery = "select NumCotacao as Numero_Cotacao," +
-                                    "  NumSolicitacao as Codigo_Requisicao," +
-                                    "  DataCotacao as Data_Cotacao," +
-                                    "  DataEntrega as Data_Entrega," +
-                                    "  CNPJ," +
-                                    "  CodMaterial as Codigo_Material," +
-                                    "  PrecoUnitario as Preco_Unitario, " +
-                                    "  SituacaoCotacao as Situacao_Cotacao," +
-                                    "  Vencedora from tbl_cotacao where NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
+                    String sqlquery = "0";
+                    if(chkStatusCotacao.isSelected()){
+                        sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' AND NumSolicitacao = " + txtIDRequisicao.getText().trim();
+                    } else if(chkCotacoesVencedoras.isSelected()){
+                        sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where VENCEDORA = 'SIM' AND NumSolicitacao = " + txtIDRequisicao.getText().trim();
+                    } else {
+                        sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where NUMSOLICITACAO = " + txtIDRequisicao.getText().trim();
+                    }
         
                     Statement stmt;
                     ResultSet rs;
@@ -425,37 +415,16 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
         String sqlquery;
 
         if(rbIDCotacao.isSelected() && !txtIDCotacao.getText().isEmpty()) {
-            sqlquery = "select NumCotacao as Numero_Cotacao," +
-                                "  NumSolicitacao as Codigo_Requisicao," +
-                                "  DataCotacao as Data_Cotacao," +
-                                "  DataEntrega as Data_Entrega," +
-                                "  CNPJ," +
-                                "  CodMaterial as Codigo_Material," +
-                                "  PrecoUnitario as Preco_Unitario, " +
-                                "  SituacaoCotacao as Situacao_Cotacao," +
-                                "  Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' AND NumCotacao = " + txtIDCotacao.getText().trim();
+            sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' AND NumCotacao = " + txtIDCotacao.getText().trim();
 
         } else if(rbIDRequisicao.isSelected() && !txtIDRequisicao.getText().isEmpty()) {
-            sqlquery = "select NumCotacao as Numero_Cotacao," +
-                                "  NumSolicitacao as Codigo_Requisicao," +
-                                "  DataCotacao as Data_Cotacao," +
-                                "  DataEntrega as Data_Entrega," +
-                                "  CNPJ," +
-                                "  CodMaterial as Codigo_Material," +
-                                "  PrecoUnitario as Preco_Unitario, " +
-                                "  SituacaoCotacao as Situacao_Cotacao," +
-                                "  Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' AND NumSolicitacao = " + txtIDRequisicao.getText().trim();
+            sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' AND NumSolicitacao = " + txtIDRequisicao.getText().trim();
 
         } else {
-            sqlquery = "select NumCotacao as Numero_Cotacao," +
-                                "  NumSolicitacao as Codigo_Requisicao," +
-                                "  DataCotacao as Data_Cotacao," +
-                                "  DataEntrega as Data_Entrega," +
-                                "  CNPJ," +
-                                "  CodMaterial as Codigo_Material," +
-                                "  PrecoUnitario as Preco_Unitario, " +
-                                "  SituacaoCotacao as Situacao_Cotacao," +
-                                "  Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' ";
+            sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor'";
         }
 
             Statement stmt;
@@ -471,10 +440,66 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
             }
             DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();       
             
-    } else{
+    } else if(chkCotacoesVencedoras.isSelected()){
+            chkStatusCotacao.setSelected(false);
+            
+            String sqlquery;
+            
+            if(rbIDCotacao.isSelected() && !txtIDCotacao.getText().isEmpty()) {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where VENCEDORA = 'SIM' AND NumCotacao = " + txtIDCotacao.getText().trim();
+                
+            } else if(rbIDRequisicao.isSelected() && !txtIDRequisicao.getText().isEmpty()) {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where VENCEDORA = 'SIM' AND NumSolicitacao = " + txtIDRequisicao.getText().trim();
+                
+            } else {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where VENCEDORA = 'SIM'";
+            }
+        
+                    Statement stmt;
+                    ResultSet rs;
+        
+                    try{
+                        stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                        rs = stmt.executeQuery(sqlquery);
+                        jTableCotacoes.setModel(DbUtils.resultSetToTableModel(rs));
+        
+                    } catch(SQLException ex){
+                        Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();       
+            
+        } else {
+            String sqlquery;
+            if(rbIDCotacao.isSelected() && !txtIDCotacao.getText().isEmpty()) {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where NumCotacao = " + txtIDCotacao.getText().trim();
 
-        btnRecarregaTabelaActionPerformed(evt);
-    }
+            } else if(rbIDRequisicao.isSelected() && !txtIDRequisicao.getText().isEmpty()) {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where NumSolicitacao = " + txtIDRequisicao.getText().trim();
+
+            } else {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao";
+            }
+
+            Statement stmt;
+            ResultSet rs;
+
+            try{
+                stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                rs = stmt.executeQuery(sqlquery);
+                jTableCotacoes.setModel(DbUtils.resultSetToTableModel(rs));
+
+            } catch(SQLException ex){
+                Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();  
+        }
+    
     }//GEN-LAST:event_chkStatusCotacaoActionPerformed
 
     private void btnCopiarIDCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarIDCotacaoActionPerformed
@@ -493,43 +518,22 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCopiarIDCotacaoActionPerformed
 
     private void chkCotacoesVencedorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkCotacoesVencedorasActionPerformed
-    if(chkCotacoesVencedoras.isSelected()){
+        if(chkCotacoesVencedoras.isSelected()){
             chkStatusCotacao.setSelected(false);
             
             String sqlquery;
             
             if(rbIDCotacao.isSelected() && !txtIDCotacao.getText().isEmpty()) {
-                sqlquery = "select NumCotacao as Numero_Cotacao," +
-                                    "  NumSolicitacao as Codigo_Requisicao," +
-                                    "  DataCotacao as Data_Cotacao," +
-                                    "  DataEntrega as Data_Entrega," +
-                                    "  CNPJ," +
-                                    "  CodMaterial as Codigo_Material," +
-                                    "  PrecoUnitario as Preco_Unitario, " +
-                                    "  SituacaoCotacao as Situacao_Cotacao," +
-                                    "  Vencedora from tbl_cotacao where VENCEDORA = 'SIM' AND NumCotacao = " + txtIDCotacao.getText().trim();
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where VENCEDORA = 'SIM' AND NumCotacao = " + txtIDCotacao.getText().trim();
                 
             } else if(rbIDRequisicao.isSelected() && !txtIDRequisicao.getText().isEmpty()) {
-                sqlquery = "select NumCotacao as Numero_Cotacao," +
-                                    "  NumSolicitacao as Codigo_Requisicao," +
-                                    "  DataCotacao as Data_Cotacao," +
-                                    "  DataEntrega as Data_Entrega," +
-                                    "  CNPJ," +
-                                    "  CodMaterial as Codigo_Material," +
-                                    "  PrecoUnitario as Preco_Unitario, " +
-                                    "  SituacaoCotacao as Situacao_Cotacao," +
-                                    "  Vencedora from tbl_cotacao where VENCEDORA = 'SIM' AND NumSolicitacao = " + txtIDRequisicao.getText().trim();
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where VENCEDORA = 'SIM' AND NumSolicitacao = " + txtIDRequisicao.getText().trim();
                 
             } else {
-                sqlquery = "select NumCotacao as Numero_Cotacao," +
-                                    "  NumSolicitacao as Codigo_Requisicao," +
-                                    "  DataCotacao as Data_Cotacao," +
-                                    "  DataEntrega as Data_Entrega," +
-                                    "  CNPJ," +
-                                    "  CodMaterial as Codigo_Material," +
-                                    "  PrecoUnitario as Preco_Unitario, " +
-                                    "  SituacaoCotacao as Situacao_Cotacao," +
-                                    "  Vencedora from tbl_cotacao where VENCEDORA = 'SIM' ";
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where VENCEDORA = 'SIM'";
             }
         
                     Statement stmt;
@@ -545,9 +549,65 @@ public class GUI_ConsultarCotacao extends javax.swing.JFrame {
                     }
                     DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();       
             
-        }else{
-            btnRecarregaTabelaActionPerformed(evt);
-        }        // TODO add your handling code here:
+        } else if(chkStatusCotacao.isSelected()){
+            chkCotacoesVencedoras.setSelected(false);
+
+            String sqlquery;
+
+            if(rbIDCotacao.isSelected() && !txtIDCotacao.getText().isEmpty()) {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' AND NumCotacao = " + txtIDCotacao.getText().trim();
+
+            } else if(rbIDRequisicao.isSelected() && !txtIDRequisicao.getText().isEmpty()) {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor' AND NumSolicitacao = " + txtIDRequisicao.getText().trim();
+
+            } else {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where SITUACAOCOTACAO = 'Aguardando Resposta do Fornecedor'";
+            }
+
+                Statement stmt;
+                ResultSet rs;
+
+                try{
+                    stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                    rs = stmt.executeQuery(sqlquery);
+                    jTableCotacoes.setModel(DbUtils.resultSetToTableModel(rs));
+
+                } catch(SQLException ex){
+                    Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel();       
+
+        } else {
+            String sqlquery;
+            if(rbIDCotacao.isSelected() && !txtIDCotacao.getText().isEmpty()) {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where NumCotacao = " + txtIDCotacao.getText().trim();
+
+            } else if(rbIDRequisicao.isSelected() && !txtIDRequisicao.getText().isEmpty()) {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao where NumSolicitacao = " + txtIDRequisicao.getText().trim();
+
+            } else {
+                sqlquery = "select NumCotacao as Numero_Cotacao, NumSolicitacao as Codigo_Requisicao, DataCotacao as Data_Cotacao, DataEntrega as Data_Entrega, CNPJ, CodMaterial as Codigo_Material, PrecoUnitario as Preco_Unitario, " +
+                                    "  SituacaoCotacao as Situacao_Cotacao, Vencedora from tbl_cotacao";
+            }
+
+            Statement stmt;
+            ResultSet rs;
+
+            try{
+                stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                rs = stmt.executeQuery(sqlquery);
+                jTableCotacoes.setModel(DbUtils.resultSetToTableModel(rs));
+
+            } catch(SQLException ex){
+                Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            DefaultTableModel dm = (DefaultTableModel) jTableCotacoes.getModel(); 
+        }        
     }//GEN-LAST:event_chkCotacoesVencedorasActionPerformed
 
     /**

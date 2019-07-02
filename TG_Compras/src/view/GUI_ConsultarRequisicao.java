@@ -588,7 +588,7 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
             
             if(chkFiltrarRequisicoesAberto.isSelected()){
                 sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
-                   + "from tbl_solicitacao_compra where SituacaoSolicitacao = 'Em Aberto' AND NUMSOLICITACAO = " + codigoSetor;
+                   + "from tbl_solicitacao_compra where SituacaoSolicitacao = 'Em Aberto' AND SETOR = " + codigoSetor;
            } else {
                 sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
                     + "from tbl_solicitacao_compra where SETOR = " + codigoSetor;
@@ -605,15 +605,57 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarSetorActionPerformed
 
     private void chkFiltrarRequisicoesAbertoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFiltrarRequisicoesAbertoActionPerformed
+        
+        String sqlquery;
+        String sqlQuerySecundaria = "-1";
+        String codSecundario = "-1";
+        int codigo = -1;
+        
         if(chkFiltrarRequisicoesAberto.isSelected()){
-            String sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+            if(rbPesquisarRequisicaoCompra.isSelected() && !txtIdRequisicao.getText().isEmpty()){
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra where SITUACAOSOLICITACAO = 'Em Aberto' AND NumSolicitacao = " + txtIdRequisicao.getText().trim();
+                
+            } else if(rbPesquisarCotacao.isSelected() && !txtCotacao.getText().isEmpty()){
+                codSecundario = txtCotacao.getText().trim();
+                sqlQuerySecundaria = "Select NumSolicitacao from tbl_Cotacao where NumCotacao = " + codSecundario;
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra where SITUACAOSOLICITACAO = 'Em Aberto' AND NumSolicitacao = ";
+                
+            } else if(rbPesquisarPedidoCompra.isSelected() && !txtPedidoDeCompra.getText().isEmpty()){
+                codSecundario = txtPedidoDeCompra.getText().trim();
+                sqlQuerySecundaria = "Select NumSolicitacao from tbl_Pedido_Compra where NumPedido = " + codSecundario;
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra where SITUACAOSOLICITACAO = 'Em Aberto' AND NumSolicitacao = ";
+                
+            } else if(rbPesquisarSetor.isSelected()){
+                codSecundario = "'" + cmbSetores.getSelectedItem().toString().trim() + "'";
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra where SITUACAOSOLICITACAO = 'Em Aberto' AND Setor = " + codSecundario;
+                
+            } else {
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
                     + "from tbl_solicitacao_compra where SITUACAOSOLICITACAO = 'Em Aberto'";
+            }
         
             Statement stmt;
             ResultSet rs;
 
             try{
                 stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                if(!sqlQuerySecundaria.equals("-1")) {
+                    rs = stmt.executeQuery(sqlQuerySecundaria);
+                    if(rbPesquisarSetor.isSelected()){
+                        while(rs.next()){
+                            codigo  = rs.getInt("NomeSetor");
+                        }
+                    } else {
+                        while(rs.next()){
+                            codigo  = rs.getInt("NumSolicitacao");
+                        }
+                    }
+                    sqlquery = sqlquery + codigo;
+                }
                 rs = stmt.executeQuery(sqlquery);
                 jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
 
@@ -622,8 +664,58 @@ public class GUI_ConsultarRequisicao extends javax.swing.JFrame {
             }
             dm =  (DefaultTableModel) jTableRequisicao.getModel();
 
-        } else{
-            btnRecarregaTabelaActionPerformed(evt);
+        } else {
+            if(rbPesquisarRequisicaoCompra.isSelected() && !txtIdRequisicao.getText().isEmpty()){
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra where NumSolicitacao = " + txtIdRequisicao.getText().trim();
+                
+            } else if(rbPesquisarCotacao.isSelected() && !txtCotacao.getText().isEmpty()){
+                codSecundario = txtCotacao.getText().trim();
+                sqlQuerySecundaria = "Select NumSolicitacao from tbl_Cotacao where NumCotacao = " + codSecundario;
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra where NumSolicitacao = ";
+                
+            } else if(rbPesquisarPedidoCompra.isSelected() && !txtPedidoDeCompra.getText().isEmpty()){
+                codSecundario = txtPedidoDeCompra.getText().trim();
+                sqlQuerySecundaria = "Select NumSolicitacao from tbl_Pedido_Compra where NumPedido = " + codSecundario;
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra where NumSolicitacao = ";
+                
+            } else if(rbPesquisarSetor.isSelected()){
+                codSecundario = "'" + cmbSetores.getSelectedItem().toString().trim() + "'";
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra where Setor = " + codSecundario;
+                
+            } else {
+                sqlquery = "select NumSolicitacao as NUMERO_SOLICITACAO, CPF as CPF_REQUERENTE, Setor as CODIGO_SETOR, DataSolicitacao as DATA_SOLICITACAO, DescMatNotFound as MATERIAL_NAO_ENCONTRADO, SituacaoSolicitacao as SITUACAO_SOLICITACAO "
+                    + "from tbl_solicitacao_compra";
+            }
+            Statement stmt;
+            ResultSet rs;
+
+            try{
+                stmt = conexao.conectar().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                if(!sqlQuerySecundaria.equals("-1")) {
+                    rs = stmt.executeQuery(sqlQuerySecundaria);
+                    if(rbPesquisarSetor.isSelected()){
+                        while(rs.next()){
+                            codigo  = rs.getInt("NomeSetor");
+                        }
+                    } else {
+                        while(rs.next()){
+                            codigo  = rs.getInt("NumSolicitacao");
+                        }
+                    }
+                    sqlquery = sqlquery + codigo;
+                    
+                }
+                rs = stmt.executeQuery(sqlquery);
+                jTableRequisicao.setModel(DbUtils.resultSetToTableModel(rs));
+
+            } catch(SQLException ex){
+                Logger.getLogger(GUI_PesquisarFornecedor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            dm =  (DefaultTableModel) jTableRequisicao.getModel();
         }
     }//GEN-LAST:event_chkFiltrarRequisicoesAbertoActionPerformed
 
